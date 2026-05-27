@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\SWP\\BE\\SWP\\SWP\\SWP.csproj": {}
+    "D:\\EBOOK\\KÌ 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP\\SWP.csproj": {}
   },
   "projects": {
-    "D:\\SWP\\BE\\SWP\\SWP.BLL\\SWP.BLL.csproj": {
+    "D:\\EBOOK\\KÌ 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.BLL\\SWP.BLL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\SWP\\BE\\SWP\\SWP.BLL\\SWP.BLL.csproj",
+        "projectUniqueName": "D:\\EBOOK\\KÌ 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.BLL\\SWP.BLL.csproj",
         "projectName": "SWP.BLL",
-        "projectPath": "D:\\SWP\\BE\\SWP\\SWP.BLL\\SWP.BLL.csproj",
-        "packagesPath": "C:\\Users\\tienhop\\.nuget\\packages\\",
-        "outputPath": "D:\\SWP\\BE\\SWP\\SWP.BLL\\obj\\",
+        "projectPath": "D:\\EBOOK\\KÌ 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.BLL\\SWP.BLL.csproj",
+        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "outputPath": "D:\\EBOOK\\KÌ 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.BLL\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\tienhop\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -32,8 +32,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\SWP\\BE\\SWP\\SWP.DAL\\SWP.DAL.csproj": {
-                "projectPath": "D:\\SWP\\BE\\SWP\\SWP.DAL\\SWP.DAL.csproj"
+              "D:\\EBOOK\\KÌ 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.DAL\\SWP.DAL.csproj": {
+                "projectPath": "D:\\EBOOK\\KÌ 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.DAL\\SWP.DAL.csproj"
               }
             }
           }
@@ -99,24 +99,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.308/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.313/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\SWP\\BE\\SWP\\SWP.DAL\\SWP.DAL.csproj": {
+    "D:\\EBOOK\\KÌ 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.DAL\\SWP.DAL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\SWP\\BE\\SWP\\SWP.DAL\\SWP.DAL.csproj",
+        "projectUniqueName": "D:\\EBOOK\\KÌ 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.DAL\\SWP.DAL.csproj",
         "projectName": "SWP.DAL",
-        "projectPath": "D:\\SWP\\BE\\SWP\\SWP.DAL\\SWP.DAL.csproj",
-        "packagesPath": "C:\\Users\\tienhop\\.nuget\\packages\\",
-        "outputPath": "D:\\SWP\\BE\\SWP\\SWP.DAL\\obj\\",
+        "projectPath": "D:\\EBOOK\\KÌ 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.DAL\\SWP.DAL.csproj",
+        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "outputPath": "D:\\EBOOK\\KÌ 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.DAL\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\tienhop\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -186,24 +186,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.308/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.313/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\SWP\\BE\\SWP\\SWP\\SWP.csproj": {
+    "D:\\EBOOK\\KÌ 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP\\SWP.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\SWP\\BE\\SWP\\SWP\\SWP.csproj",
+        "projectUniqueName": "D:\\EBOOK\\KÌ 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP\\SWP.csproj",
         "projectName": "SWP",
-        "projectPath": "D:\\SWP\\BE\\SWP\\SWP\\SWP.csproj",
-        "packagesPath": "C:\\Users\\tienhop\\.nuget\\packages\\",
-        "outputPath": "D:\\SWP\\BE\\SWP\\SWP\\obj\\",
+        "projectPath": "D:\\EBOOK\\KÌ 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP\\SWP.csproj",
+        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "outputPath": "D:\\EBOOK\\KÌ 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\tienhop\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -218,8 +218,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\SWP\\BE\\SWP\\SWP.BLL\\SWP.BLL.csproj": {
-                "projectPath": "D:\\SWP\\BE\\SWP\\SWP.BLL\\SWP.BLL.csproj"
+              "D:\\EBOOK\\KÌ 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.BLL\\SWP.BLL.csproj": {
+                "projectPath": "D:\\EBOOK\\KÌ 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.BLL\\SWP.BLL.csproj"
               }
             }
           }
@@ -288,7 +288,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.308/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.313/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
