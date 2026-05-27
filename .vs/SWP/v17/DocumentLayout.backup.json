@@ -1,0 +1,273 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\EBOOK\\K\u00CC 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{BDF044D2-2398-425B-B08E-EECA18D7ADE0}|SWP.BLL\\SWP.BLL.csproj|d:\\ebook\\k\u00EC 8\\swp391_su26\\swp\\swp391_g5_backend\\swp.bll\\dtos\\lecturer\\lecturerdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BDF044D2-2398-425B-B08E-EECA18D7ADE0}|SWP.BLL\\SWP.BLL.csproj|solutionrelative:swp.bll\\dtos\\lecturer\\lecturerdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BDF044D2-2398-425B-B08E-EECA18D7ADE0}|SWP.BLL\\SWP.BLL.csproj|d:\\ebook\\k\u00EC 8\\swp391_su26\\swp\\swp391_g5_backend\\swp.bll\\dtos\\auth\\registerrequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BDF044D2-2398-425B-B08E-EECA18D7ADE0}|SWP.BLL\\SWP.BLL.csproj|solutionrelative:swp.bll\\dtos\\auth\\registerrequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BDF044D2-2398-425B-B08E-EECA18D7ADE0}|SWP.BLL\\SWP.BLL.csproj|d:\\ebook\\k\u00EC 8\\swp391_su26\\swp\\swp391_g5_backend\\swp.bll\\dtos\\auth\\authresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BDF044D2-2398-425B-B08E-EECA18D7ADE0}|SWP.BLL\\SWP.BLL.csproj|solutionrelative:swp.bll\\dtos\\auth\\authresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BDF044D2-2398-425B-B08E-EECA18D7ADE0}|SWP.BLL\\SWP.BLL.csproj|d:\\ebook\\k\u00EC 8\\swp391_su26\\swp\\swp391_g5_backend\\swp.bll\\dtos\\auth\\loginrequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BDF044D2-2398-425B-B08E-EECA18D7ADE0}|SWP.BLL\\SWP.BLL.csproj|solutionrelative:swp.bll\\dtos\\auth\\loginrequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F2BE8D1-0141-4680-B53C-7B58F97DBB3F}|SWP\\SWP.csproj|d:\\ebook\\k\u00EC 8\\swp391_su26\\swp\\swp391_g5_backend\\swp\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{1F2BE8D1-0141-4680-B53C-7B58F97DBB3F}|SWP\\SWP.csproj|solutionrelative:swp\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BDF044D2-2398-425B-B08E-EECA18D7ADE0}|SWP.BLL\\SWP.BLL.csproj|d:\\ebook\\k\u00EC 8\\swp391_su26\\swp\\swp391_g5_backend\\swp.bll\\services\\lecturerservice.workspace.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BDF044D2-2398-425B-B08E-EECA18D7ADE0}|SWP.BLL\\SWP.BLL.csproj|solutionrelative:swp.bll\\services\\lecturerservice.workspace.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BDF044D2-2398-425B-B08E-EECA18D7ADE0}|SWP.BLL\\SWP.BLL.csproj|d:\\ebook\\k\u00EC 8\\swp391_su26\\swp\\swp391_g5_backend\\swp.bll\\services\\lecturerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BDF044D2-2398-425B-B08E-EECA18D7ADE0}|SWP.BLL\\SWP.BLL.csproj|solutionrelative:swp.bll\\services\\lecturerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F2BE8D1-0141-4680-B53C-7B58F97DBB3F}|SWP\\SWP.csproj|d:\\ebook\\k\u00EC 8\\swp391_su26\\swp\\swp391_g5_backend\\swp\\controllers\\lecturercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F2BE8D1-0141-4680-B53C-7B58F97DBB3F}|SWP\\SWP.csproj|solutionrelative:swp\\controllers\\lecturercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BDF044D2-2398-425B-B08E-EECA18D7ADE0}|SWP.BLL\\SWP.BLL.csproj|d:\\ebook\\k\u00EC 8\\swp391_su26\\swp\\swp391_g5_backend\\swp.bll\\interfaces\\ilecturerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BDF044D2-2398-425B-B08E-EECA18D7ADE0}|SWP.BLL\\SWP.BLL.csproj|solutionrelative:swp.bll\\interfaces\\ilecturerservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BDF044D2-2398-425B-B08E-EECA18D7ADE0}|SWP.BLL\\SWP.BLL.csproj|d:\\ebook\\k\u00EC 8\\swp391_su26\\swp\\swp391_g5_backend\\swp.bll\\interfaces\\iauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BDF044D2-2398-425B-B08E-EECA18D7ADE0}|SWP.BLL\\SWP.BLL.csproj|solutionrelative:swp.bll\\interfaces\\iauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F2BE8D1-0141-4680-B53C-7B58F97DBB3F}|SWP\\SWP.csproj|d:\\ebook\\k\u00EC 8\\swp391_su26\\swp\\swp391_g5_backend\\swp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F2BE8D1-0141-4680-B53C-7B58F97DBB3F}|SWP\\SWP.csproj|solutionrelative:swp\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F2BE8D1-0141-4680-B53C-7B58F97DBB3F}|SWP\\SWP.csproj|d:\\ebook\\k\u00EC 8\\swp391_su26\\swp\\swp391_g5_backend\\swp\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F2BE8D1-0141-4680-B53C-7B58F97DBB3F}|SWP\\SWP.csproj|solutionrelative:swp\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BDF044D2-2398-425B-B08E-EECA18D7ADE0}|SWP.BLL\\SWP.BLL.csproj|d:\\ebook\\k\u00EC 8\\swp391_su26\\swp\\swp391_g5_backend\\swp.bll\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BDF044D2-2398-425B-B08E-EECA18D7ADE0}|SWP.BLL\\SWP.BLL.csproj|solutionrelative:swp.bll\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA5321C2-76E3-4BEB-9A36-A5F1BB5A7084}|SWP.DAL\\SWP.DAL.csproj|d:\\ebook\\k\u00EC 8\\swp391_su26\\swp\\swp391_g5_backend\\swp.dal\\swp.dal.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{AA5321C2-76E3-4BEB-9A36-A5F1BB5A7084}|SWP.DAL\\SWP.DAL.csproj|solutionrelative:swp.dal\\swp.dal.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{AA5321C2-76E3-4BEB-9A36-A5F1BB5A7084}|SWP.DAL\\SWP.DAL.csproj|d:\\ebook\\k\u00EC 8\\swp391_su26\\swp\\swp391_g5_backend\\swp.dal\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{AA5321C2-76E3-4BEB-9A36-A5F1BB5A7084}|SWP.DAL\\SWP.DAL.csproj|solutionrelative:swp.dal\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{40ea2e6b-2121-4bb8-a43e-c83c04b51041}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "LecturerDtos.cs",
+              "DocumentMoniker": "D:\\EBOOK\\K\u00CC 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.BLL\\DTOs\\Lecturer\\LecturerDtos.cs",
+              "RelativeDocumentMoniker": "SWP.BLL\\DTOs\\Lecturer\\LecturerDtos.cs",
+              "ToolTip": "D:\\EBOOK\\K\u00CC 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.BLL\\DTOs\\Lecturer\\LecturerDtos.cs",
+              "RelativeToolTip": "SWP.BLL\\DTOs\\Lecturer\\LecturerDtos.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAAwBMAAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-25T04:02:44.03Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "LecturerService.cs",
+              "DocumentMoniker": "D:\\EBOOK\\K\u00CC 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.BLL\\Services\\LecturerService.cs",
+              "RelativeDocumentMoniker": "SWP.BLL\\Services\\LecturerService.cs",
+              "ToolTip": "D:\\EBOOK\\K\u00CC 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.BLL\\Services\\LecturerService.cs",
+              "RelativeToolTip": "SWP.BLL\\Services\\LecturerService.cs",
+              "ViewState": "AgIAADUAAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-25T03:34:02.495Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "LecturerService.Workspace.cs",
+              "DocumentMoniker": "D:\\EBOOK\\K\u00CC 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.BLL\\Services\\LecturerService.Workspace.cs",
+              "RelativeDocumentMoniker": "SWP.BLL\\Services\\LecturerService.Workspace.cs",
+              "ToolTip": "D:\\EBOOK\\K\u00CC 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.BLL\\Services\\LecturerService.Workspace.cs",
+              "RelativeToolTip": "SWP.BLL\\Services\\LecturerService.Workspace.cs",
+              "ViewState": "AgIAAK0BAAAAAAAAAADwv1sAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-25T03:23:11.445Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "LoginRequestDto.cs",
+              "DocumentMoniker": "D:\\EBOOK\\K\u00CC 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.BLL\\DTOs\\Auth\\LoginRequestDto.cs",
+              "RelativeDocumentMoniker": "SWP.BLL\\DTOs\\Auth\\LoginRequestDto.cs",
+              "ToolTip": "D:\\EBOOK\\K\u00CC 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.BLL\\DTOs\\Auth\\LoginRequestDto.cs",
+              "RelativeToolTip": "SWP.BLL\\DTOs\\Auth\\LoginRequestDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-23T16:06:22.072Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "RegisterRequestDto.cs",
+              "DocumentMoniker": "D:\\EBOOK\\K\u00CC 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.BLL\\DTOs\\Auth\\RegisterRequestDto.cs",
+              "RelativeDocumentMoniker": "SWP.BLL\\DTOs\\Auth\\RegisterRequestDto.cs",
+              "ToolTip": "D:\\EBOOK\\K\u00CC 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.BLL\\DTOs\\Auth\\RegisterRequestDto.cs",
+              "RelativeToolTip": "SWP.BLL\\DTOs\\Auth\\RegisterRequestDto.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAcwB4AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-23T16:05:59.855Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\EBOOK\\K\u00CC 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP\\appsettings.json",
+              "RelativeDocumentMoniker": "SWP\\appsettings.json",
+              "ToolTip": "D:\\EBOOK\\K\u00CC 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP\\appsettings.json",
+              "RelativeToolTip": "SWP\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-05-23T16:07:26.752Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "AuthResponseDto.cs",
+              "DocumentMoniker": "D:\\EBOOK\\K\u00CC 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.BLL\\DTOs\\Auth\\AuthResponseDto.cs",
+              "RelativeDocumentMoniker": "SWP.BLL\\DTOs\\Auth\\AuthResponseDto.cs",
+              "ToolTip": "D:\\EBOOK\\K\u00CC 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.BLL\\DTOs\\Auth\\AuthResponseDto.cs",
+              "RelativeToolTip": "SWP.BLL\\DTOs\\Auth\\AuthResponseDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-23T16:06:29.729Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "LecturerController.cs",
+              "DocumentMoniker": "D:\\EBOOK\\K\u00CC 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP\\Controllers\\LecturerController.cs",
+              "RelativeDocumentMoniker": "SWP\\Controllers\\LecturerController.cs",
+              "ToolTip": "D:\\EBOOK\\K\u00CC 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP\\Controllers\\LecturerController.cs",
+              "RelativeToolTip": "SWP\\Controllers\\LecturerController.cs",
+              "ViewState": "AgIAAO0AAAAAAAAAAAAqwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-25T03:37:09.02Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ILecturerService.cs",
+              "DocumentMoniker": "D:\\EBOOK\\K\u00CC 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.BLL\\Interfaces\\ILecturerService.cs",
+              "RelativeDocumentMoniker": "SWP.BLL\\Interfaces\\ILecturerService.cs",
+              "ToolTip": "D:\\EBOOK\\K\u00CC 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.BLL\\Interfaces\\ILecturerService.cs",
+              "RelativeToolTip": "SWP.BLL\\Interfaces\\ILecturerService.cs",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-25T03:23:08.563Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "IAuthService.cs",
+              "DocumentMoniker": "D:\\EBOOK\\K\u00CC 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.BLL\\Interfaces\\IAuthService.cs",
+              "RelativeDocumentMoniker": "SWP.BLL\\Interfaces\\IAuthService.cs",
+              "ToolTip": "D:\\EBOOK\\K\u00CC 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.BLL\\Interfaces\\IAuthService.cs",
+              "RelativeToolTip": "SWP.BLL\\Interfaces\\IAuthService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-23T16:04:35.48Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "SWP.DAL.csproj",
+              "DocumentMoniker": "D:\\EBOOK\\K\u00CC 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.DAL\\SWP.DAL.csproj",
+              "RelativeDocumentMoniker": "SWP.DAL\\SWP.DAL.csproj",
+              "ToolTip": "D:\\EBOOK\\K\u00CC 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.DAL\\SWP.DAL.csproj",
+              "RelativeToolTip": "SWP.DAL\\SWP.DAL.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-05-23T14:56:26.756Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\EBOOK\\K\u00CC 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP\\Program.cs",
+              "RelativeDocumentMoniker": "SWP\\Program.cs",
+              "ToolTip": "D:\\EBOOK\\K\u00CC 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP\\Program.cs",
+              "RelativeToolTip": "SWP\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-23T14:37:45.911Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "User.cs",
+              "DocumentMoniker": "D:\\EBOOK\\K\u00CC 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.DAL\\Models\\User.cs",
+              "RelativeDocumentMoniker": "SWP.DAL\\Models\\User.cs",
+              "ToolTip": "D:\\EBOOK\\K\u00CC 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.DAL\\Models\\User.cs",
+              "RelativeToolTip": "SWP.DAL\\Models\\User.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-23T14:35:37.418Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "AuthService.cs",
+              "DocumentMoniker": "D:\\EBOOK\\K\u00CC 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.BLL\\Services\\AuthService.cs",
+              "RelativeDocumentMoniker": "SWP.BLL\\Services\\AuthService.cs",
+              "ToolTip": "D:\\EBOOK\\K\u00CC 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.BLL\\Services\\AuthService.cs",
+              "RelativeToolTip": "SWP.BLL\\Services\\AuthService.cs",
+              "ViewState": "AgIAAGwAAAAAAAAAAAAowI4AAABWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-21T01:14:35.982Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "D:\\EBOOK\\K\u00CC 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "SWP\\Controllers\\AuthController.cs",
+              "ToolTip": "D:\\EBOOK\\K\u00CC 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "SWP\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAADoAAAAAAAAAAAAwwEwAAABNAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-21T00:59:37.509Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

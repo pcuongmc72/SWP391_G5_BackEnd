@@ -1,0 +1,35 @@
+D:\SWP\BE\SWP\SWP.BLL\bin\Debug\net8.0\SWP.BLL.deps.json
+D:\SWP\BE\SWP\SWP.BLL\bin\Debug\net8.0\SWP.BLL.runtimeconfig.json
+D:\SWP\BE\SWP\SWP.BLL\bin\Debug\net8.0\SWP.BLL.dll
+D:\SWP\BE\SWP\SWP.BLL\bin\Debug\net8.0\SWP.BLL.pdb
+D:\SWP\BE\SWP\SWP.BLL\obj\Debug\net8.0\SWP.BLL.csproj.AssemblyReference.cache
+D:\SWP\BE\SWP\SWP.BLL\obj\Debug\net8.0\SWP.BLL.GeneratedMSBuildEditorConfig.editorconfig
+D:\SWP\BE\SWP\SWP.BLL\obj\Debug\net8.0\SWP.BLL.AssemblyInfoInputs.cache
+D:\SWP\BE\SWP\SWP.BLL\obj\Debug\net8.0\SWP.BLL.AssemblyInfo.cs
+D:\SWP\BE\SWP\SWP.BLL\obj\Debug\net8.0\SWP.BLL.csproj.CoreCompileInputs.cache
+D:\SWP\BE\SWP\SWP.BLL\obj\Debug\net8.0\SWP.BLL.dll
+D:\SWP\BE\SWP\SWP.BLL\obj\Debug\net8.0\refint\SWP.BLL.dll
+D:\SWP\BE\SWP\SWP.BLL\obj\Debug\net8.0\SWP.BLL.pdb
+D:\SWP\BE\SWP\SWP.BLL\obj\Debug\net8.0\SWP.BLL.genruntimeconfig.cache
+D:\SWP\BE\SWP\SWP.BLL\obj\Debug\net8.0\ref\SWP.BLL.dll
+D:\SWP\BE\SWP\SWP.BLL\bin\Debug\net8.0\SWP.DAL.dll
+D:\SWP\BE\SWP\SWP.BLL\bin\Debug\net8.0\SWP.DAL.pdb
+D:\SWP\BE\SWP\SWP.BLL\obj\Debug\net8.0\SWP.BLL.csproj.Up2Date
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP391_G5_BackEnd\SWP.BLL\bin\Debug\net8.0\SWP.BLL.deps.json
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP391_G5_BackEnd\SWP.BLL\bin\Debug\net8.0\SWP.BLL.runtimeconfig.json
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP391_G5_BackEnd\SWP.BLL\bin\Debug\net8.0\SWP.BLL.dll
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP391_G5_BackEnd\SWP.BLL\bin\Debug\net8.0\SWP.BLL.pdb
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP391_G5_BackEnd\SWP.BLL\bin\Debug\net8.0\SWP.DAL.dll
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP391_G5_BackEnd\SWP.BLL\bin\Debug\net8.0\SWP.DAL.pdb
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP391_G5_BackEnd\SWP.BLL\obj\Debug\net8.0\SWP.BLL.csproj.AssemblyReference.cache
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP391_G5_BackEnd\SWP.BLL\obj\Debug\net8.0\SWP.BLL.GeneratedMSBuildEditorConfig.editorconfig
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP391_G5_BackEnd\SWP.BLL\obj\Debug\net8.0\SWP.BLL.AssemblyInfoInputs.cache
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP391_G5_BackEnd\SWP.BLL\obj\Debug\net8.0\SWP.BLL.AssemblyInfo.cs
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP391_G5_BackEnd\SWP.BLL\obj\Debug\net8.0\SWP.BLL.csproj.CoreCompileInputs.cache
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP391_G5_BackEnd\SWP.BLL\obj\Debug\net8.0\SWP.BLL.sourcelink.json
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP391_G5_BackEnd\SWP.BLL\obj\Debug\net8.0\SWP.BLL.csproj.Up2Date
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP391_G5_BackEnd\SWP.BLL\obj\Debug\net8.0\SWP.BLL.dll
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP391_G5_BackEnd\SWP.BLL\obj\Debug\net8.0\refint\SWP.BLL.dll
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP391_G5_BackEnd\SWP.BLL\obj\Debug\net8.0\SWP.BLL.pdb
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP391_G5_BackEnd\SWP.BLL\obj\Debug\net8.0\SWP.BLL.genruntimeconfig.cache
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP391_G5_BackEnd\SWP.BLL\obj\Debug\net8.0\ref\SWP.BLL.dll

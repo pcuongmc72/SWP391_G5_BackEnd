@@ -1,0 +1,605 @@
+[
+  {
+    "ContainingType": "SWP.Controllers.AuthController",
+    "Method": "Login",
+    "RelativePath": "api/Auth/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "SWP.BLL.DTOs.Auth.LoginRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SWP.BLL.DTOs.Auth.AuthResponseDto",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 401
+      }
+    ]
+  },
+  {
+    "ContainingType": "SWP.Controllers.AuthController",
+    "Method": "GetProfile",
+    "RelativePath": "api/Auth/profile",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "SWP.BLL.DTOs.Auth.UserInfoDto",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 401
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 404
+      }
+    ]
+  },
+  {
+    "ContainingType": "SWP.Controllers.AuthController",
+    "Method": "Register",
+    "RelativePath": "api/Auth/register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "SWP.BLL.DTOs.Auth.RegisterRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "SWP.BLL.DTOs.Auth.AuthResponseDto",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 200
+      },
+      {
+        "Type": "Microsoft.AspNetCore.Mvc.ProblemDetails",
+        "MediaTypes": [
+          "application/json"
+        ],
+        "StatusCode": 400
+      }
+    ]
+  },
+  {
+    "ContainingType": "SWP.Controllers.LecturerController",
+    "Method": "GetMyClasses",
+    "RelativePath": "api/Lecturer/classes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SWP.Controllers.LecturerController",
+    "Method": "GetClassDetail",
+    "RelativePath": "api/Lecturer/classes/{classId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "classId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SWP.Controllers.LecturerController",
+    "Method": "GetAssignments",
+    "RelativePath": "api/Lecturer/classes/{classId}/assignments",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "classId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SWP.Controllers.LecturerController",
+    "Method": "CreateAssignment",
+    "RelativePath": "api/Lecturer/classes/{classId}/assignments",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "classId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "SWP.BLL.DTOs.Lecturer.UpsertAssignmentDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SWP.Controllers.LecturerController",
+    "Method": "UpdateAssignment",
+    "RelativePath": "api/Lecturer/classes/{classId}/assignments/{assignmentId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "classId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "assignmentId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "SWP.BLL.DTOs.Lecturer.UpsertAssignmentDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SWP.Controllers.LecturerController",
+    "Method": "DeleteAssignment",
+    "RelativePath": "api/Lecturer/classes/{classId}/assignments/{assignmentId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "classId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "assignmentId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SWP.Controllers.LecturerController",
+    "Method": "GetFeedbacks",
+    "RelativePath": "api/Lecturer/classes/{classId}/feedbacks",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "classId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SWP.Controllers.LecturerController",
+    "Method": "RespondFeedback",
+    "RelativePath": "api/Lecturer/classes/{classId}/feedbacks/{feedbackId}/respond",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "classId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "feedbackId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "SWP.BLL.DTOs.Lecturer.RespondFeedbackDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SWP.Controllers.LecturerController",
+    "Method": "GetMaterials",
+    "RelativePath": "api/Lecturer/classes/{classId}/materials",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "classId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SWP.Controllers.LecturerController",
+    "Method": "CreateMaterial",
+    "RelativePath": "api/Lecturer/classes/{classId}/materials",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "classId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "SWP.BLL.DTOs.Lecturer.UpsertMaterialDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SWP.Controllers.LecturerController",
+    "Method": "UpdateMaterial",
+    "RelativePath": "api/Lecturer/classes/{classId}/materials/{materialId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "classId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "materialId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "SWP.BLL.DTOs.Lecturer.UpsertMaterialDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SWP.Controllers.LecturerController",
+    "Method": "DeleteMaterial",
+    "RelativePath": "api/Lecturer/classes/{classId}/materials/{materialId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "classId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "materialId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SWP.Controllers.LecturerController",
+    "Method": "MarkMaterialComplete",
+    "RelativePath": "api/Lecturer/classes/{classId}/materials/{materialId}/complete-all",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "classId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "materialId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SWP.Controllers.LecturerController",
+    "Method": "GetSessions",
+    "RelativePath": "api/Lecturer/classes/{classId}/sessions",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "classId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "from",
+        "Type": "System.Nullable\u00601[[System.DateOnly, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "to",
+        "Type": "System.Nullable\u00601[[System.DateOnly, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SWP.Controllers.LecturerController",
+    "Method": "CreateSession",
+    "RelativePath": "api/Lecturer/classes/{classId}/sessions",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "classId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "SWP.BLL.DTOs.Lecturer.UpsertClassSessionDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SWP.Controllers.LecturerController",
+    "Method": "GetSession",
+    "RelativePath": "api/Lecturer/classes/{classId}/sessions/{sessionId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "classId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "sessionId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SWP.Controllers.LecturerController",
+    "Method": "UpdateSession",
+    "RelativePath": "api/Lecturer/classes/{classId}/sessions/{sessionId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "classId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "sessionId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "SWP.BLL.DTOs.Lecturer.UpsertClassSessionDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SWP.Controllers.LecturerController",
+    "Method": "DeleteSession",
+    "RelativePath": "api/Lecturer/classes/{classId}/sessions/{sessionId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "classId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "sessionId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SWP.Controllers.LecturerController",
+    "Method": "GetStudents",
+    "RelativePath": "api/Lecturer/classes/{classId}/students",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "classId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SWP.Controllers.LecturerController",
+    "Method": "GetSubmissions",
+    "RelativePath": "api/Lecturer/classes/{classId}/submissions",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "classId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SWP.Controllers.LecturerController",
+    "Method": "GradeSubmission",
+    "RelativePath": "api/Lecturer/classes/{classId}/submissions/{submissionId}/grade",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "classId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "submissionId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "SWP.BLL.DTOs.Lecturer.GradeSubmissionDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SWP.Controllers.LecturerController",
+    "Method": "GetThreads",
+    "RelativePath": "api/Lecturer/classes/{classId}/threads",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "classId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SWP.Controllers.LecturerController",
+    "Method": "CreateThread",
+    "RelativePath": "api/Lecturer/classes/{classId}/threads",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "classId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "SWP.BLL.DTOs.Lecturer.UpsertThreadDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SWP.Controllers.LecturerController",
+    "Method": "CreateReply",
+    "RelativePath": "api/Lecturer/classes/{classId}/threads/{threadId}/replies",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "classId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "threadId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "SWP.BLL.DTOs.Lecturer.CreateReplyDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SWP.Controllers.LecturerController",
+    "Method": "GetClassWorkspace",
+    "RelativePath": "api/Lecturer/classes/{classId}/workspace",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "classId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

@@ -1,0 +1,35 @@
+using System;
+using System.Collections.Generic;
+
+namespace SWP.DAL.Models;
+
+public partial class Class
+{
+    public string Id { get; set; } = null!;
+
+    public Guid CourseId { get; set; }
+
+    public Guid AcademicTermId { get; set; }
+
+    public string LecturerId { get; set; } = null!;
+
+    public string Name { get; set; } = null!;
+
+    public bool AllowReviewAfterEnd { get; set; }
+
+    public DateTime CreatedAt { get; set; }
+
+    public virtual AcademicTerm AcademicTerm { get; set; } = null!;
+
+    public virtual ICollection<ClassStudent> ClassStudents { get; set; } = new List<ClassStudent>();
+
+    public virtual ICollection<ClassSession> ClassSessions { get; set; } = new List<ClassSession>();
+
+    public virtual ICollection<LearningMaterial> LearningMaterials { get; set; } = new List<LearningMaterial>();
+
+    public virtual ICollection<Assignment> Assignments { get; set; } = new List<Assignment>();
+
+    public virtual Course Course { get; set; } = null!;
+
+    public virtual User Lecturer { get; set; } = null!;
+}
