@@ -19,6 +19,11 @@ namespace SWP.BLL.Services
             _context = context;
         }
 
+        private static DateTime GetHanoiTime()
+        {
+            return DateTime.UtcNow.AddHours(7);
+        }
+
         public async Task<IEnumerable<BlogResponseDto>> GetAllBlogsForAdminAsync(Guid? courseId = null)
         {
             var query = _context.Blogs
@@ -51,23 +56,22 @@ namespace SWP.BLL.Services
             return blogs.Select(MapToResponseDto);
         }
 
-        public async Task<IEnumerable<BlogResponseDto>> GetAllPublicBlogsAsync(Guid? courseId = null, int? status = 1)
+        public async Task<IEnumerable<BlogResponseDto>> GetAllPublicBlogsAsync(Guid? courseId = null, int? status = 1, string? currentUserId = null)
         {
             var query = _context.Blogs
                 .Include(b => b.Author)
                 .Include(b => b.Course)
                 .AsQueryable();
 
-            // If we are looking for public blogs (default), filter out private ones.
-            // If we are looking for pending blogs (status 0), we want to see both public and private.
-            if (status == 1)
-            {
-                query = query.Where(b => !b.IsPrivate);
-            }
-
+            // If status is 1 (Approved), we show all approved blogs PLUS author's own pending blogs
             if (status.HasValue)
             {
-                query = query.Where(b => b.Status == status.Value);
+                query = query.Where(b => b.Status == status.Value && !b.IsPrivate);
+            }
+            else
+            {
+                // Default to approved public blogs if no status specified
+                query = query.Where(b => b.Status == 1 && !b.IsPrivate);
             }
 
             if (courseId.HasValue)
@@ -90,6 +94,40 @@ namespace SWP.BLL.Services
             {
                 query = query.Where(b => b.Status == status.Value);
             }
+
+            if (courseId.HasValue)
+            {
+                query = query.Where(b => b.CourseId == courseId.Value);
+            }
+
+            var blogs = await query.OrderByDescending(b => b.CreatedAt).ToListAsync();
+            return blogs.Select(MapToResponseDto);
+        }
+
+        public async Task<IEnumerable<BlogResponseDto>> GetUserBlogsAsync(string userId)
+        {
+            var blogs = await _context.Blogs
+                .Include(b => b.Author)
+                .Include(b => b.Course)
+                .Where(b => b.AuthorId == userId)
+                .OrderByDescending(b => b.CreatedAt)
+                .ToListAsync();
+
+            return blogs.Select(MapToResponseDto);
+        }
+
+        public async Task<IEnumerable<BlogResponseDto>> GetStudentClassBlogsAsync(string studentId, Guid? courseId = null)
+        {
+            // Get all class IDs the student is enrolled in
+            var classIds = await _context.ClassStudents
+                .Where(cs => cs.StudentId == studentId)
+                .Select(cs => cs.ClassId)
+                .ToListAsync();
+
+            var query = _context.Blogs
+                .Include(b => b.Author)
+                .Include(b => b.Course)
+                .Where(b => (b.Status == 1 || b.AuthorId == studentId) && b.ClassId != null && classIds.Contains(b.ClassId));
 
             if (courseId.HasValue)
             {
@@ -152,6 +190,7 @@ namespace SWP.BLL.Services
 
             var blog = new Blog
             {
+                Id = Guid.NewGuid(),
                 Title = request.Title,
                 Content = request.Content,
                 AuthorId = request.AuthorId,
@@ -159,8 +198,8 @@ namespace SWP.BLL.Services
                 ClassId = request.ClassId,
                 IsPrivate = request.IsPrivate,
                 Keywords = request.Keywords,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
+                CreatedAt = GetHanoiTime(),
+                UpdatedAt = GetHanoiTime()
             };
 
             // Initial status logic
@@ -201,8 +240,26 @@ namespace SWP.BLL.Services
             blog.Keywords = request.Keywords;
             blog.UpdatedAt = DateTime.UtcNow;
 
-            await _context.SaveChangesAsync();
+            // Re-evaluate status if it's not private anymore
+            if (blog.IsPrivate)
+            {
+                blog.Status = 1; // Auto-approved for class
+            }
+            else
+            {
+                // If it's a student making it public, it needs re-approval
+                var user = await _context.Users.FindAsync(blog.AuthorId);
+                if (user != null && (user.Role == "admin" || user.Role == "lecturer"))
+                {
+                    blog.Status = 1;
+                }
+                else
+                {
+                    blog.Status = 0; // Back to pending
+                }
+            }
 
+            await _context.SaveChangesAsync();
             return await GetBlogByIdAsync(id);
         }
 
@@ -258,40 +315,42 @@ namespace SWP.BLL.Services
 
             if (blog == null) throw new KeyNotFoundException("Blog not found.");
 
-            // Validation for private blogs
-            if (blog.IsPrivate && !string.IsNullOrEmpty(blog.ClassId))
+            // Validation logic
+            if (blog.IsPrivate)
             {
-                bool isAllowed = false;
+                // Private blogs REQUIRE class membership
+                if (!string.IsNullOrEmpty(blog.ClassId))
+                {
+                    bool isAllowed = false;
 
-                // 1. Is the commenter the lecturer of the class?
-                if (blog.Class?.LecturerId == request.AuthorId)
-                {
-                    isAllowed = true;
-                }
-                // 2. Is the commenter a student in the class?
-                else if (await _context.ClassStudents.AnyAsync(cs => cs.ClassId == blog.ClassId && cs.StudentId == request.AuthorId))
-                {
-                    isAllowed = true;
-                }
-                // 3. Is the commenter the author of the blog post?
-                else if (blog.AuthorId == request.AuthorId)
-                {
-                    isAllowed = true;
-                }
+                    // 1. Is the commenter the lecturer of the class?
+                    if (blog.Class?.LecturerId == request.AuthorId) isAllowed = true;
+                    // 2. Is the commenter a student in the class?
+                    else if (await _context.ClassStudents.AnyAsync(cs => cs.ClassId == blog.ClassId && cs.StudentId == request.AuthorId)) isAllowed = true;
+                    // 3. Is the commenter the author of the blog post?
+                    else if (blog.AuthorId == request.AuthorId) isAllowed = true;
+                    // 4. Admin is always allowed
+                    else {
+                        var user = await _context.Users.FindAsync(request.AuthorId);
+                        if (user?.Role == "admin") isAllowed = true;
+                    }
 
-                if (!isAllowed)
-                {
-                    throw new UnauthorizedAccessException("You are not authorized to comment on this private blog.");
+                    if (!isAllowed)
+                    {
+                        throw new UnauthorizedAccessException("You are not authorized to comment on this private blog.");
+                    }
                 }
             }
+            // Public blogs: Everyone authenticated can comment (handled by Controller [Authorize])
 
             var comment = new Comment
             {
+                Id = Guid.NewGuid(),
                 BlogId = request.BlogId,
                 AuthorId = request.AuthorId,
                 Content = request.Content,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
+                CreatedAt = GetHanoiTime(),
+                UpdatedAt = GetHanoiTime()
             };
 
             await _context.Comments.AddAsync(comment);

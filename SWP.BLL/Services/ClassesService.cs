@@ -40,6 +40,25 @@ public class ClassesService : IClassesService
         return classes.Select(MapToDto);
     }
 
+    public async Task<IEnumerable<ClassResponseDto>> GetClassesByStudentAsync(string studentId)
+    {
+        var classIds = await _context.ClassStudents
+            .Where(cs => cs.StudentId == studentId)
+            .Select(cs => cs.ClassId)
+            .ToListAsync();
+
+        var classes = await _context.Classes
+            .Include(c => c.Course)
+            .Include(c => c.AcademicTerm)
+            .Include(c => c.Lecturer)
+            .Include(c => c.ClassStudents)
+            .Where(c => classIds.Contains(c.Id))
+            .OrderByDescending(c => c.CreatedAt)
+            .ToListAsync();
+
+        return classes.Select(MapToDto);
+    }
+
     public async Task<ClassResponseDto> GetClassByIdAsync(string id)
     {
         var classEntity = await _context.Classes

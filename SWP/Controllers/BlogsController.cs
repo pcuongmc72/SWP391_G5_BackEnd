@@ -21,9 +21,9 @@ namespace SWP.Controllers
         }
 
         [HttpGet("public")]
-        public async Task<ActionResult<IEnumerable<BlogResponseDto>>> GetAllPublicBlogs([FromQuery] Guid? courseId)
+        public async Task<ActionResult<IEnumerable<BlogResponseDto>>> GetAllPublicBlogs([FromQuery] Guid? courseId, [FromQuery] string? currentUserId = null)
         {
-            var blogs = await _blogsService.GetAllPublicBlogsAsync(courseId);
+            var blogs = await _blogsService.GetAllPublicBlogsAsync(courseId, 1, currentUserId);
             return Ok(blogs);
         }
 
@@ -55,6 +55,20 @@ namespace SWP.Controllers
         public async Task<ActionResult<IEnumerable<BlogResponseDto>>> GetClassBlogs(string classId, [FromQuery] Guid? courseId)
         {
             var blogs = await _blogsService.GetClassBlogsAsync(classId, courseId);
+            return Ok(blogs);
+        }
+
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<IEnumerable<BlogResponseDto>>> GetUserBlogs(string userId)
+        {
+            var blogs = await _blogsService.GetUserBlogsAsync(userId);
+            return Ok(blogs);
+        }
+
+        [HttpGet("my-classes/{studentId}")]
+        public async Task<ActionResult<IEnumerable<BlogResponseDto>>> GetStudentClassBlogs(string studentId, [FromQuery] Guid? courseId)
+        {
+            var blogs = await _blogsService.GetStudentClassBlogsAsync(studentId, courseId);
             return Ok(blogs);
         }
 
@@ -119,6 +133,7 @@ namespace SWP.Controllers
         }
 
         [HttpPost("comments")]
+        [Authorize(Roles = "admin,lecturer,student")]
         public async Task<ActionResult<CommentResponseDto>> CreateComment([FromBody] CommentRequestDto request)
         {
             try
@@ -137,6 +152,7 @@ namespace SWP.Controllers
         }
 
         [HttpDelete("comments/{id}")]
+        [Authorize(Roles = "admin,lecturer,student")]
         public async Task<IActionResult> DeleteComment(Guid id)
         {
             var result = await _blogsService.DeleteCommentAsync(id);
