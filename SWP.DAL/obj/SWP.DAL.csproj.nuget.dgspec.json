@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\SWP\\BE\\SWP\\SWP.DAL\\SWP.DAL.csproj": {}
+    "D:\\SWP\\New folder\\SWP391_G5_BackEnd\\SWP.DAL\\SWP.DAL.csproj": {}
   },
   "projects": {
-    "D:\\SWP\\BE\\SWP\\SWP.DAL\\SWP.DAL.csproj": {
+    "D:\\SWP\\New folder\\SWP391_G5_BackEnd\\SWP.DAL\\SWP.DAL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\SWP\\BE\\SWP\\SWP.DAL\\SWP.DAL.csproj",
+        "projectUniqueName": "D:\\SWP\\New folder\\SWP391_G5_BackEnd\\SWP.DAL\\SWP.DAL.csproj",
         "projectName": "SWP.DAL",
-        "projectPath": "D:\\SWP\\BE\\SWP\\SWP.DAL\\SWP.DAL.csproj",
+        "projectPath": "D:\\SWP\\New folder\\SWP391_G5_BackEnd\\SWP.DAL\\SWP.DAL.csproj",
         "packagesPath": "C:\\Users\\tienhop\\.nuget\\packages\\",
-        "outputPath": "D:\\SWP\\BE\\SWP\\SWP.DAL\\obj\\",
+        "outputPath": "D:\\SWP\\New folder\\SWP391_G5_BackEnd\\SWP.DAL\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

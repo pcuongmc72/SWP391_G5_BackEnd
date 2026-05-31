@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SWP.BLL.DTOs.Auth;
 using SWP.BLL.Interfaces;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace SWP.Controllers;
@@ -18,10 +19,7 @@ public class AuthController : ControllerBase
         _authService = authService;
     }
 
-    // ──────────────────────────────────────────────
     //  POST /api/auth/login
-    // ──────────────────────────────────────────────
-    /// <summary>Đăng nhập và nhận JWT token</summary>
     [HttpPost("login")]
     [ProducesResponseType(typeof(AuthResponseDto), 200)]
     [ProducesResponseType(401)]
@@ -38,47 +36,26 @@ public class AuthController : ControllerBase
         }
     }
 
-    // ──────────────────────────────────────────────
-    //  POST /api/auth/register
-    // ──────────────────────────────────────────────
-    /// <summary>Đăng ký tài khoản mới</summary>
-    [HttpPost("register")]
-    [ProducesResponseType(typeof(AuthResponseDto), 201)]
-    [ProducesResponseType(400)]
-    public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
-    {
-        try
-        {
-            var result = await _authService.RegisterAsync(request);
-            return CreatedAtAction(nameof(GetProfile),
-                new { },
-                new { success = true, message = "Đăng ký thành công.", data = result });
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { success = false, message = ex.Message });
-        }
-    }
-
-    // ──────────────────────────────────────────────
     //  GET /api/auth/profile
-    // ──────────────────────────────────────────────
-    /// <summary>Lấy thông tin người dùng hiện tại (yêu cầu JWT)</summary>
     [HttpGet("profile")]
     [Authorize]
     [ProducesResponseType(typeof(UserInfoDto), 200)]
     [ProducesResponseType(401)]
+    [ProducesResponseType(404)]
     public async Task<IActionResult> GetProfile()
     {
+        // Đã sửa: Chỉ lấy chuỗi string ra, không parse sang int nữa
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
-                       ?? User.FindFirst("sub")?.Value;
+                       ?? User.FindFirst("sub")?.Value
+                       ?? User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
 
-        if (userIdClaim is null || !int.TryParse(userIdClaim, out int userId))
-            return Unauthorized(new { success = false, message = "Token không hợp lệ." });
+        if (string.IsNullOrEmpty(userIdClaim))
+            return Unauthorized(new { success = false, message = "Token không hợp lệ hoặc không tìm thấy ID." });
 
         try
         {
-            var profile = await _authService.GetProfileAsync(userId);
+            // Truyền thẳng chuỗi ID (VD: "HE187159") xuống Service
+            var profile = await _authService.GetProfileAsync(userIdClaim);
             return Ok(new { success = true, data = profile });
         }
         catch (KeyNotFoundException ex)

@@ -10,7 +10,7 @@ using SWP.DAL.Context;
 var builder = WebApplication.CreateBuilder(args);
 
 // ─── Database ────────────────────────────────────────────────────────────────
-builder.Services.AddDbContext<EduTrainingDbContext>(options =>
+builder.Services.AddDbContext<FlippedClassroomContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // ─── JWT Authentication ───────────────────────────────────────────────────────
@@ -56,19 +56,20 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title       = "EduTraining API",
-        Version     = "v1",
+        Title = "EduTraining API",
+        Version = "v1",
         Description = "API hệ thống EduTraining – Authentication & Authorization"
     });
 
-    // Thêm định nghĩa Bearer token
+    // Cấu hình mới: Tự động nhận diện Bearer Token
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "Nhập JWT token theo định dạng: Bearer {token}",
-        Name        = "Authorization",
-        In          = ParameterLocation.Header,
-        Type        = SecuritySchemeType.ApiKey,
-        Scheme      = "Bearer"
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http, 
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Chỉ cần dán thẳng JWT token vào đây, KHÔNG cần gõ chữ Bearer"
     });
 
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -86,6 +87,11 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+builder.Services.AddScoped<IUsersService, UsersService>();
+builder.Services.AddScoped<IAcademicTermsService, AcademicTermsService>();
+builder.Services.AddScoped<ICoursesService, CoursesService>();
+builder.Services.AddScoped<IClassesService, ClassesService>();
+builder.Services.AddScoped<IClassStudentsService, ClassStudentsService>();
 
 // ─── Build & Middleware ───────────────────────────────────────────────────────
 var app = builder.Build();
@@ -93,7 +99,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EduTraining API v1"));
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FlippedClassroom"));
 }
 
 app.UseCors("AllowAll");

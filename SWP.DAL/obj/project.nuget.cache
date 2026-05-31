@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "w6ZO6OoYG6I=",
+  "dgSpecHash": "7VdqglfIoqI=",
   "success": true,
-  "projectFilePath": "D:\\SWP\\BE\\SWP\\SWP.DAL\\SWP.DAL.csproj",
+  "projectFilePath": "D:\\SWP\\New folder\\SWP391_G5_BackEnd\\SWP.DAL\\SWP.DAL.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\tienhop\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\tienhop\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

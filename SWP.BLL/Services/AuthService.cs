@@ -1,22 +1,22 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using SWP.BLL.DTOs.Auth;
 using SWP.BLL.Interfaces;
 using SWP.DAL.Context;
 using SWP.DAL.Models;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace SWP.BLL.Services;
 
 public class AuthService : IAuthService
 {
-    private readonly EduTrainingDbContext _context;
+    private readonly FlippedClassroomContext _context;
     private readonly IConfiguration _configuration;
 
-    public AuthService(EduTrainingDbContext context, IConfiguration configuration)
+    public AuthService(FlippedClassroomContext context, IConfiguration configuration)
     {
         _context = context;
         _configuration = configuration;
@@ -25,7 +25,6 @@ public class AuthService : IAuthService
     public async Task<AuthResponseDto> LoginAsync(LoginRequestDto request)
     {
         var user = await _context.Users
-            .Include(u => u.Role)
             .FirstOrDefaultAsync(u => u.Email == request.Email);
 
         if (user is null)
@@ -65,48 +64,15 @@ public class AuthService : IAuthService
             }
         }
 
+        // So sánh chuỗi thường dành cho tài khoản test
         return string.Equals(inputPassword, storedHash, StringComparison.Ordinal);
     }
 
-    public async Task<AuthResponseDto> RegisterAsync(RegisterRequestDto request)
-    {
-        bool usernameExists = await _context.Users.AnyAsync(u => u.Username == request.Username);
-        if (usernameExists)
-            throw new InvalidOperationException("Username da ton tai.");
-
-        bool emailExists = await _context.Users.AnyAsync(u => u.Email == request.Email);
-        if (emailExists)
-            throw new InvalidOperationException("Email da duoc su dung.");
-
-        bool roleExists = await _context.Roles.AnyAsync(r => r.RoleId == request.RoleId);
-        if (!roleExists)
-            throw new InvalidOperationException($"RoleId {request.RoleId} khong ton tai.");
-
-        var newUser = new User
-        {
-            Username = request.Username,
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
-            Email = request.Email,
-            RoleId = request.RoleId,
-            IsActive = true,
-            CreatedAt = DateTime.UtcNow
-        };
-
-        _context.Users.Add(newUser);
-        await _context.SaveChangesAsync();
-
-        var createdUser = await _context.Users
-            .Include(u => u.Role)
-            .FirstAsync(u => u.UserId == newUser.UserId);
-
-        return BuildAuthResponse(createdUser);
-    }
-
-    public async Task<UserInfoDto> GetProfileAsync(int userId)
+   
+    public async Task<UserInfoDto> GetProfileAsync(string id)
     {
         var user = await _context.Users
-            .Include(u => u.Role)
-            .FirstOrDefaultAsync(u => u.UserId == userId);
+            .FirstOrDefaultAsync(u => u.Id == id);
 
         if (user is null)
             throw new KeyNotFoundException("Nguoi dung khong ton tai.");
@@ -129,11 +95,11 @@ public class AuthService : IAuthService
 
     private static UserInfoDto MapToUserInfo(User user) => new()
     {
-        UserId = user.UserId,
-        Username = user.Username,
+        Id = user.Id,                 
         Email = user.Email,
-        RoleName = user.Role?.RoleName ?? string.Empty,
-        IsActive = user.IsActive ?? false
+        FullName = user.FullName,     
+        Role = user.Role,            
+        IsActive = user.IsActive
     };
 
     private (string Token, DateTime ExpiresAt) GenerateJwtToken(User user)
@@ -147,10 +113,10 @@ public class AuthService : IAuthService
 
         var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
-            new Claim(JwtRegisteredClaimNames.UniqueName, user.Username),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            new Claim(ClaimTypes.Role, user.Role?.RoleName ?? string.Empty),
+            new Claim(JwtRegisteredClaimNames.Sub, user.Id),               
+            new Claim(JwtRegisteredClaimNames.Email, user.Email),         
+            new Claim(ClaimTypes.Name, user.FullName),                    
+            new Claim(ClaimTypes.Role, user.Role),                        
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 

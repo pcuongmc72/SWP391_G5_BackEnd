@@ -10,9 +10,9 @@ public class AuthResponseDto
 
 public class UserInfoDto
 {
-    public int UserId { get; set; }
-    public string Username { get; set; } = null!;
+    public string Id { get; set; } = null!;           
+    public string FullName { get; set; } = null!;    
     public string Email { get; set; } = null!;
-    public string RoleName { get; set; } = null!;
+    public string Role { get; set; } = null!;        
     public bool IsActive { get; set; }
 }
