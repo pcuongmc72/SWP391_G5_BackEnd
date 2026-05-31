@@ -1,6 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-
 namespace SWP.DAL.Models;
 
 public partial class ClassStudent
@@ -10,6 +7,9 @@ public partial class ClassStudent
     public string StudentId { get; set; } = null!;
 
     public DateTime EnrolledAt { get; set; }
+
+    /// <summary>ClassRole: student | assistant</summary>
+    public string ClassRole { get; set; } = "student";
 
     public virtual Class Class { get; set; } = null!;
 

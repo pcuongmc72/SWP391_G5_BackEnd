@@ -6,10 +6,6 @@ public interface IAuthService
 {
     Task<AuthResponseDto> LoginAsync(LoginRequestDto request);
     Task<AuthResponseDto> RegisterAsync(RegisterRequestDto request);
-<<<<<<< HEAD
-    Task<UserInfoDto> GetProfileAsync(int userId);
+    Task<UserInfoDto> GetProfileAsync(string id);
+    Task<UserInfoDto> UpdateProfileAsync(string id, UpdateProfileDto request);
 }
-=======
-    Task<UserInfoDto> GetProfileAsync(String id);
-}
->>>>>>> origin/thuanpdhe187333

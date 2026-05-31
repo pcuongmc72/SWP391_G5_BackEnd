@@ -10,18 +10,13 @@ public class AuthResponseDto
 
 public class UserInfoDto
 {
-<<<<<<< HEAD
-    public int UserId { get; set; }
-    public string Username { get; set; } = null!;
-    public string Email { get; set; } = null!;
-    public string RoleName { get; set; } = null!;
-    public bool IsActive { get; set; }
-}
-=======
     public string Id { get; set; } = null!;
     public string FullName { get; set; } = null!;
     public string Email { get; set; } = null!;
     public string Role { get; set; } = null!;
+    public string? AvatarUrl { get; set; }
     public bool IsActive { get; set; }
+    public string? Phone { get; set; }
+    public string? Address { get; set; }
+    public string? Bio { get; set; }
 }
->>>>>>> origin/thuanpdhe187333

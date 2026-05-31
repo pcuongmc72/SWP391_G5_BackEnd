@@ -2,10 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SWP.BLL.DTOs.Auth;
 using SWP.BLL.Interfaces;
-<<<<<<< HEAD
-=======
 using System.IdentityModel.Tokens.Jwt;
->>>>>>> origin/thuanpdhe187333
 using System.Security.Claims;
 
 namespace SWP.Controllers;
@@ -43,31 +40,19 @@ public class AuthController : ControllerBase
     }
 
     // ──────────────────────────────────────────────
-    //  POST /api/auth/register
+    //  POST /api/auth/register  (Admin only)
     // ──────────────────────────────────────────────
-<<<<<<< HEAD
-    /// <summary>Đăng ký tài khoản mới</summary>
-    [HttpPost("register")]
-    [ProducesResponseType(typeof(AuthResponseDto), 201)]
-=======
-    /// <summary>Tạo tài khoản mới (Chỉ Admin mới có quyền)</summary>
+    /// <summary>Tạo tài khoản mới — chỉ Admin được phép</summary>
     [HttpPost("register")]
     [Authorize(Roles = "admin")]
     [ProducesResponseType(typeof(AuthResponseDto), 200)]
->>>>>>> origin/thuanpdhe187333
     [ProducesResponseType(400)]
     public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
     {
         try
         {
             var result = await _authService.RegisterAsync(request);
-<<<<<<< HEAD
-            return CreatedAtAction(nameof(GetProfile),
-                new { },
-                new { success = true, message = "Đăng ký thành công.", data = result });
-=======
             return Ok(new { success = true, message = "Tạo tài khoản thành công.", data = result });
->>>>>>> origin/thuanpdhe187333
         }
         catch (InvalidOperationException ex)
         {
@@ -83,35 +68,16 @@ public class AuthController : ControllerBase
     [Authorize]
     [ProducesResponseType(typeof(UserInfoDto), 200)]
     [ProducesResponseType(401)]
-<<<<<<< HEAD
+    [ProducesResponseType(404)]
     public async Task<IActionResult> GetProfile()
     {
-        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
-                       ?? User.FindFirst("sub")?.Value;
-
-        if (userIdClaim is null || !int.TryParse(userIdClaim, out int userId))
+        var id = GetCurrentUserId();
+        if (id is null)
             return Unauthorized(new { success = false, message = "Token không hợp lệ." });
 
         try
         {
-            var profile = await _authService.GetProfileAsync(userId);
-=======
-    [ProducesResponseType(404)]
-    public async Task<IActionResult> GetProfile()
-    {
-        // Đã sửa: Chỉ lấy chuỗi string ra, không parse sang int nữa
-        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
-                       ?? User.FindFirst("sub")?.Value
-                       ?? User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
-
-        if (string.IsNullOrEmpty(userIdClaim))
-            return Unauthorized(new { success = false, message = "Token không hợp lệ hoặc không tìm thấy ID." });
-
-        try
-        {
-            // Truyền thẳng chuỗi ID (VD: "HE187159") xuống Service
-            var profile = await _authService.GetProfileAsync(userIdClaim);
->>>>>>> origin/thuanpdhe187333
+            var profile = await _authService.GetProfileAsync(id);
             return Ok(new { success = true, data = profile });
         }
         catch (KeyNotFoundException ex)
@@ -119,8 +85,36 @@ public class AuthController : ControllerBase
             return NotFound(new { success = false, message = ex.Message });
         }
     }
-<<<<<<< HEAD
+
+    // ──────────────────────────────────────────────
+    //  PUT /api/auth/profile
+    // ──────────────────────────────────────────────
+    /// <summary>Cập nhật thông tin cá nhân (FullName, Phone, Address, Bio, AvatarUrl)</summary>
+    [HttpPut("profile")]
+    [Authorize]
+    [ProducesResponseType(typeof(UserInfoDto), 200)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileDto request)
+    {
+        var id = GetCurrentUserId();
+        if (id is null)
+            return Unauthorized(new { success = false, message = "Token không hợp lệ." });
+
+        try
+        {
+            var updated = await _authService.UpdateProfileAsync(id, request);
+            return Ok(new { success = true, message = "Cập nhật thành công.", data = updated });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { success = false, message = ex.Message });
+        }
+    }
+
+    // ── Helper ────────────────────────────────────
+    private string? GetCurrentUserId() =>
+        User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+        ?? User.FindFirst("sub")?.Value
+        ?? User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
 }
-=======
-}
->>>>>>> origin/thuanpdhe187333

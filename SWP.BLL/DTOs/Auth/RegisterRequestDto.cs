@@ -4,27 +4,6 @@ namespace SWP.BLL.DTOs.Auth;
 
 public class RegisterRequestDto
 {
-<<<<<<< HEAD
-    [Required(ErrorMessage = "Username là bắt buộc")]
-    [MaxLength(50)]
-    public string Username { get; set; } = null!;
-
-    [Required(ErrorMessage = "Password là bắt buộc")]
-    [MinLength(6, ErrorMessage = "Password phải có ít nhất 6 ký tự")]
-    public string Password { get; set; } = null!;
-
-    [Required(ErrorMessage = "Email là bắt buộc")]
-    [EmailAddress(ErrorMessage = "Email không hợp lệ")]
-    [MaxLength(100)]
-    public string Email { get; set; } = null!;
-
-    /// <summary>
-    /// RoleId: 1 = Admin, 2 = Lecturer, 3 = Student
-    /// </summary>
-    [Required(ErrorMessage = "RoleId là bắt buộc")]
-    public int RoleId { get; set; }
-}
-=======
     [Required(ErrorMessage = "Ma dinh danh (Id) la bat buoc.")]
     // Bắt buộc ID phải bắt đầu bằng 2 chữ cái, theo sau là các chữ số
     [RegularExpression(@"^[a-zA-Z]{2}\d+$", ErrorMessage = "Id phai bat dau bang 2 chu cai va theo sau la so (VD: HE187159, GV123456).")]
@@ -50,4 +29,3 @@ public class RegisterRequestDto
     [MaxLength(20)]
     public string Role { get; set; } = null!;
 }
->>>>>>> origin/thuanpdhe187333

@@ -117,6 +117,7 @@ public partial class FlippedClassroomContext : DbContext
                 .HasMaxLength(20)
                 .IsUnicode(false);
             entity.Property(e => e.EnrolledAt).HasDefaultValueSql("(sysdatetime())");
+            entity.Property(e => e.ClassRole).HasMaxLength(20);
 
             entity.HasOne(d => d.Class).WithMany(p => p.ClassStudents)
                 .HasForeignKey(d => d.ClassId)
@@ -266,6 +267,9 @@ public partial class FlippedClassroomContext : DbContext
             entity.Property(e => e.PasswordHash).HasMaxLength(512);
             entity.Property(e => e.Role).HasMaxLength(20);
             entity.Property(e => e.UpdatedAt).HasDefaultValueSql("(sysdatetime())");
+            entity.Property(e => e.Phone).HasMaxLength(20);
+            entity.Property(e => e.Address).HasMaxLength(500);
+            entity.Property(e => e.Bio).HasMaxLength(1000);
         });
 
         OnModelCreatingPartial(modelBuilder);

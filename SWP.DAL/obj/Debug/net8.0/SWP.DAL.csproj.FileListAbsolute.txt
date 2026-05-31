@@ -1,32 +1,15 @@
-D:\SWP\BE\SWP\SWP.DAL\bin\Debug\net8.0\SWP.DAL.deps.json
-D:\SWP\BE\SWP\SWP.DAL\bin\Debug\net8.0\SWP.DAL.runtimeconfig.json
-D:\SWP\BE\SWP\SWP.DAL\bin\Debug\net8.0\SWP.DAL.dll
-D:\SWP\BE\SWP\SWP.DAL\bin\Debug\net8.0\SWP.DAL.pdb
-D:\SWP\BE\SWP\SWP.DAL\obj\Debug\net8.0\SWP.DAL.GeneratedMSBuildEditorConfig.editorconfig
-D:\SWP\BE\SWP\SWP.DAL\obj\Debug\net8.0\SWP.DAL.AssemblyInfoInputs.cache
-D:\SWP\BE\SWP\SWP.DAL\obj\Debug\net8.0\SWP.DAL.AssemblyInfo.cs
-D:\SWP\BE\SWP\SWP.DAL\obj\Debug\net8.0\SWP.DAL.csproj.CoreCompileInputs.cache
-D:\SWP\BE\SWP\SWP.DAL\obj\Debug\net8.0\SWP.DAL.dll
-D:\SWP\BE\SWP\SWP.DAL\obj\Debug\net8.0\refint\SWP.DAL.dll
-D:\SWP\BE\SWP\SWP.DAL\obj\Debug\net8.0\SWP.DAL.pdb
-D:\SWP\BE\SWP\SWP.DAL\obj\Debug\net8.0\SWP.DAL.genruntimeconfig.cache
-D:\SWP\BE\SWP\SWP.DAL\obj\Debug\net8.0\ref\SWP.DAL.dll
-D:\SWP\BE\SWP\SWP.DAL\obj\Debug\net8.0\SWP.DAL.csproj.AssemblyReference.cache
-<<<<<<< HEAD
-=======
-D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP391_G5_BackEnd\SWP.DAL\bin\Debug\net8.0\SWP.DAL.deps.json
-D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP391_G5_BackEnd\SWP.DAL\bin\Debug\net8.0\SWP.DAL.runtimeconfig.json
-D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP391_G5_BackEnd\SWP.DAL\bin\Debug\net8.0\SWP.DAL.dll
-D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP391_G5_BackEnd\SWP.DAL\bin\Debug\net8.0\SWP.DAL.pdb
-D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP391_G5_BackEnd\SWP.DAL\obj\Debug\net8.0\SWP.DAL.csproj.AssemblyReference.cache
-D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP391_G5_BackEnd\SWP.DAL\obj\Debug\net8.0\SWP.DAL.GeneratedMSBuildEditorConfig.editorconfig
-D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP391_G5_BackEnd\SWP.DAL\obj\Debug\net8.0\SWP.DAL.AssemblyInfoInputs.cache
-D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP391_G5_BackEnd\SWP.DAL\obj\Debug\net8.0\SWP.DAL.AssemblyInfo.cs
-D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP391_G5_BackEnd\SWP.DAL\obj\Debug\net8.0\SWP.DAL.csproj.CoreCompileInputs.cache
-D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP391_G5_BackEnd\SWP.DAL\obj\Debug\net8.0\SWP.DAL.sourcelink.json
-D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP391_G5_BackEnd\SWP.DAL\obj\Debug\net8.0\SWP.DAL.dll
-D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP391_G5_BackEnd\SWP.DAL\obj\Debug\net8.0\refint\SWP.DAL.dll
-D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP391_G5_BackEnd\SWP.DAL\obj\Debug\net8.0\SWP.DAL.pdb
-D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP391_G5_BackEnd\SWP.DAL\obj\Debug\net8.0\SWP.DAL.genruntimeconfig.cache
-D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP391_G5_BackEnd\SWP.DAL\obj\Debug\net8.0\ref\SWP.DAL.dll
->>>>>>> origin/thuanpdhe187333
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP\SWP391_G5_BackEnd\SWP.DAL\obj\Debug\net8.0\SWP.DAL.csproj.AssemblyReference.cache
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP\SWP391_G5_BackEnd\SWP.DAL\obj\Debug\net8.0\SWP.DAL.GeneratedMSBuildEditorConfig.editorconfig
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP\SWP391_G5_BackEnd\SWP.DAL\obj\Debug\net8.0\SWP.DAL.AssemblyInfoInputs.cache
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP\SWP391_G5_BackEnd\SWP.DAL\obj\Debug\net8.0\SWP.DAL.AssemblyInfo.cs
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP\SWP391_G5_BackEnd\SWP.DAL\obj\Debug\net8.0\SWP.DAL.csproj.CoreCompileInputs.cache
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP\SWP391_G5_BackEnd\SWP.DAL\obj\Debug\net8.0\SWP.DAL.sourcelink.json
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP\SWP391_G5_BackEnd\SWP.DAL\bin\Debug\net8.0\SWP.DAL.deps.json
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP\SWP391_G5_BackEnd\SWP.DAL\bin\Debug\net8.0\SWP.DAL.runtimeconfig.json
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP\SWP391_G5_BackEnd\SWP.DAL\bin\Debug\net8.0\SWP.DAL.dll
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP\SWP391_G5_BackEnd\SWP.DAL\bin\Debug\net8.0\SWP.DAL.pdb
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP\SWP391_G5_BackEnd\SWP.DAL\obj\Debug\net8.0\SWP.DAL.dll
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP\SWP391_G5_BackEnd\SWP.DAL\obj\Debug\net8.0\refint\SWP.DAL.dll
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP\SWP391_G5_BackEnd\SWP.DAL\obj\Debug\net8.0\SWP.DAL.pdb
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP\SWP391_G5_BackEnd\SWP.DAL\obj\Debug\net8.0\SWP.DAL.genruntimeconfig.cache
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP\SWP391_G5_BackEnd\SWP.DAL\obj\Debug\net8.0\ref\SWP.DAL.dll

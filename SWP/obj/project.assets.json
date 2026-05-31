@@ -4553,11 +4553,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\EBOOK\\KÌ 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP\\SWP.csproj",
+      "projectUniqueName": "D:\\EBOOK\\KÌ 8\\SWP391_SU26\\SWP\\SWP\\SWP391_G5_BackEnd\\SWP\\SWP.csproj",
       "projectName": "SWP",
-      "projectPath": "D:\\EBOOK\\KÌ 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP\\SWP.csproj",
+      "projectPath": "D:\\EBOOK\\KÌ 8\\SWP391_SU26\\SWP\\SWP\\SWP391_G5_BackEnd\\SWP\\SWP.csproj",
       "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-      "outputPath": "D:\\EBOOK\\KÌ 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP\\obj\\",
+      "outputPath": "D:\\EBOOK\\KÌ 8\\SWP391_SU26\\SWP\\SWP\\SWP391_G5_BackEnd\\SWP\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -4578,8 +4578,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "D:\\EBOOK\\KÌ 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.BLL\\SWP.BLL.csproj": {
-              "projectPath": "D:\\EBOOK\\KÌ 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP.BLL\\SWP.BLL.csproj"
+            "D:\\EBOOK\\KÌ 8\\SWP391_SU26\\SWP\\SWP\\SWP391_G5_BackEnd\\SWP.BLL\\SWP.BLL.csproj": {
+              "projectPath": "D:\\EBOOK\\KÌ 8\\SWP391_SU26\\SWP\\SWP\\SWP391_G5_BackEnd\\SWP.BLL\\SWP.BLL.csproj"
             }
           }
         }
@@ -4651,13 +4651,5 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.313/PortableRuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problem reading the cache file D:\\EBOOK\\KÌ 8\\SWP391_SU26\\SWP\\SWP391_G5_BackEnd\\SWP\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0."
-    }
-  ]
+  }
 }
