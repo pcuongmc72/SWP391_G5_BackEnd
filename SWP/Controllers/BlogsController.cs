@@ -21,9 +21,9 @@ namespace SWP.Controllers
         }
 
         [HttpGet("public")]
-        public async Task<ActionResult<IEnumerable<BlogResponseDto>>> GetAllPublicBlogs([FromQuery] Guid? courseId, [FromQuery] string? currentUserId = null)
+        public async Task<ActionResult<IEnumerable<BlogResponseDto>>> GetAllPublicBlogs([FromQuery] Guid? courseId)
         {
-            var blogs = await _blogsService.GetAllPublicBlogsAsync(courseId, 1, currentUserId);
+            var blogs = await _blogsService.GetAllPublicBlogsAsync(courseId);
             return Ok(blogs);
         }
 

@@ -9,11 +9,11 @@ namespace SWP.BLL.Interfaces
     {
         Task<IEnumerable<BlogResponseDto>> GetAllBlogsForAdminAsync(Guid? courseId = null);
         Task<IEnumerable<BlogResponseDto>> GetPrivateBlogsAsync(Guid? courseId = null);
-        Task<IEnumerable<BlogResponseDto>> GetAllPublicBlogsAsync(Guid? courseId = null, int? status = 1, string? currentUserId = null);
+        Task<IEnumerable<BlogResponseDto>> GetAllPublicBlogsAsync(Guid? courseId = null, int? status = 1);
         Task<IEnumerable<BlogResponseDto>> GetClassBlogsAsync(string classId, Guid? courseId = null, int? status = 1);
         Task<IEnumerable<BlogResponseDto>> GetUserBlogsAsync(string userId);
         Task<IEnumerable<BlogResponseDto>> GetStudentClassBlogsAsync(string studentId, Guid? courseId = null);
-        Task<IEnumerable<BlogResponseDto>> GetAllBlogsAsync();
+
         Task<BlogResponseDto> GetBlogByIdAsync(Guid id);
         Task<BlogResponseDto> CreateBlogAsync(BlogRequestDto request);
         Task<BlogResponseDto> UpdateBlogAsync(Guid id, BlogRequestDto request);

@@ -56,23 +56,12 @@ namespace SWP.BLL.Services
             return blogs.Select(MapToResponseDto);
         }
 
-        public async Task<IEnumerable<BlogResponseDto>> GetAllPublicBlogsAsync(Guid? courseId = null, int? status = 1, string? currentUserId = null)
+        public async Task<IEnumerable<BlogResponseDto>> GetAllPublicBlogsAsync(Guid? courseId = null, int? status = 1)
         {
             var query = _context.Blogs
                 .Include(b => b.Author)
                 .Include(b => b.Course)
-                .AsQueryable();
-
-            // If status is 1 (Approved), we show all approved blogs PLUS author's own pending blogs
-            if (status.HasValue)
-            {
-                query = query.Where(b => b.Status == status.Value && !b.IsPrivate);
-            }
-            else
-            {
-                // Default to approved public blogs if no status specified
-                query = query.Where(b => b.Status == 1 && !b.IsPrivate);
-            }
+                .Where(b => b.Status == (status ?? 1) && !b.IsPrivate);
 
             if (courseId.HasValue)
             {
@@ -138,16 +127,7 @@ namespace SWP.BLL.Services
             return blogs.Select(MapToResponseDto);
         }
 
-        public async Task<IEnumerable<BlogResponseDto>> GetAllBlogsAsync()
-        {
-            var blogs = await _context.Blogs
-                .Include(b => b.Author)
-                .Include(b => b.Course)
-                .OrderByDescending(b => b.CreatedAt)
-                .ToListAsync();
 
-            return blogs.Select(MapToResponseDto);
-        }
 
         public async Task<BlogResponseDto> GetBlogByIdAsync(Guid id)
         {
@@ -238,7 +218,7 @@ namespace SWP.BLL.Services
             blog.ClassId = request.ClassId;
             blog.IsPrivate = request.IsPrivate;
             blog.Keywords = request.Keywords;
-            blog.UpdatedAt = DateTime.UtcNow;
+            blog.UpdatedAt = GetHanoiTime();
 
             // Re-evaluate status if it's not private anymore
             if (blog.IsPrivate)
@@ -269,7 +249,7 @@ namespace SWP.BLL.Services
             if (blog == null) return false;
 
             blog.Status = status;
-            blog.UpdatedAt = DateTime.UtcNow;
+            blog.UpdatedAt = GetHanoiTime();
 
             await _context.SaveChangesAsync();
             return true;
