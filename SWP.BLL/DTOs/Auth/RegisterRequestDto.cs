@@ -6,7 +6,7 @@ public class RegisterRequestDto
 {
     [Required(ErrorMessage = "Ma dinh danh (Id) la bat buoc.")]
     // Bắt buộc ID phải bắt đầu bằng 2 chữ cái, theo sau là các chữ số
-    [RegularExpression(@"^[a-zA-Z]{2}\d+$", ErrorMessage = "Id phai bat dau bang 2 chu cai va theo sau la so (VD: HE187159, GV123456).")]
+    [RegularExpression(@"^[a-zA-Z]{2}\d+$", ErrorMessage = "Id phai bat zdau bang 2 chu cai va theo sau la so (VD: HE187159, GV123456).")]
     [MaxLength(20)]
     public string Id { get; set; } = null!;
 

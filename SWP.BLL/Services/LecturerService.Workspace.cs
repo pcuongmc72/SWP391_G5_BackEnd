@@ -42,7 +42,8 @@ public partial class LecturerService
                 Id = cs.Student.Id,
                 FullName = cs.Student.FullName,
                 Email = cs.Student.Email,
-                AvatarUrl = cs.Student.AvatarUrl
+                AvatarUrl = cs.Student.AvatarUrl,
+                ClassRole = cs.ClassRole ?? "student"
             })
             .ToListAsync();
     }
@@ -113,7 +114,8 @@ public partial class LecturerService
 
         if (entity is null) throw new KeyNotFoundException("Khong tim thay hoc lieu.");
 
-        _context.LearningMaterials.Remove(entity);
+        // Soft delete – disable the material but keep it in DB so lecturer can still see it
+        entity.IsDisabled = true;
         await _context.SaveChangesAsync();
     }
 
@@ -382,7 +384,8 @@ public partial class LecturerService
         FileUrl = m.FileUrl,
         FileSize = m.FileSize,
         UploadedAt = m.UploadedAt,
-        CompletedByUsers = m.MaterialCompletions?.Select(c => c.StudentId).ToList() ?? new List<string>()
+        CompletedByUsers = m.MaterialCompletions?.Select(c => c.StudentId).ToList() ?? new List<string>(),
+        IsDisabled = m.IsDisabled
     };
 
     private static SubmissionDto MapSubmission(Submission s) => new()
@@ -443,5 +446,23 @@ public partial class LecturerService
         var valid = new[] { "video", "pdf", "document", "quiz" };
         if (!valid.Contains(type.ToLower()))
             throw new ArgumentException("Loai hoc lieu khong hop le.");
+    }
+
+    public async Task PromoteStudentAsync(string lecturerId, string classId, string studentId, string role)
+    {
+        await EnsureClassAccessAsync(lecturerId, classId);
+
+        var validRoles = new[] { "student", "assistant" };
+        if (!validRoles.Contains(role.ToLower()))
+            throw new ArgumentException($"Role khong hop le: {role}. Chi chap nhan: student, assistant.");
+
+        var enrollment = await _context.ClassStudents
+            .FirstOrDefaultAsync(cs => cs.ClassId == classId && cs.StudentId == studentId);
+
+        if (enrollment is null)
+            throw new KeyNotFoundException("Hoc sinh khong thuoc lop hoc nay.");
+
+        enrollment.ClassRole = role.ToLower();
+        await _context.SaveChangesAsync();
     }
 }

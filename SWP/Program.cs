@@ -70,14 +70,15 @@ builder.Services.AddSwaggerGen(c =>
         Description = "API hệ thống EduTraining – Authentication & Authorization"
     });
 
-    // Thêm định nghĩa Bearer token
+    // Cấu hình mới: Tự động nhận diện Bearer Token
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "Nhập JWT token theo định dạng: Bearer {token}",
         Name = "Authorization",
+        Type = SecuritySchemeType.Http, 
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer"
+        Description = "Chỉ cần dán thẳng JWT token vào đây, KHÔNG cần gõ chữ Bearer"
     });
 
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -94,7 +95,14 @@ builder.Services.AddSwaggerGen(c =>
             Array.Empty<string>()
         }
     });
+
+    c.CustomSchemaIds(type => type.FullName);
 });
+builder.Services.AddScoped<IUsersService, UsersService>();
+builder.Services.AddScoped<IAcademicTermsService, AcademicTermsService>();
+builder.Services.AddScoped<ICoursesService, CoursesService>();
+builder.Services.AddScoped<IClassesService, ClassesService>();
+builder.Services.AddScoped<IClassStudentsService, ClassStudentsService>();
 
 // ─── Build & Middleware ───────────────────────────────────────────────────────
 var app = builder.Build();
@@ -102,7 +110,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EduTraining API v1"));
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FlippedClassroom"));
 }
 
 app.UseCors("AllowAll");

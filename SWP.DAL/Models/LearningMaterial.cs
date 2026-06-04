@@ -20,6 +20,9 @@ public partial class LearningMaterial
 
     public DateTime CreatedAt { get; set; }
 
+    /// <summary>Soft delete flag – true means disabled/hidden from students but still visible to lecturer</summary>
+    public bool IsDisabled { get; set; } = false;
+
     public virtual Class Class { get; set; } = null!;
 
     public virtual ICollection<MaterialCompletion> MaterialCompletions { get; set; } = new List<MaterialCompletion>();

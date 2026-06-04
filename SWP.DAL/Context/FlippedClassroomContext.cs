@@ -37,7 +37,6 @@ public partial class FlippedClassroomContext : DbContext
     public virtual DbSet<DiscussionThread> DiscussionThreads { get; set; }
 
     public virtual DbSet<DiscussionReply> DiscussionReplies { get; set; }
-
     public virtual DbSet<Course> Courses { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
@@ -55,6 +54,8 @@ public partial class FlippedClassroomContext : DbContext
     {
         modelBuilder.Entity<AcademicTerm>(entity =>
         {
+            entity.HasIndex(e => e.TermCode, "UQ_AcademicTerms_TermCode").IsUnique(); // Bổ sung TermCode
+            entity.Property(e => e.TermCode).HasMaxLength(20).IsUnicode(false); // Bổ sung TermCode
             entity.Property(e => e.Id).HasDefaultValueSql("(newsequentialid())");
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetime())");
             entity.Property(e => e.Name).HasMaxLength(255);
@@ -66,6 +67,8 @@ public partial class FlippedClassroomContext : DbContext
                 .HasMaxLength(20)
                 .IsUnicode(false);
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetime())");
+            entity.Property(e => e.StartDate);
+            entity.Property(e => e.EndDate);
             entity.Property(e => e.LecturerId)
                 .HasMaxLength(20)
                 .IsUnicode(false);
@@ -105,9 +108,9 @@ public partial class FlippedClassroomContext : DbContext
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_ClassSessions_Class");
         });
-
         modelBuilder.Entity<ClassStudent>(entity =>
         {
+            entity.ToTable("ClassStudents", tb => tb.HasTrigger("TR_ClassStudents_Trigger"));
             entity.HasKey(e => new { e.ClassId, e.StudentId });
 
             entity.Property(e => e.ClassId)
@@ -117,7 +120,7 @@ public partial class FlippedClassroomContext : DbContext
                 .HasMaxLength(20)
                 .IsUnicode(false);
             entity.Property(e => e.EnrolledAt).HasDefaultValueSql("(sysdatetime())");
-            entity.Property(e => e.ClassRole).HasMaxLength(20);
+            entity.Property(e => e.ClassRole).HasMaxLength(20).IsRequired(false);
 
             entity.HasOne(d => d.Class).WithMany(p => p.ClassStudents)
                 .HasForeignKey(d => d.ClassId)
@@ -138,6 +141,7 @@ public partial class FlippedClassroomContext : DbContext
             entity.Property(e => e.FileUrl).HasMaxLength(500);
             entity.Property(e => e.MaterialType).HasMaxLength(20);
             entity.Property(e => e.Title).HasMaxLength(255);
+            entity.Property(e => e.IsDisabled).HasDefaultValue(false);
 
             entity.HasOne(d => d.Class).WithMany(p => p.LearningMaterials)
                 .HasForeignKey(d => d.ClassId)
@@ -241,7 +245,6 @@ public partial class FlippedClassroomContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_DiscussionReplies_Author");
         });
-
         modelBuilder.Entity<Course>(entity =>
         {
             entity.HasIndex(e => e.Code, "UQ_Courses_Code").IsUnique();

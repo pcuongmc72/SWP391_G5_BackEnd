@@ -19,10 +19,7 @@ public class AuthController : ControllerBase
         _authService = authService;
     }
 
-    // ──────────────────────────────────────────────
     //  POST /api/auth/login
-    // ──────────────────────────────────────────────
-    /// <summary>Đăng nhập và nhận JWT token</summary>
     [HttpPost("login")]
     [ProducesResponseType(typeof(AuthResponseDto), 200)]
     [ProducesResponseType(401)]
@@ -62,8 +59,6 @@ public class AuthController : ControllerBase
 
     // ──────────────────────────────────────────────
     //  GET /api/auth/profile
-    // ──────────────────────────────────────────────
-    /// <summary>Lấy thông tin người dùng hiện tại (yêu cầu JWT)</summary>
     [HttpGet("profile")]
     [Authorize]
     [ProducesResponseType(typeof(UserInfoDto), 200)]
@@ -85,7 +80,6 @@ public class AuthController : ControllerBase
             return NotFound(new { success = false, message = ex.Message });
         }
     }
-
     // ──────────────────────────────────────────────
     //  PUT /api/auth/profile
     // ──────────────────────────────────────────────

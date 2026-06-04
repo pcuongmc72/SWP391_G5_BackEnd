@@ -26,7 +26,6 @@ public partial class User
     public string? Address { get; set; }
 
     public string? Bio { get; set; }
-
     public virtual ICollection<ClassStudent> ClassStudents { get; set; } = new List<ClassStudent>();
 
     public virtual ICollection<Class> Classes { get; set; } = new List<Class>();

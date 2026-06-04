@@ -212,6 +212,24 @@ public class LecturerController : ControllerBase
     public async Task<IActionResult> CreateReply(string classId, Guid threadId, [FromBody] CreateReplyDto request)
         => await Write(classId, () => _lecturerService.CreateReplyAsync(GetCurrentUserId()!, classId, threadId, request));
 
+    // ─── Student Promotion (class-scoped) ─────────────────────────────
+    [HttpPut("classes/{classId}/students/{studentId}/promote")]
+    public async Task<IActionResult> PromoteStudent(string classId, string studentId, [FromQuery] string role = "assistant")
+    {
+        var lecturerId = GetCurrentUserId();
+        if (lecturerId is null) return Unauthorized();
+        try
+        {
+            await _lecturerService.PromoteStudentAsync(lecturerId, classId, studentId, role);
+            var msg = role.ToLower() == "assistant"
+                ? "Da thang cap tro giang thanh cong."
+                : "Da ha chuc vu, hoc sinh quay lai vai tro binh thuong.";
+            return Ok(new { success = true, message = msg });
+        }
+        catch (KeyNotFoundException ex) { return NotFound(new { success = false, message = ex.Message }); }
+        catch (ArgumentException ex) { return BadRequest(new { success = false, message = ex.Message }); }
+    }
+
     private async Task<IActionResult> SessionMutation(string classId, Func<Task<ClassSessionDto>> action, string message)
     {
         var lecturerId = GetCurrentUserId();

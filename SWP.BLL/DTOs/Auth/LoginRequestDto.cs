@@ -10,5 +10,5 @@ public class LoginRequestDto
     public string Email { get; set; } = null!;
 
     [Required(ErrorMessage = "Password la bat buoc")]
-    public string Password { get; set; } = null!;
+    public string? Password { get; set; } = null!;
 }

@@ -55,6 +55,8 @@ public class ClassStudentDto
     public string FullName { get; set; } = null!;
     public string Email { get; set; } = null!;
     public string? AvatarUrl { get; set; }
+    /// <summary>Class-scoped role: student | assistant</summary>
+    public string ClassRole { get; set; } = "student";
 }
 
 public class MaterialDto
@@ -68,6 +70,7 @@ public class MaterialDto
     public string? FileSize { get; set; }
     public DateOnly UploadedAt { get; set; }
     public List<string> CompletedByUsers { get; set; } = new();
+    public bool IsDisabled { get; set; } = false;
 }
 
 public class UpsertMaterialDto

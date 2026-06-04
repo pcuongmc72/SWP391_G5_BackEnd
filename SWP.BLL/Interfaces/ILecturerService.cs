@@ -36,4 +36,7 @@ public interface ILecturerService
     Task<IReadOnlyList<DiscussionThreadDto>> GetThreadsAsync(string lecturerId, string classId);
     Task<DiscussionThreadDto> CreateThreadAsync(string lecturerId, string classId, UpsertThreadDto request);
     Task<DiscussionReplyDto> CreateReplyAsync(string lecturerId, string classId, Guid threadId, CreateReplyDto request);
+
+    /// <summary>Promote or demote a student's role within this class only (ClassStudents.ClassRole).</summary>
+    Task PromoteStudentAsync(string lecturerId, string classId, string studentId, string role);
 }

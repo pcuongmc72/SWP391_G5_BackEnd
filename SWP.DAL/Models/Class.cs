@@ -11,12 +11,15 @@ public partial class Class
 
     public Guid AcademicTermId { get; set; }
 
-    public string LecturerId { get; set; } = null!;
+    public string? LecturerId { get; set; }
 
-    public string Name { get; set; } = null!;
+    public string? Name { get; set; }
 
     public bool AllowReviewAfterEnd { get; set; }
 
+    public DateOnly? StartDate { get; set; }
+
+    public DateOnly? EndDate { get; set; }
     public DateTime CreatedAt { get; set; }
 
     public virtual AcademicTerm AcademicTerm { get; set; } = null!;
@@ -31,5 +34,5 @@ public partial class Class
 
     public virtual Course Course { get; set; } = null!;
 
-    public virtual User Lecturer { get; set; } = null!;
+    public virtual User? Lecturer { get; set; }
 }

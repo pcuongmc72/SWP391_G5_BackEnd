@@ -152,3 +152,4 @@ D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP\SWP391_G5_BackEnd\SWP\obj\Debug\net8.0\refint
 D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP\SWP391_G5_BackEnd\SWP\obj\Debug\net8.0\SWP.pdb
 D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP\SWP391_G5_BackEnd\SWP\obj\Debug\net8.0\SWP.genruntimeconfig.cache
 D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP\SWP391_G5_BackEnd\SWP\obj\Debug\net8.0\ref\SWP.dll
+D:\EBOOK\KÌ 8\SWP391_SU26\SWP\SWP\SWP391_G5_BackEnd\SWP\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
