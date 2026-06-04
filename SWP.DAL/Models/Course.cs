@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace SWP.DAL.Models;
@@ -16,4 +16,6 @@ public partial class Course
     public DateTime CreatedAt { get; set; }
 
     public virtual ICollection<Class> Classes { get; set; } = new List<Class>();
+
+    public virtual ICollection<Blog> Blogs { get; set; } = new List<Blog>();
 }

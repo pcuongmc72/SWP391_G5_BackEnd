@@ -28,4 +28,6 @@ public partial class Class
     public virtual Course Course { get; set; } = null!;
 
     public virtual User? Lecturer { get; set; }
+
+    public virtual ICollection<Blog> Blogs { get; set; } = new List<Blog>();
 }
