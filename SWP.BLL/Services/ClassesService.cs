@@ -164,6 +164,9 @@ public class ClassesService : IClassesService
         if (classEntity == null)
             throw new KeyNotFoundException("Không tìm thấy lớp học.");
 
+        if (!string.IsNullOrEmpty(classEntity.LecturerId))
+            throw new InvalidOperationException("Không thể xóa lớp học này vì đang có giảng viên phụ trách.");
+
         bool hasStudents = await _context.ClassStudents.AnyAsync(cs => cs.ClassId == id);
         if (hasStudents)
             throw new InvalidOperationException("Không thể xóa lớp học này vì đang có sinh viên theo học.");
