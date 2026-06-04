@@ -19,29 +19,51 @@ public class AcademicTermsService : IAcademicTermsService
         _context = context;
     }
 
-    public async Task<IEnumerable<AcademicTermResponseDto>> GetAllTermsAsync()
+        public async Task<IEnumerable<AcademicTermResponseDto>> GetAllTermsAsync()
     {
-        var terms = await _context.AcademicTerms
+        // Sử dụng Select trực tiếp để chuyển đổi thành câu lệnh SQL COALESCE xử lý Null
+        return await _context.AcademicTerms
             .OrderByDescending(t => t.StartDate)
+            .Select(t => new AcademicTermResponseDto
+            {
+                Id = t.Id,
+                TermCode = t.TermCode ?? "N/A", // Nếu TermCode trong DB bị NULL thì thay bằng "N/A"
+                Name = t.Name ?? "N/A",         // Nếu Name trong DB bị NULL thì thay bằng "N/A"
+                StartDate = t.StartDate,
+                EndDate = t.EndDate,
+                CreatedAt = t.CreatedAt
+            })
             .ToListAsync();
-
-        return terms.Select(MapToDto);
     }
 
-    public async Task<AcademicTermResponseDto> GetTermByIdAsync(Guid id)
+
+        public async Task<AcademicTermResponseDto> GetTermByIdAsync(Guid id)
     {
-        var term = await _context.AcademicTerms.FirstOrDefaultAsync(t => t.Id == id);
+        var term = await _context.AcademicTerms
+            .Where(t => t.Id == id)
+            .Select(t => new AcademicTermResponseDto
+            {
+                Id = t.Id,
+                TermCode = t.TermCode ?? "N/A",
+                Name = t.Name ?? "N/A",
+                StartDate = t.StartDate,
+                EndDate = t.EndDate,
+                CreatedAt = t.CreatedAt
+            })
+            .FirstOrDefaultAsync();
+
         if (term == null)
             throw new KeyNotFoundException("Không tìm thấy học kỳ yêu cầu.");
 
-        return MapToDto(term);
+        return term;
     }
+
 
     public async Task<AcademicTermResponseDto> CreateTermAsync(AcademicTermRequestDto request)
     {
         // Kiểm tra trùng lặp mã học kỳ (ví dụ trùng mã SP26)
         bool codeExists = await _context.AcademicTerms
-            .AnyAsync(t => t.TermCode.ToLower() == request.TermCode.ToLower());
+            .AnyAsync(t => t.TermCode != null && t.TermCode.ToLower() == request.TermCode.ToLower());
 
         if (codeExists)
             throw new InvalidOperationException($"Mã học kỳ '{request.TermCode.ToUpper()}' đã tồn tại trên hệ thống.");
@@ -70,7 +92,7 @@ public class AcademicTermsService : IAcademicTermsService
 
         // Kiểm tra xem mã mới định thay đổi có trùng với một học kỳ khác không
         bool codeDuplicate = await _context.AcademicTerms
-            .AnyAsync(t => t.Id != id && t.TermCode.ToLower() == request.TermCode.ToLower());
+            .AnyAsync(t => t.Id != id && t.TermCode != null && t.TermCode.ToLower() == request.TermCode.ToLower());
 
         if (codeDuplicate)
             throw new InvalidOperationException($"Mã học kỳ '{request.TermCode.ToUpper()}' đã được sử dụng bởi học kỳ khác.");
@@ -120,7 +142,7 @@ public class AcademicTermsService : IAcademicTermsService
     private static AcademicTermResponseDto MapToDto(AcademicTerm term) => new()
     {
         Id = term.Id,
-        TermCode = term.TermCode,
+        TermCode = term.TermCode ?? "N/A",
         Name = term.Name,
         StartDate = term.StartDate,
         EndDate = term.EndDate,
