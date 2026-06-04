@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace SWP.DAL.Models;
@@ -6,7 +6,7 @@ namespace SWP.DAL.Models;
 public partial class AcademicTerm
 {
     public Guid Id { get; set; }
-    public string TermCode { get; set; } = null!;
+    public string? TermCode { get; set; }
 
     public string Name { get; set; } = null!;
 

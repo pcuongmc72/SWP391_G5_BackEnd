@@ -33,3 +33,21 @@ D:\SWP\New folder\SWP391_G5_BackEnd\SWP.BLL\obj\Debug\net8.0\refint\SWP.BLL.dll
 D:\SWP\New folder\SWP391_G5_BackEnd\SWP.BLL\obj\Debug\net8.0\SWP.BLL.pdb
 D:\SWP\New folder\SWP391_G5_BackEnd\SWP.BLL\obj\Debug\net8.0\SWP.BLL.genruntimeconfig.cache
 D:\SWP\New folder\SWP391_G5_BackEnd\SWP.BLL\obj\Debug\net8.0\ref\SWP.BLL.dll
+C:\Users\admin\Desktop\SWP\SWP391_G5_BackEnd\SWP.BLL\bin\Debug\net8.0\SWP.BLL.deps.json
+C:\Users\admin\Desktop\SWP\SWP391_G5_BackEnd\SWP.BLL\bin\Debug\net8.0\SWP.BLL.runtimeconfig.json
+C:\Users\admin\Desktop\SWP\SWP391_G5_BackEnd\SWP.BLL\bin\Debug\net8.0\SWP.BLL.dll
+C:\Users\admin\Desktop\SWP\SWP391_G5_BackEnd\SWP.BLL\bin\Debug\net8.0\SWP.BLL.pdb
+C:\Users\admin\Desktop\SWP\SWP391_G5_BackEnd\SWP.BLL\bin\Debug\net8.0\SWP.DAL.dll
+C:\Users\admin\Desktop\SWP\SWP391_G5_BackEnd\SWP.BLL\bin\Debug\net8.0\SWP.DAL.pdb
+C:\Users\admin\Desktop\SWP\SWP391_G5_BackEnd\SWP.BLL\obj\Debug\net8.0\SWP.BLL.csproj.AssemblyReference.cache
+C:\Users\admin\Desktop\SWP\SWP391_G5_BackEnd\SWP.BLL\obj\Debug\net8.0\SWP.BLL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\admin\Desktop\SWP\SWP391_G5_BackEnd\SWP.BLL\obj\Debug\net8.0\SWP.BLL.AssemblyInfoInputs.cache
+C:\Users\admin\Desktop\SWP\SWP391_G5_BackEnd\SWP.BLL\obj\Debug\net8.0\SWP.BLL.AssemblyInfo.cs
+C:\Users\admin\Desktop\SWP\SWP391_G5_BackEnd\SWP.BLL\obj\Debug\net8.0\SWP.BLL.csproj.CoreCompileInputs.cache
+C:\Users\admin\Desktop\SWP\SWP391_G5_BackEnd\SWP.BLL\obj\Debug\net8.0\SWP.BLL.sourcelink.json
+C:\Users\admin\Desktop\SWP\SWP391_G5_BackEnd\SWP.BLL\obj\Debug\net8.0\SWP.BLL.csproj.Up2Date
+C:\Users\admin\Desktop\SWP\SWP391_G5_BackEnd\SWP.BLL\obj\Debug\net8.0\SWP.BLL.dll
+C:\Users\admin\Desktop\SWP\SWP391_G5_BackEnd\SWP.BLL\obj\Debug\net8.0\refint\SWP.BLL.dll
+C:\Users\admin\Desktop\SWP\SWP391_G5_BackEnd\SWP.BLL\obj\Debug\net8.0\SWP.BLL.pdb
+C:\Users\admin\Desktop\SWP\SWP391_G5_BackEnd\SWP.BLL\obj\Debug\net8.0\SWP.BLL.genruntimeconfig.cache
+C:\Users\admin\Desktop\SWP\SWP391_G5_BackEnd\SWP.BLL\obj\Debug\net8.0\ref\SWP.BLL.dll

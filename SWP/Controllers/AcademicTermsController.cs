@@ -10,7 +10,7 @@ namespace SWP.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = "admin")]
+[Authorize(Roles = "admin,student")]
 [Produces("application/json")]
 public class AcademicTermsController : ControllerBase
 {
@@ -32,6 +32,7 @@ public class AcademicTermsController : ControllerBase
 
     // GET: /api/academic-terms/{id}
     [HttpGet("{id}")]
+    [Authorize(Roles = "admin,student")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     public async Task<IActionResult> GetById(Guid id)
