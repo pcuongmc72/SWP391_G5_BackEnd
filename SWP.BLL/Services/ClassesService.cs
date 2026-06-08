@@ -40,19 +40,46 @@ public class ClassesService : IClassesService
         return classes.Select(MapToDto);
     }
 
-    public async Task<IEnumerable<ClassResponseDto>> GetClassesByStudentAsync(string studentId)
+    public async Task<IEnumerable<ClassResponseDto>> GetClassesByStudentAsync(string studentId, Guid? academicTermId = null)
     {
-        var classIds = await _context.ClassStudents
-            .Where(cs => cs.StudentId == studentId)
-            .Select(cs => cs.ClassId)
-            .ToListAsync();
+        return await GetClassesByUserAsync(studentId, "student", academicTermId);
+    }
 
-        var classes = await _context.Classes
+    public async Task<IEnumerable<ClassResponseDto>> GetClassesByUserAsync(string userId, string role, Guid? academicTermId = null)
+    {
+        IQueryable<Class> query;
+
+        if (string.IsNullOrEmpty(role) || role.ToLower() == "student")
+        {
+            var enrolledClassIds = _context.ClassStudents
+                .Where(cs => cs.StudentId == userId)
+                .Select(cs => cs.ClassId);
+
+            query = _context.Classes.Where(c => enrolledClassIds.Contains(c.Id));
+        }
+        else if (role.ToLower() == "lecturer")
+        {
+            query = _context.Classes.Where(c => c.LecturerId == userId);
+        }
+        else if (role.ToLower() == "admin")
+        {
+            query = _context.Classes;
+        }
+        else
+        {
+            return Enumerable.Empty<ClassResponseDto>();
+        }
+
+        if (academicTermId.HasValue)
+        {
+            query = query.Where(c => c.AcademicTermId == academicTermId.Value);
+        }
+
+        var classes = await query
             .Include(c => c.Course)
             .Include(c => c.AcademicTerm)
             .Include(c => c.Lecturer)
             .Include(c => c.ClassStudents)
-            .Where(c => classIds.Contains(c.Id))
             .OrderByDescending(c => c.CreatedAt)
             .ToListAsync();
 
@@ -91,6 +118,7 @@ public class ClassesService : IClassesService
         var newClass = new Class
         {
             Id = request.Id.ToUpper(),
+            Name = request.Id.ToUpper(), // Default name to class code
             CourseId = request.CourseId,
             AcademicTermId = request.AcademicTermId,
             LecturerId = request.LecturerId,
@@ -146,6 +174,7 @@ public class ClassesService : IClassesService
 
         await ValidateForeignKeysAsync(request.CourseId, request.AcademicTermId, request.LecturerId);
 
+        classEntity.Name = request.Id.ToUpper();
         classEntity.CourseId = request.CourseId;
         classEntity.AcademicTermId = request.AcademicTermId;
         classEntity.LecturerId = request.LecturerId;
@@ -198,6 +227,7 @@ public class ClassesService : IClassesService
     private static ClassResponseDto MapToDto(Class classEntity) => new()
     {
         Id = classEntity.Id,
+        Name = classEntity.Name,
         CourseId = classEntity.CourseId,
         CourseCode = classEntity.Course?.Code ?? "N/A",
         CourseName = classEntity.Course?.Name ?? "N/A",

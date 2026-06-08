@@ -161,6 +161,15 @@ namespace SWP.BLL.Services
                 {
                     isAllowed = true;
                 }
+                // 3. Is the author an Admin?
+                else
+                {
+                    var author = await _context.Users.FindAsync(request.AuthorId);
+                    if (author != null && author.Role?.ToLower() == "admin")
+                    {
+                        isAllowed = true;
+                    }
+                }
 
                 if (!isAllowed)
                 {

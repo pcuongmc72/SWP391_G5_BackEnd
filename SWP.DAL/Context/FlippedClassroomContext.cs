@@ -58,7 +58,7 @@ public partial class FlippedClassroomContext : DbContext
                 .HasMaxLength(20)
                 .IsUnicode(false);
 
-            // ĐÃ XÓA entity.Property(e => e.Name)... ở đây
+            entity.Property(e => e.Name).HasMaxLength(255).IsRequired(true);
 
             entity.HasOne(d => d.AcademicTerm).WithMany(p => p.Classes)
                 .HasForeignKey(d => d.AcademicTermId)

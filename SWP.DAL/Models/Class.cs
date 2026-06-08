@@ -6,7 +6,7 @@ namespace SWP.DAL.Models;
 public partial class Class
 {
     public string Id { get; set; } = null!;
-
+    public string Name { get; set; } = null!;
     public Guid CourseId { get; set; }
 
     public Guid AcademicTermId { get; set; }

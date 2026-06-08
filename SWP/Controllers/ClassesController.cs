@@ -45,11 +45,11 @@ public class ClassesController : ControllerBase
         }
     }
 
-    [HttpGet("user/{studentId}")]
+    [HttpGet("user/{userId}")]
     [ProducesResponseType(200)]
-    public async Task<IActionResult> GetByUser(string studentId)
+    public async Task<IActionResult> GetByUser(string userId, [FromQuery] string? role, [FromQuery] Guid? academicTermId)
     {
-        var result = await _classesService.GetClassesByStudentAsync(studentId);
+        var result = await _classesService.GetClassesByUserAsync(userId, role ?? "student", academicTermId);
         return Ok(new { success = true, data = result });
     }
 

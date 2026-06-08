@@ -94,7 +94,7 @@ namespace SWP.Controllers
             }
             catch (UnauthorizedAccessException ex)
             {
-                return Forbid(ex.Message);
+                return StatusCode(403, new { success = false, message = ex.Message });
             }
         }
 
@@ -147,7 +147,7 @@ namespace SWP.Controllers
             }
             catch (UnauthorizedAccessException ex)
             {
-                return Forbid(ex.Message);
+                return StatusCode(403, new { success = false, message = ex.Message });
             }
         }
 
