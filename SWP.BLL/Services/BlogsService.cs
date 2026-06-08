@@ -127,6 +127,28 @@ namespace SWP.BLL.Services
             return blogs.Select(MapToResponseDto);
         }
 
+        public async Task<IEnumerable<BlogResponseDto>> GetLecturerClassBlogsAsync(string lecturerId, Guid? courseId = null)
+        {
+            // Get all class IDs where this lecturer is teaching
+            var classIds = await _context.Classes
+                .Where(c => c.LecturerId == lecturerId)
+                .Select(c => c.Id)
+                .ToListAsync();
+
+            var query = _context.Blogs
+                .Include(b => b.Author)
+                .Include(b => b.Course)
+                .Where(b => b.ClassId != null && classIds.Contains(b.ClassId));
+
+            if (courseId.HasValue)
+            {
+                query = query.Where(b => b.CourseId == courseId.Value);
+            }
+
+            var blogs = await query.OrderByDescending(b => b.CreatedAt).ToListAsync();
+            return blogs.Select(MapToResponseDto);
+        }
+
 
 
         public async Task<BlogResponseDto> GetBlogByIdAsync(Guid id)

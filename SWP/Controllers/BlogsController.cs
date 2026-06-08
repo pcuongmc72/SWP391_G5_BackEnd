@@ -72,6 +72,14 @@ namespace SWP.Controllers
             return Ok(blogs);
         }
 
+        [HttpGet("lecturer-classes/{lecturerId}")]
+        [Authorize(Roles = "lecturer")]
+        public async Task<ActionResult<IEnumerable<BlogResponseDto>>> GetLecturerClassBlogs(string lecturerId, [FromQuery] Guid? courseId)
+        {
+            var blogs = await _blogsService.GetLecturerClassBlogsAsync(lecturerId, courseId);
+            return Ok(blogs);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<BlogResponseDto>> GetBlogById(Guid id)
         {

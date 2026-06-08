@@ -13,6 +13,8 @@ namespace SWP.BLL.Interfaces
         Task<IEnumerable<BlogResponseDto>> GetClassBlogsAsync(string classId, Guid? courseId = null, int? status = 1);
         Task<IEnumerable<BlogResponseDto>> GetUserBlogsAsync(string userId);
         Task<IEnumerable<BlogResponseDto>> GetStudentClassBlogsAsync(string studentId, Guid? courseId = null);
+        Task<IEnumerable<BlogResponseDto>> GetLecturerClassBlogsAsync(string lecturerId, Guid? courseId = null);
+
 
         Task<BlogResponseDto> GetBlogByIdAsync(Guid id);
         Task<BlogResponseDto> CreateBlogAsync(BlogRequestDto request);
