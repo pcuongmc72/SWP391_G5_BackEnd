@@ -671,6 +671,54 @@
     ]
   },
   {
+    "ContainingType": "SWP.Controllers.StudentLearningMaterialsController",
+    "Method": "Complete",
+    "RelativePath": "api/student-learning-materials/{materialId}/complete",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "materialId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SWP.Controllers.StudentLearningMaterialsController",
+    "Method": "Uncomplete",
+    "RelativePath": "api/student-learning-materials/{materialId}/complete",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "materialId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "SWP.Controllers.StudentLearningMaterialsController",
+    "Method": "GetByClass",
+    "RelativePath": "api/student-learning-materials/class/{classId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "classId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "SWP.Controllers.UsersController",
     "Method": "CreateUser",
     "RelativePath": "api/Users",
