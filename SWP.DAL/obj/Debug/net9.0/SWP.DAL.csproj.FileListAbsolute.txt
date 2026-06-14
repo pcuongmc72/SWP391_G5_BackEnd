@@ -1,0 +1,5 @@
+C:\Users\admin\Desktop\SWP391\SWP391_G5_BackEnd\SWP.DAL\obj\Debug\net9.0\SWP.DAL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\admin\Desktop\SWP391\SWP391_G5_BackEnd\SWP.DAL\obj\Debug\net9.0\SWP.DAL.AssemblyInfoInputs.cache
+C:\Users\admin\Desktop\SWP391\SWP391_G5_BackEnd\SWP.DAL\obj\Debug\net9.0\SWP.DAL.AssemblyInfo.cs
+C:\Users\admin\Desktop\SWP391\SWP391_G5_BackEnd\SWP.DAL\obj\Debug\net9.0\SWP.DAL.csproj.CoreCompileInputs.cache
+C:\Users\admin\Desktop\SWP391\SWP391_G5_BackEnd\SWP.DAL\obj\Debug\net9.0\SWP.DAL.sourcelink.json
