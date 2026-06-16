@@ -104,6 +104,7 @@ builder.Services.AddScoped<ICoursesService, CoursesService>();
 builder.Services.AddScoped<IClassesService, ClassesService>();
 builder.Services.AddScoped<IClassStudentsService, ClassStudentsService>();
 builder.Services.AddScoped<IStudentClassesService, StudentClassesService>();
+builder.Services.AddScoped<IBlogsService, BlogsService>();
 
 // ─── Build & Middleware ───────────────────────────────────────────────────────
 var app = builder.Build();
