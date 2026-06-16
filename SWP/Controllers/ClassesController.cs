@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -10,7 +9,7 @@ namespace SWP.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = "admin,lecturer,student")]
+[Authorize(Roles = "admin")]
 [Produces("application/json")]
 public class ClassesController : ControllerBase
 {
@@ -45,16 +44,7 @@ public class ClassesController : ControllerBase
         }
     }
 
-    [HttpGet("user/{userId}")]
-    [ProducesResponseType(200)]
-    public async Task<IActionResult> GetByUser(string userId, [FromQuery] string? role, [FromQuery] Guid? academicTermId)
-    {
-        var result = await _classesService.GetClassesByUserAsync(userId, role ?? "student", academicTermId);
-        return Ok(new { success = true, data = result });
-    }
-
     [HttpPost]
-    [Authorize(Roles = "admin")]
     [ProducesResponseType(201)]
     [ProducesResponseType(400)]
     public async Task<IActionResult> Create([FromBody] ClassRequestDto request)
@@ -72,7 +62,6 @@ public class ClassesController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    [Authorize(Roles = "admin")]
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
     [ProducesResponseType(404)]
@@ -94,7 +83,6 @@ public class ClassesController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    [Authorize(Roles = "admin")]
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
     [ProducesResponseType(404)]

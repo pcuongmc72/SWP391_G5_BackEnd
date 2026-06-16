@@ -35,7 +35,6 @@ namespace SWP.BLL.Services
                 FullName = request.FullName,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
                 Role = request.Role.ToLower(),
-                AvatarUrl = request.AvatarUrl,
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow

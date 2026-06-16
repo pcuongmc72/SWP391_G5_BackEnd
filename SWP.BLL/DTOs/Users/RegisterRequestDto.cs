@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace SWP.BLL.DTOs.Users;
 
@@ -27,7 +27,4 @@ public class RegisterRequestDto
     [RegularExpression("^(Admin|Lecturer|Student)$", ErrorMessage = "Role chi duoc phep la: Admin, Lecturer, Student.")]
     [MaxLength(20)]
     public string Role { get; set; } = null!;
-
-    [MaxLength(500)]
-    public string? AvatarUrl { get; set; }
 }
