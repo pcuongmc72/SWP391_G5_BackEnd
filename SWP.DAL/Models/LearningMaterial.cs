@@ -10,6 +10,8 @@ public partial class LearningMaterial
 
     public string? Description { get; set; }
 
+    public string? Chapter { get; set; }
+
     public string MaterialType { get; set; } = null!;
 
     public string? FileUrl { get; set; }
