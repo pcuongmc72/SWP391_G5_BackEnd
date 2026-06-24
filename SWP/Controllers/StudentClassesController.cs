@@ -16,9 +16,8 @@ namespace SWP.Controllers;
 public class StudentClassesController : ControllerBase
 {
     private readonly IStudentClassesService _studentClassesService;
-    private readonly IClassStudentsService _classStudentsService; // <-- Thêm service này
+    private readonly IClassStudentsService _classStudentsService;
 
-    // Cập nhật Constructor để nhận cả 2 Service
     public StudentClassesController(
         IStudentClassesService studentClassesService,
         IClassStudentsService classStudentsService)
@@ -27,17 +26,13 @@ public class StudentClassesController : ControllerBase
         _classStudentsService = classStudentsService;
     }
 
+    // ─── GET /api/student-classes  ─────────────────────────────────────────────
     [HttpGet]
     public async Task<IActionResult> GetMyClasses([FromQuery] Guid? academicTermId)
     {
-        var studentId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
-                     ?? User.FindFirst("sub")?.Value
-                     ?? User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
-
+        var studentId = GetCurrentStudentId();
         if (string.IsNullOrEmpty(studentId))
-        {
             return Unauthorized(new { success = false, message = "Token không hợp lệ." });
-        }
 
         try
         {
@@ -50,10 +45,8 @@ public class StudentClassesController : ControllerBase
         }
     }
 
-    /// <summary>
-    /// GET /api/student-classes/{classId}/students
-    /// Cho phép sinh viên xem danh sách các bạn cùng lớp của mình.
-    /// </summary>
+    // ─── GET /api/student-classes/{classId}/students ───────────────────────────
+    /// <summary>Cho phép sinh viên xem danh sách bạn cùng lớp.</summary>
     [HttpGet("{classId}/students")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
@@ -61,7 +54,6 @@ public class StudentClassesController : ControllerBase
     {
         try
         {
-            // Lấy danh sách học sinh trong lớp (gọi hàm có sẵn ở BLL)
             var result = await _classStudentsService.GetStudentsInClassAsync(classId);
             return Ok(new { success = true, data = result });
         }
@@ -74,4 +66,92 @@ public class StudentClassesController : ControllerBase
             return BadRequest(new { success = false, message = ex.Message });
         }
     }
+
+    // ─── GET /api/student-classes/{classId}/roadmap ────────────────────────────
+    /// <summary>Trả về lộ trình học tập của lớp, nhóm theo Chapter, kèm trạng thái hoàn thành.</summary>
+    [HttpGet("{classId}/roadmap")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> GetMyClassRoadmap(string classId)
+    {
+        var studentId = GetCurrentStudentId();
+        if (string.IsNullOrEmpty(studentId))
+            return Unauthorized(new { success = false, message = "Token không hợp lệ." });
+
+        try
+        {
+            var result = await _studentClassesService.GetClassRoadmapAsync(studentId, classId);
+            return Ok(new { success = true, data = result });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { success = false, message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { success = false, message = ex.Message });
+        }
+    }
+
+    // ─── POST /api/student-classes/materials/{materialId}/complete ─────────────
+    /// <summary>Đánh dấu học liệu là đã hoàn thành.</summary>
+    [HttpPost("materials/{materialId:guid}/complete")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> CompleteMaterial(Guid materialId)
+    {
+        var studentId = GetCurrentStudentId();
+        if (string.IsNullOrEmpty(studentId))
+            return Unauthorized(new { success = false, message = "Token không hợp lệ." });
+
+        try
+        {
+            var success = await _studentClassesService.CompleteMaterialAsync(studentId, materialId);
+            return Ok(new { success, message = "Đánh dấu hoàn thành thành công." });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { success = false, message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { success = false, message = ex.Message });
+        }
+    }
+
+    // ─── POST /api/student-classes/materials/{materialId}/uncomplete ───────────
+    /// <summary>Hủy đánh dấu hoàn thành học liệu.</summary>
+    [HttpPost("materials/{materialId:guid}/uncomplete")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> UncompleteMaterial(Guid materialId)
+    {
+        var studentId = GetCurrentStudentId();
+        if (string.IsNullOrEmpty(studentId))
+            return Unauthorized(new { success = false, message = "Token không hợp lệ." });
+
+        try
+        {
+            var success = await _studentClassesService.UncompleteMaterialAsync(studentId, materialId);
+            return Ok(new { success, message = "Hủy đánh dấu hoàn thành thành công." });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { success = false, message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { success = false, message = ex.Message });
+        }
+    }
+
+    // ─── Helper ────────────────────────────────────────────────────────────────
+    private string? GetCurrentStudentId() =>
+        User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+        ?? User.FindFirst("sub")?.Value
+        ?? User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
 }
+
