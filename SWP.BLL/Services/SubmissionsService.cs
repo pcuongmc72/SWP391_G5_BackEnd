@@ -50,16 +50,14 @@ public class SubmissionsService : ISubmissionsService
         var existing = await _context.Submissions
             .FirstOrDefaultAsync(s => s.AssignmentId == request.AssignmentId && s.StudentId == studentId);
 
-        // Xác định trạng thái: LATE nếu quá hạn
-        var status = "SUBMITTED";
-        if (assignment.DueDate.HasValue && assignment.DueDate.Value < DateOnly.FromDateTime(DateTime.Now))
-            status = "LATE";
+        // SQL CHECK constraint: only 'SUBMITTED' or 'GRADED' are valid values.
+        // Quá hạn không thay đổi status — đó là logic nghiệp vụ cần giải quyết ở tầng khác.
+        const string status = "SUBMITTED";
 
         if (existing != null)
         {
             // Nộp lại
             existing.FileName     = request.FileName;
-            existing.FileUrl      = request.FileUrl;
             existing.StudentNotes = request.StudentNotes;
             existing.SubmittedAt  = DateTime.Now;
             existing.Status       = status;
@@ -70,13 +68,14 @@ public class SubmissionsService : ISubmissionsService
         }
         else
         {
+            // uniqueidentifier — SQL uses newsequentialid(), EF/DB will generate.
+            // We create a new Guid here so the returned DTO has the Id immediately.
             existing = new Submission
             {
-                Id           = $"sub_{Guid.NewGuid():N}",
+                Id           = Guid.NewGuid(),
                 AssignmentId = request.AssignmentId,
                 StudentId    = studentId,
                 FileName     = request.FileName,
-                FileUrl      = request.FileUrl,
                 StudentNotes = request.StudentNotes,
                 SubmittedAt  = DateTime.Now,
                 Status       = status
@@ -90,27 +89,30 @@ public class SubmissionsService : ISubmissionsService
 
     public async Task<SubmissionGradeDetailDto> GetSubmissionGradeDetailAsync(string submissionId, string studentId)
     {
+        // submissionId is a Guid string — parse it
+        if (!Guid.TryParse(submissionId, out var submissionGuid))
+            throw new ArgumentException("submissionId không hợp lệ.", nameof(submissionId));
+
         var sub = await _context.Submissions
             .Include(s => s.Assignment)
-            .FirstOrDefaultAsync(s => s.Id == submissionId && s.StudentId == studentId)
+            .FirstOrDefaultAsync(s => s.Id == submissionGuid && s.StudentId == studentId)
             ?? throw new KeyNotFoundException("Không tìm thấy bài nộp hoặc bạn không có quyền xem.");
 
         return new SubmissionGradeDetailDto
         {
-            SubmissionId = sub.Id,
-            AssignmentId = sub.AssignmentId,
-            AssignmentTitle = sub.Assignment.Title,
+            SubmissionId          = sub.Id,
+            AssignmentId          = sub.AssignmentId,
+            AssignmentTitle       = sub.Assignment.Title,
             AssignmentDescription = sub.Assignment.Description,
-            DueDate = sub.Assignment.DueDate,
-            MaxPoints = sub.Assignment.MaxPoints,
-            FileName = sub.FileName,
-            FileUrl = sub.FileUrl,
-            StudentNotes = sub.StudentNotes,
-            SubmittedAt = sub.SubmittedAt,
-            SubmissionStatus = sub.Status,
-            Grade = sub.Grade,
-            Feedback = sub.Feedback,
-            GradedAt = sub.GradedAt
+            DueDate               = sub.Assignment.DueDate,
+            MaxPoints             = sub.Assignment.MaxPoints,
+            FileName              = sub.FileName,
+            StudentNotes          = sub.StudentNotes,
+            SubmittedAt           = sub.SubmittedAt,
+            SubmissionStatus      = sub.Status,
+            Grade                 = sub.Grade,
+            Feedback              = sub.Feedback,
+            GradedAt              = sub.GradedAt
         };
     }
 
@@ -120,7 +122,6 @@ public class SubmissionsService : ISubmissionsService
         AssignmentId = s.AssignmentId,
         StudentId    = s.StudentId,
         FileName     = s.FileName,
-        FileUrl      = s.FileUrl,
         StudentNotes = s.StudentNotes,
         SubmittedAt  = s.SubmittedAt,
         Status       = s.Status,

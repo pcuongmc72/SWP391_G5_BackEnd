@@ -1,67 +1,133 @@
-using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using SWP.BLL.DTOs.Auth;
+using SWP.BLL.Interfaces;
+using SWP.DAL.Context;
+using SWP.DAL.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using SWP.BLL.Interfaces;
-using SWP.DAL.Context;
 
-namespace SWP.BLL.Services
+namespace SWP.BLL.Services;
+
+public class AuthService : IAuthService
 {
-    public class AuthService : IAuthService
+    private readonly FlippedClassroomContext _context;
+    private readonly IConfiguration _configuration;
+
+    public AuthService(FlippedClassroomContext context, IConfiguration configuration)
     {
-        private readonly FlippedClassroomContext _context;
-        private readonly IConfiguration _configuration;
+        _context = context;
+        _configuration = configuration;
+    }
 
-        public AuthService(FlippedClassroomContext context, IConfiguration configuration)
+    public async Task<AuthResponseDto> LoginAsync(LoginRequestDto request)
+    {
+        var user = await _context.Users
+            .FirstOrDefaultAsync(u => u.Email == request.Email);
+
+        if (user is null)
+            throw new UnauthorizedAccessException("Email hoac password khong dung.");
+
+        if (user.IsActive == false)
+            throw new UnauthorizedAccessException("Tai khoan da bi vo hieu hoa.");
+
+        bool passwordValid = VerifyPassword(request.Password, user.PasswordHash);
+        if (!passwordValid)
+            throw new UnauthorizedAccessException("Email hoac password khong dung.");
+
+        if (!IsBCryptHash(user.PasswordHash))
         {
-            _context = context;
-            _configuration = configuration;
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
+            await _context.SaveChangesAsync();
         }
 
-        public async Task<string?> LoginAsync(string email, string password)
+        return BuildAuthResponse(user);
+    }
+
+    private static bool IsBCryptHash(string hash) =>
+        hash.StartsWith("$2a$") || hash.StartsWith("$2b$") ||
+        hash.StartsWith("$2x$") || hash.StartsWith("$2y$");
+
+    private static bool VerifyPassword(string inputPassword, string storedHash)
+    {
+        if (IsBCryptHash(storedHash))
         {
-            var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Email == email && u.IsActive);
-
-            if (user == null)
-                return null;
-
-            // Kiểm tra password hash (BCrypt hoặc so sánh trực tiếp tùy setup)
-            if (user.PasswordHash != password)
-                return null;
-
-            return GenerateJwtToken(user.Id, user.Email, user.Role ?? "student");
-        }
-
-        private string GenerateJwtToken(string userId, string email, string role)
-        {
-            var jwtSection = _configuration.GetSection("Jwt");
-            var key = Encoding.UTF8.GetBytes(jwtSection["Key"]!);
-
-            var claims = new[]
+            try
             {
-                new Claim(ClaimTypes.NameIdentifier, userId),
-                new Claim(ClaimTypes.Email, email),
-                new Claim(ClaimTypes.Role, role),
-                new Claim(JwtRegisteredClaimNames.Sub, userId),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
-
-            var token = new JwtSecurityToken(
-                issuer: jwtSection["Issuer"],
-                audience: jwtSection["Audience"],
-                claims: claims,
-                expires: DateTime.UtcNow.AddHours(8),
-                signingCredentials: new SigningCredentials(
-                    new SymmetricSecurityKey(key),
-                    SecurityAlgorithms.HmacSha256)
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
+                return BCrypt.Net.BCrypt.Verify(inputPassword, storedHash);
+            }
+            catch (BCrypt.Net.SaltParseException)
+            {
+                return false;
+            }
         }
+
+        // So sánh chuỗi thường dành cho tài khoản test
+        return string.Equals(inputPassword, storedHash, StringComparison.Ordinal);
+    }
+
+   
+    public async Task<UserInfoDto> GetProfileAsync(string id)
+    {
+        var user = await _context.Users
+            .FirstOrDefaultAsync(u => u.Id == id);
+
+        if (user is null)
+            throw new KeyNotFoundException("Nguoi dung khong ton tai.");
+
+        return MapToUserInfo(user);
+    }
+
+    private AuthResponseDto BuildAuthResponse(User user)
+    {
+        var (token, expiresAt) = GenerateJwtToken(user);
+
+        return new AuthResponseDto
+        {
+            Token = token,
+            TokenType = "Bearer",
+            ExpiresAt = expiresAt,
+            User = MapToUserInfo(user)
+        };
+    }
+
+    private static UserInfoDto MapToUserInfo(User user) => new()
+    {
+        Id = user.Id,                 
+        Email = user.Email,
+        FullName = user.FullName,     
+        Role = user.Role,            
+        IsActive = user.IsActive
+    };
+
+    private (string Token, DateTime ExpiresAt) GenerateJwtToken(User user)
+    {
+        var jwtSection = _configuration.GetSection("Jwt");
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSection["Key"]!));
+        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        int expireMinutes = int.Parse(jwtSection["ExpireMinutes"] ?? "60");
+        var expiresAt = DateTime.UtcNow.AddMinutes(expireMinutes);
+
+        var claims = new[]
+        {
+            new Claim(JwtRegisteredClaimNames.Sub, user.Id),               
+            new Claim(JwtRegisteredClaimNames.Email, user.Email),         
+            new Claim(ClaimTypes.Name, user.FullName),                    
+            new Claim(ClaimTypes.Role, user.Role),                        
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        };
+
+        var token = new JwtSecurityToken(
+            issuer: jwtSection["Issuer"],
+            audience: jwtSection["Audience"],
+            claims: claims,
+            expires: expiresAt,
+            signingCredentials: credentials
+        );
+
+        return (new JwtSecurityTokenHandler().WriteToken(token), expiresAt);
     }
 }

@@ -1,13 +1,16 @@
+﻿using SWP.BLL.DTOs.ClassStudents;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using SWP.DAL.Models;
 
 namespace SWP.BLL.Interfaces
 {
     public interface IClassStudentsService
     {
-        Task<IEnumerable<ClassStudent>> GetByClassIdAsync(string classId);
-        Task<ClassStudent> EnrollAsync(string classId, string studentId);
-        Task<bool> UnenrollAsync(string classId, string studentId);
+        Task<IEnumerable<StudentInClassDto>> GetStudentsInClassAsync(string classId);
+        Task<StudentInClassDto> AddStudentToClassAsync(string classId, AddStudentRequestDto request);
+        Task<bool> RemoveStudentFromClassAsync(string classId, string studentId);
     }
 }

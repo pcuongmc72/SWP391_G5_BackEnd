@@ -1,16 +1,15 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using SWP.DAL.Models;
+using SWP.BLL.DTOs.AcademicTerms;
 
-namespace SWP.BLL.Interfaces
+namespace SWP.BLL.Interfaces;
+
+public interface IAcademicTermsService
 {
-    public interface IAcademicTermsService
-    {
-        Task<IEnumerable<AcademicTerm>> GetAllAsync();
-        Task<AcademicTerm?> GetByIdAsync(Guid id);
-        Task<AcademicTerm> CreateAsync(AcademicTerm term);
-        Task<AcademicTerm> UpdateAsync(Guid id, AcademicTerm term);
-        Task<bool> DeleteAsync(Guid id);
-    }
+    Task<IEnumerable<AcademicTermResponseDto>> GetAllTermsAsync();
+    Task<AcademicTermResponseDto> GetTermByIdAsync(Guid id);
+    Task<AcademicTermResponseDto> CreateTermAsync(AcademicTermRequestDto request);
+    Task<AcademicTermResponseDto> UpdateTermAsync(Guid id, AcademicTermRequestDto request);
+    Task<bool> DeleteTermAsync(Guid id);
 }

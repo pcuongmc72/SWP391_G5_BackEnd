@@ -10,7 +10,7 @@ public partial class AcademicTerm
     public string Name { get; set; } = null!;
 
     /// <summary>Mã học kỳ, VD: "HK1-2024-2025"</summary>
-    public string TermCode { get; set; } = null!;
+    public string? TermCode { get; set; }
 
     public DateOnly StartDate { get; set; }
 

@@ -48,7 +48,7 @@ public class AssignmentsService : IAssignmentsService
                 {
                     Id           = sub.Id,
                     FileName     = sub.FileName,
-                    FileUrl      = sub.FileUrl,
+                    // FileUrl removed — not a SQL column in Submissions
                     StudentNotes = sub.StudentNotes,
                     SubmittedAt  = sub.SubmittedAt,
                     Status       = sub.Status,
@@ -62,12 +62,15 @@ public class AssignmentsService : IAssignmentsService
 
     public async Task<AssignmentDto> GetAssignmentByIdAsync(string assignmentId, string studentId)
     {
+        if (!Guid.TryParse(assignmentId, out var assignmentGuid))
+            throw new ArgumentException("assignmentId không hợp lệ.", nameof(assignmentId));
+
         var a = await _context.Assignments
-            .FirstOrDefaultAsync(x => x.Id == assignmentId)
+            .FirstOrDefaultAsync(x => x.Id == assignmentGuid)
             ?? throw new KeyNotFoundException("Không tìm thấy bài tập.");
 
         var sub = await _context.Submissions
-            .FirstOrDefaultAsync(s => s.AssignmentId == assignmentId && s.StudentId == studentId);
+            .FirstOrDefaultAsync(s => s.AssignmentId == assignmentGuid && s.StudentId == studentId);
 
         return new AssignmentDto
         {
@@ -82,7 +85,7 @@ public class AssignmentsService : IAssignmentsService
             {
                 Id           = sub.Id,
                 FileName     = sub.FileName,
-                FileUrl      = sub.FileUrl,
+                // FileUrl removed — not a SQL column in Submissions
                 StudentNotes = sub.StudentNotes,
                 SubmittedAt  = sub.SubmittedAt,
                 Status       = sub.Status,

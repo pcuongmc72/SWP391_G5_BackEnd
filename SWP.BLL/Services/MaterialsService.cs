@@ -27,30 +27,34 @@ public class MaterialsService : IMaterialsService
             .OrderBy(m => m.UploadedAt)
             .ToListAsync();
 
-        // Lấy các tài liệu học viên đã hoàn thành trong lớp học này
+        // Lấy các MaterialId (Guid) mà học viên đã hoàn thành trong lớp học này
         var completedMaterialIds = await _context.MaterialCompletions
             .Where(mc => mc.StudentId == studentId && mc.Material.ClassId == classId)
-            .Select(mc => mc.MaterialId)
+            .Select(mc => mc.MaterialId)   // Guid
             .ToListAsync();
 
         return materials.Select(m => new MaterialDto
         {
-            Id = m.Id,
-            ClassId = m.ClassId,
-            Title = m.Title,
-            Description = m.Description,
-            Type = m.Type,
-            Url = m.Url,
-            FileSize = m.FileSize,
-            UploadedAt = m.UploadedAt,
-            IsCompleted = completedMaterialIds.Contains(m.Id)
+            Id           = m.Id,
+            ClassId      = m.ClassId,
+            Title        = m.Title,
+            Description  = m.Description,
+            MaterialType = m.MaterialType,  // SQL column: MaterialType
+            FileUrl      = m.FileUrl,       // SQL column: FileUrl
+            FileSize     = m.FileSize,
+            UploadedAt   = m.UploadedAt,    // DateOnly (SQL: date)
+            CreatedAt    = m.CreatedAt,
+            IsCompleted  = completedMaterialIds.Contains(m.Id)  // Guid == Guid
         });
     }
 
     public async Task<bool> MarkMaterialCompleteAsync(string materialId, string studentId)
     {
+        if (!Guid.TryParse(materialId, out var materialGuid))
+            return false;
+
         // Kiểm tra xem học liệu này có tồn tại không
-        var materialExists = await _context.Materials.AnyAsync(m => m.Id == materialId);
+        var materialExists = await _context.Materials.AnyAsync(m => m.Id == materialGuid);
         if (!materialExists)
         {
             return false;
@@ -58,14 +62,14 @@ public class MaterialsService : IMaterialsService
 
         // Kiểm tra xem đã được đánh dấu hoàn thành trước đó chưa
         var alreadyCompleted = await _context.MaterialCompletions
-            .AnyAsync(mc => mc.MaterialId == materialId && mc.StudentId == studentId);
+            .AnyAsync(mc => mc.MaterialId == materialGuid && mc.StudentId == studentId);
 
         if (!alreadyCompleted)
         {
             var completion = new MaterialCompletion
             {
-                MaterialId = materialId,
-                StudentId = studentId,
+                MaterialId  = materialGuid,   // Guid
+                StudentId   = studentId,
                 CompletedAt = DateTime.UtcNow
             };
 

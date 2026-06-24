@@ -48,7 +48,7 @@ public class SubmissionsController : ControllerBase
     [ProducesResponseType(401)]
     public async Task<IActionResult> Submit([FromBody] SubmitAssignmentRequestDto request)
     {
-        if (string.IsNullOrEmpty(request.AssignmentId))
+        if (request.AssignmentId == Guid.Empty)
             return BadRequest(new { success = false, message = "AssignmentId là bắt buộc." });
 
         var studentId = GetCurrentUserId();

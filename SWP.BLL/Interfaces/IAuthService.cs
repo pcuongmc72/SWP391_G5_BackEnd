@@ -1,10 +1,9 @@
-using System.Threading.Tasks;
+using SWP.BLL.DTOs.Auth;
 
-namespace SWP.BLL.Interfaces
+namespace SWP.BLL.Interfaces;
+
+public interface IAuthService
 {
-    public interface IAuthService
-    {
-        /// <summary>Đăng nhập, trả về JWT token nếu thành công.</summary>
-        Task<string?> LoginAsync(string email, string password);
-    }
+    Task<AuthResponseDto> LoginAsync(LoginRequestDto request);
+    Task<UserInfoDto> GetProfileAsync(string id);
 }

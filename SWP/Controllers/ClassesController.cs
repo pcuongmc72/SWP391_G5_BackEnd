@@ -11,7 +11,7 @@ namespace SWP.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = "admin")]
+[Authorize]
 [Produces("application/json")]
 public class ClassesController : ControllerBase
 {
@@ -23,6 +23,7 @@ public class ClassesController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Roles = "admin")]
     [ProducesResponseType(200)]
     public async Task<IActionResult> GetAll([FromQuery] Guid? academicTermId)
     {
@@ -94,6 +95,7 @@ public class ClassesController : ControllerBase
         ?? User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
 
     [HttpGet("{id}")]
+    [Authorize(Roles = "admin")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     public async Task<IActionResult> GetById(string id)
@@ -110,6 +112,7 @@ public class ClassesController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "admin")]
     [ProducesResponseType(201)]
     [ProducesResponseType(400)]
     public async Task<IActionResult> Create([FromBody] ClassRequestDto request)
@@ -127,6 +130,7 @@ public class ClassesController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(Roles = "admin")]
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
     [ProducesResponseType(404)]
@@ -148,6 +152,7 @@ public class ClassesController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Roles = "admin")]
     [ProducesResponseType(200)]
     [ProducesResponseType(400)]
     [ProducesResponseType(404)]

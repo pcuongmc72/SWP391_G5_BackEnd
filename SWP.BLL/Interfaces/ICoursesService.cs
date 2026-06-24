@@ -1,16 +1,18 @@
+﻿using SWP.BLL.DTOs.Courses;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using SWP.DAL.Models;
 
 namespace SWP.BLL.Interfaces
 {
     public interface ICoursesService
     {
-        Task<IEnumerable<Course>> GetAllAsync();
-        Task<Course?> GetByIdAsync(Guid id);
-        Task<Course> CreateAsync(Course course);
-        Task<Course> UpdateAsync(Guid id, Course course);
-        Task<bool> DeleteAsync(Guid id);
+        Task<IEnumerable<CourseResponseDto>> GetAllCoursesAsync();
+        Task<CourseResponseDto> GetCourseByIdAsync(Guid id);
+        Task<CourseResponseDto> CreateCourseAsync(CourseRequestDto request);
+        Task<CourseResponseDto> UpdateCourseAsync(Guid id, CourseRequestDto request);
+        Task<bool> DeleteCourseAsync(Guid id);
     }
 }
