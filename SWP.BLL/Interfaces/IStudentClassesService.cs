@@ -13,6 +13,11 @@ public interface IStudentClassesService
     Task<IEnumerable<ClassResponseDto>> GetClassesForStudentAsync(string studentId, Guid? academicTermId = null);
 
     /// <summary>
+    /// Lấy danh sách các buổi học (lộ trình theo tuần) của một lớp học.
+    /// </summary>
+    Task<IEnumerable<ClassSessionDto>> GetClassSessionsAsync(string classId);
+
+    /// <summary>
     /// Lấy lộ trình học tập (roadmap) của một lớp, nhóm theo Chapter.
     /// Trả về trạng thái hoàn thành (isCompleted) của từng học liệu cho sinh viên đó.
     /// </summary>
@@ -28,4 +33,3 @@ public interface IStudentClassesService
     /// </summary>
     Task<bool> UncompleteMaterialAsync(string studentId, Guid materialId);
 }
-

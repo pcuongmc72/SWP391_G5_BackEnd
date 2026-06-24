@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace SWP.DAL.Models;
 
 public partial class LearningMaterial

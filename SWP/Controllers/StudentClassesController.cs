@@ -154,4 +154,3 @@ public class StudentClassesController : ControllerBase
         ?? User.FindFirst("sub")?.Value
         ?? User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
 }
-

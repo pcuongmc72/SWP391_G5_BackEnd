@@ -43,6 +43,44 @@ public class StudentClassesService : IStudentClassesService
         return classes.Select(MapToDto);
     }
 
+    // ─── Lấy danh sách buổi học (lộ trình theo tuần) ───────────────────────────
+
+    public async Task<IEnumerable<ClassSessionDto>> GetClassSessionsAsync(string classId)
+    {
+        // Lấy tất cả buổi học của lớp, sắp xếp theo ngày
+        var sessions = await _context.ClassSessions
+            .Where(s => s.ClassId == classId)
+            .OrderBy(s => s.SessionDate)
+            .ThenBy(s => s.StartTime)
+            .ToListAsync();
+
+        if (!sessions.Any())
+            return Enumerable.Empty<ClassSessionDto>();
+
+        // Tính WeekNumber: buổi đầu tiên = tuần 1
+        var firstDate = sessions.First().SessionDate.ToDateTime(TimeOnly.MinValue);
+
+        return sessions.Select(s =>
+        {
+            var sessionDate = s.SessionDate.ToDateTime(TimeOnly.MinValue);
+            var daysDiff = (sessionDate - firstDate).TotalDays;
+            var weekNumber = (int)Math.Floor(daysDiff / 7) + 1;
+
+            return new ClassSessionDto
+            {
+                Id = s.Id,
+                ClassId = s.ClassId,
+                WeekNumber = weekNumber,
+                Title = s.Title,
+                SessionDate = s.SessionDate,
+                StartTime = s.StartTime,
+                EndTime = s.EndTime,
+                Description = s.Detail,
+                Room = s.Room
+            };
+        });
+    }
+
     // ─── Lộ trình học tập (Roadmap) ───────────────────────────────────────────
 
     public async Task<StudentClassRoadmapDto> GetClassRoadmapAsync(string studentId, string classId)
@@ -167,4 +205,3 @@ public class StudentClassesService : IStudentClassesService
         CreatedAt    = classEntity.CreatedAt
     };
 }
-
