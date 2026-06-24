@@ -14,5 +14,6 @@ namespace SWP.BLL.Interfaces
         Task<ClassResponseDto> CreateClassAsync(ClassRequestDto request);
         Task<ClassResponseDto> UpdateClassAsync(string id, ClassRequestDto request);
         Task<bool> DeleteClassAsync(string id);
+        Task<IEnumerable<ClassResponseDto>> GetClassesByUserAsync(string userId, string role, Guid? academicTermId = null);
     }
 }
