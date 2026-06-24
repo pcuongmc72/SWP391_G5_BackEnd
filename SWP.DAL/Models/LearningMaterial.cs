@@ -23,6 +23,11 @@ public partial class LearningMaterial
     /// <summary>Soft delete flag – true means disabled/hidden from students but still visible to lecturer</summary>
     public bool IsDisabled { get; set; } = false;
 
+    public string? Chapter { get; set; }
+
+    public string? Lesson { get; set; }
+
+
     public virtual Class Class { get; set; } = null!;
 
     public virtual ICollection<MaterialCompletion> MaterialCompletions { get; set; } = new List<MaterialCompletion>();

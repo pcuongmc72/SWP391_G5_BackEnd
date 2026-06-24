@@ -74,4 +74,84 @@ public class StudentClassesController : ControllerBase
             return BadRequest(new { success = false, message = ex.Message });
         }
     }
+
+    [HttpGet("{classId}/roadmap")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> GetMyClassRoadmap(string classId)
+    {
+        var studentId = GetCurrentStudentId();
+        if (string.IsNullOrEmpty(studentId))
+            return Unauthorized(new { success = false, message = "Token không hợp lệ." });
+
+        try
+        {
+            var result = await _studentClassesService.GetClassRoadmapAsync(studentId, classId);
+            return Ok(new { success = true, data = result });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { success = false, message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { success = false, message = ex.Message });
+        }
+    }
+
+    [HttpPost("materials/{materialId}/complete")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> CompleteMaterial(Guid materialId)
+    {
+        var studentId = GetCurrentStudentId();
+        if (string.IsNullOrEmpty(studentId))
+            return Unauthorized(new { success = false, message = "Token không hợp lệ." });
+
+        try
+        {
+            var success = await _studentClassesService.CompleteMaterialAsync(studentId, materialId);
+            return Ok(new { success, message = "Đánh dấu hoàn thành thành công." });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { success = false, message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { success = false, message = ex.Message });
+        }
+    }
+
+    [HttpPost("materials/{materialId}/uncomplete")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> UncompleteMaterial(Guid materialId)
+    {
+        var studentId = GetCurrentStudentId();
+        if (string.IsNullOrEmpty(studentId))
+            return Unauthorized(new { success = false, message = "Token không hợp lệ." });
+
+        try
+        {
+            var success = await _studentClassesService.UncompleteMaterialAsync(studentId, materialId);
+            return Ok(new { success, message = "Hủy đánh dấu hoàn thành thành công." });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { success = false, message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { success = false, message = ex.Message });
+        }
+    }
+
+    private string? GetCurrentStudentId() =>
+        User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+        ?? User.FindFirst("sub")?.Value
+        ?? User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
 }

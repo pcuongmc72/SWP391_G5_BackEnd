@@ -61,4 +61,131 @@ public class StudentClassesService : IStudentClassesService
         AllowReviewAfterEnd = classEntity.AllowReviewAfterEnd,
         CreatedAt = classEntity.CreatedAt
     };
+        public async Task<IEnumerable<ClassSessionDto>> GetClassSessionsAsync(string classId)
+    {
+        // Lấy tất cả buổi học của lớp, sắp xếp theo ngày
+        var sessions = await _context.ClassSessions
+            .Where(s => s.ClassId == classId)
+            .OrderBy(s => s.SessionDate)
+            .ThenBy(s => s.StartTime)
+            .ToListAsync();
+
+        if (!sessions.Any())
+            return Enumerable.Empty<ClassSessionDto>();
+
+        // Tính WeekNumber: buổi đầu tiên = tuần 1
+        var firstDate = sessions.First().SessionDate.ToDateTime(TimeOnly.MinValue);
+
+        return sessions.Select(s =>
+        {
+            var sessionDate = s.SessionDate.ToDateTime(TimeOnly.MinValue);
+            var daysDiff = (sessionDate - firstDate).TotalDays;
+            var weekNumber = (int)Math.Floor(daysDiff / 7) + 1;
+
+            return new ClassSessionDto
+            {
+                Id = s.Id,
+                ClassId = s.ClassId,
+                WeekNumber = weekNumber,
+                Title = s.Title,
+                SessionDate = s.SessionDate,
+                StartTime = s.StartTime,
+                EndTime = s.EndTime,
+                Description = s.Detail,
+                Room = s.Room
+            };
+        });
+    }
+
+    public async Task<StudentClassRoadmapDto> GetClassRoadmapAsync(string studentId, string classId)
+    {
+        var classEntity = await _context.Classes
+            .Include(c => c.Course)
+            .FirstOrDefaultAsync(c => c.Id == classId);
+
+        if (classEntity == null)
+            throw new KeyNotFoundException("Khong tim thay lop hoc.");
+
+        var materials = await _context.LearningMaterials
+            .Include(m => m.MaterialCompletions)
+            .Where(m => m.ClassId == classId && m.IsDisabled == false)
+            .ToListAsync();
+
+        var mappedMaterials = materials.Select(m =>
+        {
+            var completion = m.MaterialCompletions.FirstOrDefault(c => c.StudentId == studentId);
+            return new
+            {
+                ChapterName = string.IsNullOrWhiteSpace(m.Chapter) ? "Chung" : m.Chapter.Trim(),
+                Dto = new StudentRoadmapMaterialDto
+                {
+                    Id = m.Id,
+                    ClassId = m.ClassId,
+                    Title = m.Title,
+                    Description = m.Description,
+                    Type = m.MaterialType,
+                    FileUrl = m.FileUrl,
+                    FileSize = m.FileSize,
+                    UploadedAt = m.UploadedAt,
+                    IsCompleted = completion != null,
+                    CompletedAt = completion?.CompletedAt
+                }
+            };
+        }).ToList();
+
+        var chapters = mappedMaterials
+            .GroupBy(m => m.ChapterName)
+            .Select(g => new ChapterRoadmapDto
+            {
+                ChapterName = g.Key,
+                Materials = g.Select(x => x.Dto).OrderBy(m => m.UploadedAt).ToList()
+            })
+            .ToList();
+
+        return new StudentClassRoadmapDto
+        {
+            ClassId = classId,
+            ClassName = classEntity.Name ?? classEntity.Course?.Name ?? "Lớp học",
+            Chapters = chapters
+        };
+    }
+
+    public async Task<bool> CompleteMaterialAsync(string studentId, Guid materialId)
+    {
+        var material = await _context.LearningMaterials.FirstOrDefaultAsync(m => m.Id == materialId && m.IsDisabled == false);
+        if (material == null)
+            throw new KeyNotFoundException("Khong tim thay hoc lieu.");
+
+        // Check if already completed
+        var existing = await _context.MaterialCompletions
+            .FirstOrDefaultAsync(mc => mc.MaterialId == materialId && mc.StudentId == studentId);
+
+        if (existing != null)
+            return true; // Already marked complete
+
+        var completion = new MaterialCompletion
+        {
+            MaterialId = materialId,
+            StudentId = studentId,
+            CompletedAt = DateTime.UtcNow
+        };
+
+        _context.MaterialCompletions.Add(completion);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> UncompleteMaterialAsync(string studentId, Guid materialId)
+    {
+        var existing = await _context.MaterialCompletions
+            .FirstOrDefaultAsync(mc => mc.MaterialId == materialId && mc.StudentId == studentId);
+
+        if (existing == null)
+            return true; // Already uncompleted
+
+        _context.MaterialCompletions.Remove(existing);
+        await _context.SaveChangesAsync();
+        return true;
+    }
 }
+
