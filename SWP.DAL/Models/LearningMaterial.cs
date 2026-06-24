@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace SWP.DAL.Models;
 
 public partial class LearningMaterial
@@ -9,8 +12,6 @@ public partial class LearningMaterial
     public string Title { get; set; } = null!;
 
     public string? Description { get; set; }
-
-    public string? Chapter { get; set; }
 
     public string MaterialType { get; set; } = null!;
 
@@ -24,6 +25,12 @@ public partial class LearningMaterial
 
     /// <summary>Soft delete flag – true means disabled/hidden from students but still visible to lecturer</summary>
     public bool IsDisabled { get; set; } = false;
+
+    /// <summary>Tên chương / chapter của học liệu. Format: "TênMôn ÷ TênChương" (ví dụ: "SWP ÷ Chương 1")</summary>
+    public string? Chapter { get; set; }
+
+    /// <summary>Tên bài học cụ thể (tuỳ chọn, có thể null)</summary>
+    public string? Lesson { get; set; }
 
     public virtual Class Class { get; set; } = null!;
 

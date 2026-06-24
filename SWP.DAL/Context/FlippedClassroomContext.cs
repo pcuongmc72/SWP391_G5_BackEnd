@@ -37,6 +37,7 @@ public partial class FlippedClassroomContext : DbContext
     public virtual DbSet<DiscussionThread> DiscussionThreads { get; set; }
 
     public virtual DbSet<DiscussionReply> DiscussionReplies { get; set; }
+    
     public virtual DbSet<Course> Courses { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
@@ -110,6 +111,7 @@ public partial class FlippedClassroomContext : DbContext
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_ClassSessions_Class");
         });
+        
         modelBuilder.Entity<ClassStudent>(entity =>
         {
             entity.ToTable("ClassStudents", tb => tb.HasTrigger("TR_ClassStudents_Trigger"));
@@ -136,12 +138,13 @@ public partial class FlippedClassroomContext : DbContext
 
         modelBuilder.Entity<LearningMaterial>(entity =>
         {
+            entity.HasKey(e => e.Id);
             entity.Property(e => e.Id).HasDefaultValueSql("(newsequentialid())");
             entity.Property(e => e.ClassId).HasMaxLength(20).IsUnicode(false);
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetime())");
             entity.Property(e => e.FileSize).HasMaxLength(50);
             entity.Property(e => e.FileUrl).HasMaxLength(500);
-            entity.Property(e => e.MaterialType).HasMaxLength(20);
+            entity.Property(e => e.MaterialType).HasMaxLength(20).IsUnicode(false);
             entity.Property(e => e.Title).HasMaxLength(255);
             entity.Property(e => e.IsDisabled).HasDefaultValue(false);
 
@@ -160,9 +163,10 @@ public partial class FlippedClassroomContext : DbContext
 
             entity.HasOne(d => d.Material).WithMany(p => p.MaterialCompletions)
                 .HasForeignKey(d => d.MaterialId)
-                .HasConstraintName("FK_MaterialCompletions_Material");
+                .HasConstraintName("FK_MaterialCompletions_Material")
+                .OnDelete(DeleteBehavior.Cascade);
 
-            entity.HasOne(d => d.Student).WithMany()
+            entity.HasOne(d => d.Student).WithMany(p => p.MaterialCompletions)
                 .HasForeignKey(d => d.StudentId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_MaterialCompletions_Student");
@@ -247,6 +251,7 @@ public partial class FlippedClassroomContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_DiscussionReplies_Author");
         });
+        
         modelBuilder.Entity<Course>(entity =>
         {
             entity.HasIndex(e => e.Code, "UQ_Courses_Code").IsUnique();
