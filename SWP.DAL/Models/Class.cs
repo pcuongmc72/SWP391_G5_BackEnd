@@ -26,17 +26,12 @@ public partial class Class
 
     public virtual ICollection<ClassStudent> ClassStudents { get; set; } = new List<ClassStudent>();
 
-<<<<<<< HEAD
     public virtual ICollection<ClassSession> ClassSessions { get; set; } = new List<ClassSession>();
 
     public virtual ICollection<LearningMaterial> LearningMaterials { get; set; } = new List<LearningMaterial>();
 
     public virtual ICollection<Assignment> Assignments { get; set; } = new List<Assignment>();
 
-=======
-    public virtual ICollection<LearningMaterial> LearningMaterials { get; set; } = new List<LearningMaterial>();
-
->>>>>>> origin/cuongnphe194338
     public virtual Course Course { get; set; } = null!;
 
     public virtual User? Lecturer { get; set; }

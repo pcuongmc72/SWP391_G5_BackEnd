@@ -1,9 +1,6 @@
-<<<<<<< HEAD
-=======
 using System;
 using System.Collections.Generic;
 
->>>>>>> origin/cuongnphe194338
 namespace SWP.DAL.Models;
 
 public partial class User
@@ -32,6 +29,7 @@ public partial class User
     public string? Address { get; set; }
 
     public string? Bio { get; set; }
+
     public virtual ICollection<ClassStudent> ClassStudents { get; set; } = new List<ClassStudent>();
 
     public virtual ICollection<Class> Classes { get; set; } = new List<Class>();
