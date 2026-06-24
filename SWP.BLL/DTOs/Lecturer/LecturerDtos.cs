@@ -65,6 +65,7 @@ public class MaterialDto
     public string ClassId { get; set; } = null!;
     public string Title { get; set; } = null!;
     public string? Description { get; set; }
+    public string? Chapter { get; set; }
     public string Type { get; set; } = null!;
     public string? FileUrl { get; set; }
     public string? FileSize { get; set; }
@@ -77,6 +78,7 @@ public class UpsertMaterialDto
 {
     public string Title { get; set; } = null!;
     public string? Description { get; set; }
+    public string? Chapter { get; set; }
     public string Type { get; set; } = "video";
     public string? FileUrl { get; set; }
     public string? FileSize { get; set; }

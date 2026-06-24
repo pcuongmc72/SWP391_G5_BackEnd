@@ -72,6 +72,7 @@ public partial class LecturerService
             ClassId = classId,
             Title = request.Title.Trim(),
             Description = string.IsNullOrWhiteSpace(request.Description) ? null : request.Description.Trim(),
+            Chapter = string.IsNullOrWhiteSpace(request.Chapter) ? null : request.Chapter.Trim(),
             MaterialType = request.Type.ToLower(),
             FileUrl = request.FileUrl,
             FileSize = request.FileSize,
@@ -97,6 +98,7 @@ public partial class LecturerService
 
         entity.Title = request.Title.Trim();
         entity.Description = string.IsNullOrWhiteSpace(request.Description) ? null : request.Description.Trim();
+        entity.Chapter = string.IsNullOrWhiteSpace(request.Chapter) ? null : request.Chapter.Trim();
         entity.MaterialType = request.Type.ToLower();
         entity.FileUrl = request.FileUrl;
         entity.FileSize = request.FileSize;
@@ -380,6 +382,7 @@ public partial class LecturerService
         ClassId = m.ClassId,
         Title = m.Title,
         Description = m.Description,
+        Chapter = m.Chapter,
         Type = m.MaterialType,
         FileUrl = m.FileUrl,
         FileSize = m.FileSize,
