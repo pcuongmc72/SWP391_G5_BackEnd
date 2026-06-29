@@ -1,3 +1,5 @@
+using System;
+
 namespace SWP.DAL.Models;
 
 public partial class MaterialCompletion
