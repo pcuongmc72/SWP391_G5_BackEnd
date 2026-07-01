@@ -32,4 +32,14 @@ public interface IStudentClassesService
     /// Hủy đánh dấu hoàn thành (uncomplete) một học liệu cho sinh viên.
     /// </summary>
     Task<bool> UncompleteMaterialAsync(string studentId, Guid materialId);
+
+    /// <summary>
+    /// Lấy danh sách bài tập của lớp học kèm bài nộp của sinh viên hiện tại.
+    /// </summary>
+    Task<IEnumerable<SWP.BLL.DTOs.Lecturer.StudentAssignmentDto>> GetStudentAssignmentsAsync(string studentId, string classId);
+
+    /// <summary>
+    /// Sinh viên nộp (hoặc nộp lại) bài tập. Tự động ghi đè nếu đã có bài nộp và chưa bị chấm điểm.
+    /// </summary>
+    Task<SWP.BLL.DTOs.Lecturer.SubmissionDto> SubmitAssignmentAsync(string studentId, string classId, Guid assignmentId, SWP.BLL.DTOs.Lecturer.SubmitAssignmentRequestDto request);
 }

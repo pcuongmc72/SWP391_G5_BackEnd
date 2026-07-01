@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SWP.BLL.DTOs.Classes;
+using SWP.BLL.DTOs.Lecturer;
 using SWP.BLL.Interfaces;
 using SWP.DAL.Context;
 using SWP.DAL.Models;
@@ -45,7 +46,7 @@ public class StudentClassesService : IStudentClassesService
 
     // ─── Lấy danh sách buổi học (lộ trình theo tuần) ───────────────────────────
 
-    public async Task<IEnumerable<ClassSessionDto>> GetClassSessionsAsync(string classId)
+    public async Task<IEnumerable<SWP.BLL.DTOs.Classes.ClassSessionDto>> GetClassSessionsAsync(string classId)
     {
         // Lấy tất cả buổi học của lớp, sắp xếp theo ngày
         var sessions = await _context.ClassSessions
@@ -55,7 +56,7 @@ public class StudentClassesService : IStudentClassesService
             .ToListAsync();
 
         if (!sessions.Any())
-            return Enumerable.Empty<ClassSessionDto>();
+            return Enumerable.Empty<SWP.BLL.DTOs.Classes.ClassSessionDto>();
 
         // Tính WeekNumber: buổi đầu tiên = tuần 1
         var firstDate = sessions.First().SessionDate.ToDateTime(TimeOnly.MinValue);
@@ -66,7 +67,7 @@ public class StudentClassesService : IStudentClassesService
             var daysDiff = (sessionDate - firstDate).TotalDays;
             var weekNumber = (int)Math.Floor(daysDiff / 7) + 1;
 
-            return new ClassSessionDto
+            return new SWP.BLL.DTOs.Classes.ClassSessionDto
             {
                 Id = s.Id,
                 ClassId = s.ClassId,
@@ -203,5 +204,117 @@ public class StudentClassesService : IStudentClassesService
         TotalStudents = classEntity.ClassStudents?.Count ?? 0,
         AllowReviewAfterEnd = classEntity.AllowReviewAfterEnd,
         CreatedAt    = classEntity.CreatedAt
+    };
+
+    // ─── Danh sách bài tập (student view) ───────────────────────────────────────
+
+    public async Task<IEnumerable<StudentAssignmentDto>> GetStudentAssignmentsAsync(
+        string studentId, string classId)
+    {
+        // Xác thực sinh viên có trong lớp
+        var isEnrolled = await _context.ClassStudents
+            .AnyAsync(cs => cs.ClassId == classId && cs.StudentId == studentId);
+        if (!isEnrolled)
+            throw new UnauthorizedAccessException("Bạn không phải thành viên của lớp học này.");
+
+        var assignments = await _context.Assignments
+            .AsNoTracking()
+            .Include(a => a.Submissions.Where(s => s.StudentId == studentId))
+                .ThenInclude(s => s.Student)
+            .Where(a => a.ClassId == classId)
+            .OrderBy(a => a.DueDate)
+            .ToListAsync();
+
+        return assignments.Select(a =>
+        {
+            var sub = a.Submissions.FirstOrDefault(s => s.StudentId == studentId);
+            return new StudentAssignmentDto
+            {
+                Id          = a.Id,
+                ClassId     = a.ClassId,
+                Title       = a.Title,
+                Description = a.Description,
+                DueDate     = a.DueDate,
+                MaxPoints   = a.MaxPoints,
+                MySubmission = sub == null ? null : MapSubmission(sub)
+            };
+        });
+    }
+
+    // ─── Nộp bài tập ─────────────────────────────────────────────────────────
+
+    public async Task<SubmissionDto> SubmitAssignmentAsync(
+        string studentId, string classId, Guid assignmentId, SubmitAssignmentRequestDto request)
+    {
+        // Xác thực sinh viên có trong lớp
+        var isEnrolled = await _context.ClassStudents
+            .AnyAsync(cs => cs.ClassId == classId && cs.StudentId == studentId);
+        if (!isEnrolled)
+            throw new UnauthorizedAccessException("Bạn không phải thành viên của lớp học này.");
+
+        var assignment = await _context.Assignments
+            .FirstOrDefaultAsync(a => a.Id == assignmentId && a.ClassId == classId);
+
+        if (assignment == null)
+            throw new KeyNotFoundException("Không tìm thấy bài tập.");
+
+        // Kiểm tra deadline (cho phép nộp muộn, đánh dấu LATE)
+        var today = DateOnly.FromDateTime(DateTime.UtcNow);
+        var isLate = today > assignment.DueDate;
+
+        // Tìm bài nộp cũ (nếu có)
+        var existing = await _context.Submissions
+            .Include(s => s.Student)
+            .FirstOrDefaultAsync(s => s.AssignmentId == assignmentId && s.StudentId == studentId);
+
+        if (existing != null)
+        {
+            // Không cho nộp lại khi đã chấm điểm
+            if (existing.Status == "GRADED")
+                throw new InvalidOperationException("Bài tập đã được chấm điểm, không thể nộp lại.");
+
+            // Cập nhật bài nộp cũ
+            existing.FileName     = request.FileName;
+            existing.StudentNotes = request.StudentNotes;
+            existing.SubmittedAt  = DateTime.UtcNow;
+            existing.Status       = isLate ? "LATE" : "SUBMITTED";
+            await _context.SaveChangesAsync();
+            return MapSubmission(existing);
+        }
+
+        // Tạo bài nộp mới
+        var submission = new Submission
+        {
+            AssignmentId  = assignmentId,
+            StudentId     = studentId,
+            FileName      = request.FileName,
+            StudentNotes  = request.StudentNotes,
+            Status        = isLate ? "LATE" : "SUBMITTED",
+            SubmittedAt   = DateTime.UtcNow
+        };
+
+        _context.Submissions.Add(submission);
+        await _context.SaveChangesAsync();
+
+        // Load navigation property để map
+        await _context.Entry(submission).Reference(s => s.Student).LoadAsync();
+        return MapSubmission(submission);
+    }
+
+    // ─── Shared Submission mapper ───────────────────────────────────────────
+
+    private static SubmissionDto MapSubmission(Submission s) => new()
+    {
+        Id           = s.Id,
+        AssignmentId = s.AssignmentId,
+        StudentId    = s.StudentId,
+        StudentName  = s.Student?.FullName,
+        FileName     = s.FileName,
+        StudentNotes = s.StudentNotes,
+        Status       = s.Status,
+        Grade        = s.Grade,
+        Feedback     = s.Feedback,
+        SubmittedAt  = s.SubmittedAt.ToString("yyyy-MM-dd HH:mm"),
+        GradedAt     = s.GradedAt?.ToString("yyyy-MM-dd HH:mm")
     };
 }

@@ -186,3 +186,28 @@ public class LecturerClassWorkspaceDto
     public List<DiscussionThreadDto> Threads { get; set; } = new();
     public List<ClassSessionDto> Sessions { get; set; } = new();
 }
+
+/// <summary>
+/// DTO trả về thông tin bài tập kèm bài nộp của sinh viên hiện tại (nếu có).
+/// Dùng cho student-facing GET /assignments endpoint.
+/// </summary>
+public class StudentAssignmentDto
+{
+    public Guid Id { get; set; }
+    public string ClassId { get; set; } = null!;
+    public string Title { get; set; } = null!;
+    public string? Description { get; set; }
+    public DateOnly DueDate { get; set; }
+    public decimal MaxPoints { get; set; }
+    /// <summary>Bài nộp của sinh viên hiện tại. Null nếu chưa nộp.</summary>
+    public SubmissionDto? MySubmission { get; set; }
+}
+
+/// <summary>
+/// Request body khi học sinh nộp bài tập.
+/// </summary>
+public class SubmitAssignmentRequestDto
+{
+    public string? FileName { get; set; }
+    public string? StudentNotes { get; set; }
+}
