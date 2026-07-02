@@ -118,6 +118,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowAll");
 
+app.UseStaticFiles(); // Cho phép phục vụ file tĩnh (wwwroot)
+
 app.UseAuthentication();
 app.UseAuthorization();
 
