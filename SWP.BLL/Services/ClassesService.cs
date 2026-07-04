@@ -154,6 +154,37 @@ public class ClassesService : IClassesService
         return true;
     }
 
+    public async Task<IEnumerable<ClassResponseDto>> GetClassesByUserAsync(string userId, string role, Guid? academicTermId = null)
+    {
+        var query = _context.Classes
+            .Include(c => c.Course)
+            .Include(c => c.AcademicTerm)
+            .Include(c => c.Lecturer)
+            .Include(c => c.ClassStudents)
+            .AsQueryable();
+
+        if (academicTermId.HasValue)
+        {
+            query = query.Where(c => c.AcademicTermId == academicTermId.Value);
+        }
+
+        if (role.ToLower() == "student")
+        {
+            var enrolledClassIds = await _context.ClassStudents
+                .Where(cs => cs.StudentId == userId)
+                .Select(cs => cs.ClassId)
+                .ToListAsync();
+            query = query.Where(c => enrolledClassIds.Contains(c.Id));
+        }
+        else if (role.ToLower() == "lecturer")
+        {
+            query = query.Where(c => c.LecturerId == userId);
+        }
+
+        var classes = await query.OrderByDescending(c => c.CreatedAt).ToListAsync();
+        return classes.Select(MapToDto);
+    }
+
     private async Task ValidateForeignKeysAsync(Guid courseId, Guid termId, string? lecturerId)
     {
         if (!await _context.Courses.AnyAsync(c => c.Id == courseId))

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,6 +22,39 @@ public class CoursesService : ICoursesService
     public async Task<IEnumerable<CourseResponseDto>> GetAllCoursesAsync()
     {
         var courses = await _context.Courses
+            .OrderByDescending(c => c.CreatedAt)
+            .ToListAsync();
+
+        return courses.Select(MapToDto);
+    }
+
+    public async Task<IEnumerable<CourseResponseDto>> GetCoursesByUserAsync(string userId, string role)
+    {
+        IQueryable<Class> classQuery = _context.Classes.AsQueryable();
+
+        if (role.ToLower() == "student")
+        {
+            var enrolledClassIds = await _context.ClassStudents
+                .Where(cs => cs.StudentId == userId)
+                .Select(cs => cs.ClassId)
+                .ToListAsync();
+            classQuery = classQuery.Where(c => enrolledClassIds.Contains(c.Id));
+        }
+        else if (role.ToLower() == "lecturer")
+        {
+            classQuery = classQuery.Where(c => c.LecturerId == userId);
+        }
+        else
+        {
+            // For admin or others, maybe return all or empty. 
+            // Applying role filter here assumes we only call this for students/lecturers.
+            return await GetAllCoursesAsync();
+        }
+
+        var courseIds = await classQuery.Select(c => c.CourseId).Distinct().ToListAsync();
+        
+        var courses = await _context.Courses
+            .Where(c => courseIds.Contains(c.Id))
             .OrderByDescending(c => c.CreatedAt)
             .ToListAsync();
 
