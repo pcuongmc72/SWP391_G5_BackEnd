@@ -6,29 +6,6 @@ namespace SWP.BLL.Services;
 
 public partial class LecturerService
 {
-    public async Task<LecturerClassWorkspaceDto> GetClassWorkspaceAsync(string lecturerId, string classId)
-    {
-        var detail = await GetClassDetailAsync(lecturerId, classId);
-        var students = await GetClassStudentsAsync(lecturerId, classId);
-        var materials = await GetMaterialsAsync(lecturerId, classId);
-        var assignments = await GetAssignmentsAsync(lecturerId, classId);
-        var submissions = await GetSubmissionsAsync(lecturerId, classId);
-        var feedbacks = await GetFeedbacksAsync(lecturerId, classId);
-        var threads = await GetThreadsAsync(lecturerId, classId);
-        var sessions = await GetSessionsAsync(lecturerId, classId, null, null);
-
-        return new LecturerClassWorkspaceDto
-        {
-            Class = detail,
-            Students = students.ToList(),
-            Materials = materials.ToList(),
-            Assignments = assignments.ToList(),
-            Submissions = submissions.ToList(),
-            Feedbacks = feedbacks.ToList(),
-            Threads = threads.ToList(),
-            Sessions = sessions.ToList()
-        };
-    }
 
     public async Task<IReadOnlyList<ClassStudentDto>> GetClassStudentsAsync(string lecturerId, string classId)
     {
@@ -55,7 +32,8 @@ public partial class LecturerService
         var list = await _context.LearningMaterials
             .AsNoTracking()
             .Include(m => m.MaterialCompletions)
-            .Where(m => m.ClassId == classId)
+            .Where(m => m.ClassId == classId && !m.IsDisabled)
+
             .OrderByDescending(m => m.UploadedAt)
             .ToListAsync();
 
@@ -446,7 +424,7 @@ public partial class LecturerService
 
     private static void ValidateMaterialType(string type)
     {
-        var valid = new[] { "video", "pdf", "document", "quiz" };
+        var valid = new[] { "video", "pdf", "document", "quiz", "image", "link" };
         if (!valid.Contains(type.ToLower()))
             throw new ArgumentException("Loai hoc lieu khong hop le.");
     }
