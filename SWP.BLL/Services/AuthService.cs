@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using SWP.BLL.DTOs.Auth;
 using SWP.BLL.Interfaces;
+using SWP.BLL.DTOs.Users;
 using SWP.DAL.Context;
 using SWP.DAL.Models;
 using System.IdentityModel.Tokens.Jwt;
@@ -45,40 +46,6 @@ public class AuthService : IAuthService
         }
 
         return BuildAuthResponse(user);
-    }
-
-    // ── Register (Admin only) ─────────────────────────────────────────────────
-    public async Task<AuthResponseDto> RegisterAsync(RegisterRequestDto request)
-    {
-        // 1. Kiểm tra ID trùng
-        if (await _context.Users.AnyAsync(u => u.Id == request.Id))
-            throw new InvalidOperationException("Ma dinh danh (Id) da ton tai.");
-
-        // 2. Kiểm tra Email trùng
-        if (await _context.Users.AnyAsync(u => u.Email == request.Email))
-            throw new InvalidOperationException("Email da duoc su dung.");
-
-        // 3. Kiểm tra Role hợp lệ
-        var validRoles = new[] { "admin", "lecturer", "student" };
-        if (!validRoles.Contains(request.Role.ToLower()))
-            throw new InvalidOperationException("Role khong hop le (chi nhan: admin, lecturer, student).");
-
-        var newUser = new User
-        {
-            Id           = request.Id,
-            Email        = request.Email,
-            FullName     = request.FullName,
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
-            Role         = request.Role.ToLower(),
-            IsActive     = true,
-            CreatedAt    = DateTime.UtcNow,
-            UpdatedAt    = DateTime.UtcNow
-        };
-
-        _context.Users.Add(newUser);
-        await _context.SaveChangesAsync();
-
-        return BuildAuthResponse(newUser);
     }
 
     // ── GetProfile ────────────────────────────────────────────────────────────

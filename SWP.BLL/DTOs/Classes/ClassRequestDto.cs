@@ -11,7 +11,7 @@ namespace SWP.BLL.DTOs.Classes
     {
         [Required(ErrorMessage = "Mã lớp là bắt buộc.")]
         [MaxLength(20)]
-        [RegularExpression(@"^[a-zA-Z0-9_-]+$", ErrorMessage = "Mã lớp chỉ được chứa chữ và số, viết liền (VD: SE1908).")]
+        [RegularExpression(@"^[A-Z]{2}\d{4}$", ErrorMessage = "Mã lớp phải bắt đầu bằng 2 chữ cái in hoa và theo sau là đúng 4 chữ số (VD: SE1908).")]
         public string Id { get; set; } = null!;
 
         [Required(ErrorMessage = "Vui lòng chọn môn học.")]

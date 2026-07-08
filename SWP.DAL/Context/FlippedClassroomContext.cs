@@ -264,8 +264,6 @@ public partial class FlippedClassroomContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasIndex(e => e.Email, "UQ_Users_Email").IsUnique();
-
             entity.Property(e => e.Id)
                 .HasMaxLength(20)
                 .IsUnicode(false);
