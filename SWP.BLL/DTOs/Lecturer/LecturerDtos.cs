@@ -175,17 +175,6 @@ public class CreateReplyDto
     public string Content { get; set; } = null!;
 }
 
-public class LecturerClassWorkspaceDto
-{
-    public LecturerClassDetailDto Class { get; set; } = null!;
-    public List<ClassStudentDto> Students { get; set; } = new();
-    public List<MaterialDto> Materials { get; set; } = new();
-    public List<AssignmentDto> Assignments { get; set; } = new();
-    public List<SubmissionDto> Submissions { get; set; } = new();
-    public List<FeedbackDto> Feedbacks { get; set; } = new();
-    public List<DiscussionThreadDto> Threads { get; set; } = new();
-    public List<ClassSessionDto> Sessions { get; set; } = new();
-}
 
 /// <summary>
 /// DTO trả về thông tin bài tập kèm bài nộp của sinh viên hiện tại (nếu có).

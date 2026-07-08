@@ -6,7 +6,7 @@ public interface ILecturerService
 {
     Task<IReadOnlyList<LecturerClassListItemDto>> GetMyClassesAsync(string lecturerId);
     Task<LecturerClassDetailDto> GetClassDetailAsync(string lecturerId, string classId);
-    Task<LecturerClassWorkspaceDto> GetClassWorkspaceAsync(string lecturerId, string classId);
+
 
     Task<IReadOnlyList<ClassStudentDto>> GetClassStudentsAsync(string lecturerId, string classId);
 
