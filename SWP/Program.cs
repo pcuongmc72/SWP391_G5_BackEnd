@@ -106,6 +106,7 @@ builder.Services.AddScoped<IClassStudentsService, ClassStudentsService>();
 builder.Services.AddScoped<IStudentClassesService, StudentClassesService>();
 builder.Services.AddScoped<IBlogsService, BlogsService>();
 builder.Services.AddScoped<IStudentLearningMaterialsService, StudentLearningMaterialsService>();
+builder.Services.AddScoped<IQuizService, QuizService>();
 
 // ─── Build & Middleware ───────────────────────────────────────────────────────
 var app = builder.Build();

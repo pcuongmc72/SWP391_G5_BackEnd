@@ -44,6 +44,12 @@ public partial class FlippedClassroomContext : DbContext
     public virtual DbSet<Blog> Blogs { get; set; }
     public virtual DbSet<Comment> Comments { get; set; }
 
+    public virtual DbSet<Quiz> Quizzes { get; set; }
+    public virtual DbSet<QuizQuestion> QuizQuestions { get; set; }
+    public virtual DbSet<QuizOption> QuizOptions { get; set; }
+    public virtual DbSet<QuizAttempt> QuizAttempts { get; set; }
+    public virtual DbSet<QuizAnswer> QuizAnswers { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         // Chỉ dùng connection string mặc định khi chưa được cấu hình qua DI (appsettings.json)
@@ -321,6 +327,88 @@ public partial class FlippedClassroomContext : DbContext
                 .HasForeignKey(d => d.AuthorId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Comments_Author");
+        });
+
+        modelBuilder.Entity<Quiz>(entity =>
+        {
+            entity.Property(e => e.Id).HasDefaultValueSql("(newsequentialid())");
+            entity.Property(e => e.ClassId).HasMaxLength(20).IsUnicode(false);
+            entity.Property(e => e.Title).HasMaxLength(255);
+            entity.Property(e => e.CreatedBy).HasMaxLength(20).IsUnicode(false);
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysdatetime())");
+            entity.Property(e => e.IsDisabled).HasDefaultValue(false);
+
+            entity.HasOne(d => d.Class).WithMany()
+                .HasForeignKey(d => d.ClassId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_Quizzes_Class");
+
+            entity.HasOne(d => d.Creator).WithMany()
+                .HasForeignKey(d => d.CreatedBy)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Quizzes_Creator");
+        });
+
+        modelBuilder.Entity<QuizQuestion>(entity =>
+        {
+            entity.Property(e => e.Id).HasDefaultValueSql("(newsequentialid())");
+            entity.Property(e => e.Points).HasColumnType("decimal(5, 2)");
+            entity.Property(e => e.QuestionText).IsRequired();
+
+            entity.HasOne(d => d.Quiz).WithMany(p => p.QuizQuestions)
+                .HasForeignKey(d => d.QuizId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_QuizQuestions_Quiz");
+        });
+
+        modelBuilder.Entity<QuizOption>(entity =>
+        {
+            entity.Property(e => e.Id).HasDefaultValueSql("(newsequentialid())");
+            entity.Property(e => e.OptionText).IsRequired();
+            entity.Property(e => e.IsCorrect).HasDefaultValue(false);
+
+            entity.HasOne(d => d.Question).WithMany(p => p.QuizOptions)
+                .HasForeignKey(d => d.QuestionId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_QuizOptions_Question");
+        });
+
+        modelBuilder.Entity<QuizAttempt>(entity =>
+        {
+            entity.Property(e => e.Id).HasDefaultValueSql("(newsequentialid())");
+            entity.Property(e => e.StudentId).HasMaxLength(20).IsUnicode(false);
+            entity.Property(e => e.TotalScore).HasColumnType("decimal(5, 2)");
+            entity.Property(e => e.StartedAt).HasDefaultValueSql("(sysdatetime())");
+
+            entity.HasOne(d => d.Quiz).WithMany(p => p.QuizAttempts)
+                .HasForeignKey(d => d.QuizId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_QuizAttempts_Quiz");
+
+            entity.HasOne(d => d.Student).WithMany()
+                .HasForeignKey(d => d.StudentId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_QuizAttempts_Student");
+        });
+
+        modelBuilder.Entity<QuizAnswer>(entity =>
+        {
+            entity.HasKey(e => new { e.AttemptId, e.QuestionId, e.SelectedOptionId });
+
+            entity.HasOne(d => d.Attempt).WithMany(p => p.QuizAnswers)
+                .HasForeignKey(d => d.AttemptId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_QuizAnswers_Attempt");
+
+            entity.HasOne(d => d.Question).WithMany()
+                .HasForeignKey(d => d.QuestionId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_QuizAnswers_Question");
+
+            entity.HasOne(d => d.SelectedOption).WithMany()
+                .HasForeignKey(d => d.SelectedOptionId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_QuizAnswers_Option");
         });
 
         OnModelCreatingPartial(modelBuilder);
