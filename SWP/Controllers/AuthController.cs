@@ -146,6 +146,39 @@ public class AuthController : ControllerBase
         }
     }
 
+    // ──────────────────────────────────────────────
+    //  POST /api/auth/change-password
+    // ──────────────────────────────────────────────
+    [HttpPost("change-password")]
+    [Authorize]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(401)]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequestDto request)
+    {
+        var id = GetCurrentUserId();
+        if (id is null)
+            return Unauthorized(new { success = false, message = "Token không hợp lệ hoặc đã hết hạn." });
+
+        try
+        {
+            await _authService.ChangePasswordAsync(id, request);
+            return Ok(new { success = true, message = "Mật khẩu đã được thay đổi thành công." });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { success = false, message = ex.Message });
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new { success = false, message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { success = false, message = "Có lỗi xảy ra trong quá trình đổi mật khẩu." });
+        }
+    }
+
     // ── Helper ────────────────────────────────────
     private string? GetCurrentUserId() =>
         User.FindFirst(ClaimTypes.NameIdentifier)?.Value

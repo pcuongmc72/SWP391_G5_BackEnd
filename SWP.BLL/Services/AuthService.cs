@@ -255,4 +255,25 @@ public class AuthService : IAuthService
         await _context.SaveChangesAsync();
         Console.WriteLine($"[Reset Password] Reset thành công cho user: {user.Email}");
     }
+
+    // ── ChangePassword ────────────────────────────────────────────────────────
+    public async Task ChangePasswordAsync(string userId, ChangePasswordRequestDto request)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        if (user == null)
+        {
+            throw new KeyNotFoundException("Không tìm thấy người dùng.");
+        }
+
+        if (!VerifyPassword(request.CurrentPassword, user.PasswordHash))
+        {
+            throw new ArgumentException("Mật khẩu hiện tại không chính xác.");
+        }
+
+        user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
+        user.UpdatedAt = DateTime.UtcNow;
+
+        await _context.SaveChangesAsync();
+        Console.WriteLine($"[Change Password] Đổi mật khẩu thành công cho user: {user.Email}");
+    }
 }
