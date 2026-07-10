@@ -107,16 +107,27 @@ namespace SWP.BLL.Services
 
         public async Task<IEnumerable<BlogResponseDto>> GetStudentClassBlogsAsync(string studentId, Guid? courseId = null)
         {
-            // Get all class IDs the student is enrolled in
-            var classIds = await _context.ClassStudents
+            // Get all class IDs and course IDs the student is enrolled in
+            var enrollments = await _context.ClassStudents
+                .Include(cs => cs.Class)
                 .Where(cs => cs.StudentId == studentId)
-                .Select(cs => cs.ClassId)
                 .ToListAsync();
+
+            var classIds = enrollments.Select(cs => cs.ClassId).ToList();
+            var enrolledCourseIds = enrollments.Select(cs => cs.Class.CourseId).Distinct().ToList();
 
             var query = _context.Blogs
                 .Include(b => b.Author)
                 .Include(b => b.Course)
-                .Where(b => (b.Status == 1 || b.AuthorId == studentId) && b.ClassId != null && classIds.Contains(b.ClassId));
+                .Where(b => (b.Status == 1 || b.AuthorId == studentId) && 
+                            (
+                                // 1. Blogs specifically for their classes
+                                (b.ClassId != null && classIds.Contains(b.ClassId)) ||
+                                // 2. Public blogs for their courses (even if no ClassId)
+                                (b.ClassId == null && !b.IsPrivate && enrolledCourseIds.Contains(b.CourseId)) ||
+                                // 3. Their own blogs (already covered by AuthorId == studentId, but ensure they see them here)
+                                (b.AuthorId == studentId)
+                            ));
 
             if (courseId.HasValue)
             {
@@ -314,7 +325,8 @@ namespace SWP.BLL.Services
                 AuthorFullName = c.Author?.FullName ?? "Unknown",
                 Content = c.Content,
                 CreatedAt = c.CreatedAt,
-                UpdatedAt = c.UpdatedAt
+                UpdatedAt = c.UpdatedAt,
+                Role = c.Author?.Role
             });
         }
 
@@ -380,7 +392,8 @@ namespace SWP.BLL.Services
                 AuthorFullName = savedComment.Author?.FullName ?? "Unknown",
                 Content = savedComment.Content,
                 CreatedAt = savedComment.CreatedAt,
-                UpdatedAt = savedComment.UpdatedAt
+                UpdatedAt = savedComment.UpdatedAt,
+                Role = savedComment.Author?.Role
             };
         }
 
@@ -410,7 +423,8 @@ namespace SWP.BLL.Services
                 Status = blog.Status,
                 Keywords = blog.Keywords,
                 CreatedAt = blog.CreatedAt,
-                UpdatedAt = blog.UpdatedAt
+                UpdatedAt = blog.UpdatedAt,
+                Role = blog.Author?.Role
             };
         }
     }
