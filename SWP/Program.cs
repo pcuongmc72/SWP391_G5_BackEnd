@@ -38,6 +38,8 @@ builder.Services.AddAuthentication(options =>
 });
 
 // ─── DI Services ─────────────────────────────────────────────────────────────
+builder.Services.AddMemoryCache();
+builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ILecturerService, LecturerService>();
 

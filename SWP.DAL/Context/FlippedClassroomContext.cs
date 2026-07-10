@@ -284,6 +284,8 @@ public partial class FlippedClassroomContext : DbContext
             entity.Property(e => e.Phone).HasMaxLength(20);
             entity.Property(e => e.Address).HasMaxLength(500);
             entity.Property(e => e.Bio).HasMaxLength(1000);
+            entity.Property(e => e.PasswordResetTokenHash).HasMaxLength(256);
+            entity.Property(e => e.PasswordResetTokenExpiry).HasColumnType("datetime2");
         });
 
         modelBuilder.Entity<Blog>(entity =>

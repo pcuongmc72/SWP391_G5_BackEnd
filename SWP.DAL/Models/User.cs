@@ -30,6 +30,10 @@ public partial class User
 
     public string? Bio { get; set; }
 
+    public string? PasswordResetTokenHash { get; set; }
+
+    public DateTime? PasswordResetTokenExpiry { get; set; }
+
     public virtual ICollection<ClassStudent> ClassStudents { get; set; } = new List<ClassStudent>();
 
     public virtual ICollection<Class> Classes { get; set; } = new List<Class>();
