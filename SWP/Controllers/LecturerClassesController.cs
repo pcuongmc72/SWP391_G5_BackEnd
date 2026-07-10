@@ -42,18 +42,6 @@ public class LecturerClassesController : ControllerBase
         catch (KeyNotFoundException ex) { return NotFound(new { success = false, message = ex.Message }); }
     }
 
-    [HttpGet("classes/{classId}/workspace")]
-    public async Task<IActionResult> GetClassWorkspace(string classId)
-    {
-        var lecturerId = GetCurrentUserId();
-        if (lecturerId is null) return Unauthorized();
-        try
-        {
-            var data = await _lecturerService.GetClassWorkspaceAsync(lecturerId, classId);
-            return Ok(new { success = true, data });
-        }
-        catch (KeyNotFoundException ex) { return NotFound(new { success = false, message = ex.Message }); }
-    }
 
     [HttpGet("classes/{classId}/students")]
     public async Task<IActionResult> GetStudents(string classId)

@@ -175,14 +175,28 @@ public class CreateReplyDto
     public string Content { get; set; } = null!;
 }
 
-public class LecturerClassWorkspaceDto
+
+/// <summary>
+/// DTO trả về thông tin bài tập kèm bài nộp của sinh viên hiện tại (nếu có).
+/// Dùng cho student-facing GET /assignments endpoint.
+/// </summary>
+public class StudentAssignmentDto
 {
-    public LecturerClassDetailDto Class { get; set; } = null!;
-    public List<ClassStudentDto> Students { get; set; } = new();
-    public List<MaterialDto> Materials { get; set; } = new();
-    public List<AssignmentDto> Assignments { get; set; } = new();
-    public List<SubmissionDto> Submissions { get; set; } = new();
-    public List<FeedbackDto> Feedbacks { get; set; } = new();
-    public List<DiscussionThreadDto> Threads { get; set; } = new();
-    public List<ClassSessionDto> Sessions { get; set; } = new();
+    public Guid Id { get; set; }
+    public string ClassId { get; set; } = null!;
+    public string Title { get; set; } = null!;
+    public string? Description { get; set; }
+    public DateOnly DueDate { get; set; }
+    public decimal MaxPoints { get; set; }
+    /// <summary>Bài nộp của sinh viên hiện tại. Null nếu chưa nộp.</summary>
+    public SubmissionDto? MySubmission { get; set; }
+}
+
+/// <summary>
+/// Request body khi học sinh nộp bài tập.
+/// </summary>
+public class SubmitAssignmentRequestDto
+{
+    public string? FileName { get; set; }
+    public string? StudentNotes { get; set; }
 }

@@ -114,4 +114,25 @@ public class ClassesController : ControllerBase
             return BadRequest(new { success = false, message = ex.Message });
         }
     }
+
+    [HttpGet("{id}/materials")]
+    [Authorize(Roles = "admin")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> GetClassMaterials(string id)
+    {
+        try
+        {
+            var result = await _classesService.GetClassMaterialsAsync(id);
+            return Ok(new { success = true, data = result });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { success = false, message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { success = false, message = ex.Message });
+        }
+    }
 }

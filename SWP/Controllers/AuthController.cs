@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SWP.BLL.DTOs.Auth;
+using SWP.BLL.DTOs.Users;
 using SWP.BLL.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -33,27 +34,6 @@ public class AuthController : ControllerBase
         catch (UnauthorizedAccessException ex)
         {
             return Unauthorized(new { success = false, message = ex.Message });
-        }
-    }
-
-    // ──────────────────────────────────────────────
-    //  POST /api/auth/register  (Admin only)
-    // ──────────────────────────────────────────────
-    /// <summary>Tạo tài khoản mới — chỉ Admin được phép</summary>
-    [HttpPost("register")]
-    [Authorize(Roles = "admin")]
-    [ProducesResponseType(typeof(AuthResponseDto), 200)]
-    [ProducesResponseType(400)]
-    public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
-    {
-        try
-        {
-            var result = await _authService.RegisterAsync(request);
-            return Ok(new { success = true, message = "Tạo tài khoản thành công.", data = result });
-        }
-        catch (InvalidOperationException ex)
-        {
-            return BadRequest(new { success = false, message = ex.Message });
         }
     }
 
