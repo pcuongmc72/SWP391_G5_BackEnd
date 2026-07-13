@@ -267,6 +267,7 @@ public partial class LecturerService
         var list = await _context.SupportFeedbacks
             .AsNoTracking()
             .Include(f => f.Sender)
+            .Include(f => f.AnsweredBy)
             .Where(f => f.ClassId == null || f.ClassId == classId)
             .OrderByDescending(f => f.CreatedAt)
             .ToListAsync();
@@ -288,6 +289,7 @@ public partial class LecturerService
         fb.Status = "RESPONDED";
         fb.Response = request.Response.Trim();
         fb.RespondedAt = DateTime.UtcNow;
+        fb.AnsweredByUserId = lecturerId;
 
         await _context.SaveChangesAsync();
         return MapFeedback(fb);
@@ -395,7 +397,9 @@ public partial class LecturerService
         Status = f.Status,
         Response = f.Response,
         CreatedAt = f.CreatedAt.ToString("yyyy-MM-dd HH:mm"),
-        RespondedAt = f.RespondedAt?.ToString("yyyy-MM-dd HH:mm")
+        RespondedAt = f.RespondedAt?.ToString("yyyy-MM-dd HH:mm"),
+        AnsweredByUserId = f.AnsweredByUserId,
+        AnsweredByName = f.AnsweredBy?.FullName
     };
 
     private static DiscussionThreadDto MapThread(DiscussionThread t) => new()

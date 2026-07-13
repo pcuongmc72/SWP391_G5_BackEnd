@@ -317,4 +317,88 @@ public class StudentClassesService : IStudentClassesService
         SubmittedAt  = s.SubmittedAt.ToString("yyyy-MM-dd HH:mm"),
         GradedAt     = s.GradedAt?.ToString("yyyy-MM-dd HH:mm")
     };
+
+    // ─── Support Feedback ───────────────────────────────────────────────────
+
+    public async Task<IReadOnlyList<FeedbackDto>> GetFeedbacksAsync(string studentId, string classId)
+    {
+        // 1. Kiểm tra sinh viên có trong lớp không
+        var isEnrolled = await _context.ClassStudents.AnyAsync(cs => cs.ClassId == classId && cs.StudentId == studentId);
+        if (!isEnrolled) throw new KeyNotFoundException("Học viên không thuộc lớp này.");
+
+        var list = await _context.SupportFeedbacks
+            .AsNoTracking()
+            .Include(f => f.Sender)
+            .Include(f => f.AnsweredBy)
+            .Where(f => f.ClassId == classId)
+            .OrderByDescending(f => f.CreatedAt)
+            .ToListAsync();
+
+        return list.Select(MapFeedback).ToList();
+    }
+
+    public async Task<FeedbackDto> CreateFeedbackAsync(string studentId, string classId, CreateFeedbackDto request)
+    {
+        var isEnrolled = await _context.ClassStudents.AnyAsync(cs => cs.ClassId == classId && cs.StudentId == studentId);
+        if (!isEnrolled) throw new KeyNotFoundException("Học viên không thuộc lớp này.");
+
+        var fb = new SupportFeedback
+        {
+            ClassId = classId,
+            SenderId = studentId,
+            Title = request.Title.Trim(),
+            Message = request.Message.Trim(),
+            Status = "OPEN",
+            CreatedAt = DateTime.UtcNow
+        };
+
+        _context.SupportFeedbacks.Add(fb);
+        await _context.SaveChangesAsync();
+
+        await _context.Entry(fb).Reference(f => f.Sender).LoadAsync();
+        return MapFeedback(fb);
+    }
+
+    public async Task<FeedbackDto> RespondFeedbackAsAssistantAsync(string studentId, string classId, Guid feedbackId, RespondFeedbackDto request)
+    {
+        // Kiểm tra sinh viên có vai trò assistant trong lớp không
+        var enrollment = await _context.ClassStudents.FirstOrDefaultAsync(cs => cs.ClassId == classId && cs.StudentId == studentId);
+        if (enrollment == null) throw new KeyNotFoundException("Học viên không thuộc lớp này.");
+        if (enrollment.ClassRole?.ToLower() != "assistant")
+        {
+            throw new UnauthorizedAccessException("Bạn không có quyền trợ giảng trong lớp này để trả lời câu hỏi.");
+        }
+
+        var fb = await _context.SupportFeedbacks
+            .Include(f => f.Sender)
+            .Include(f => f.AnsweredBy)
+            .FirstOrDefaultAsync(f => f.Id == feedbackId && f.ClassId == classId);
+
+        if (fb == null) throw new KeyNotFoundException("Không tìm thấy phản hồi.");
+
+        fb.Status = "RESPONDED";
+        fb.Response = request.Response.Trim();
+        fb.RespondedAt = DateTime.UtcNow;
+        fb.AnsweredByUserId = studentId;
+
+        await _context.SaveChangesAsync();
+        await _context.Entry(fb).Reference(f => f.AnsweredBy).LoadAsync();
+        return MapFeedback(fb);
+    }
+
+    private static FeedbackDto MapFeedback(SupportFeedback f) => new()
+    {
+        Id = f.Id,
+        ClassId = f.ClassId,
+        SenderId = f.SenderId,
+        SenderName = f.Sender?.FullName,
+        Title = f.Title,
+        Message = f.Message,
+        Status = f.Status,
+        Response = f.Response,
+        CreatedAt = f.CreatedAt.ToString("yyyy-MM-dd HH:mm"),
+        RespondedAt = f.RespondedAt?.ToString("yyyy-MM-dd HH:mm"),
+        AnsweredByUserId = f.AnsweredByUserId,
+        AnsweredByName = f.AnsweredBy?.FullName
+    };
 }

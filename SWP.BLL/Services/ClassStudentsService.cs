@@ -38,6 +38,7 @@ public class ClassStudentsService : IClassStudentsService
             FullName = cs.Student?.FullName ?? "N/A",
             Email = cs.Student?.Email ?? "N/A",
             AvatarUrl = cs.Student?.AvatarUrl,
+            ClassRole = cs.ClassRole,
             EnrolledAt = cs.EnrolledAt
         });
     }

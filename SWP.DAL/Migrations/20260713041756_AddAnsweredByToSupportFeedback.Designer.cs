@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SWP.DAL.Context;
 
@@ -11,9 +12,11 @@ using SWP.DAL.Context;
 namespace SWP.DAL.Migrations
 {
     [DbContext(typeof(FlippedClassroomContext))]
-    partial class FlippedClassroomContextModelSnapshot : ModelSnapshot
+    [Migration("20260713041756_AddAnsweredByToSupportFeedback")]
+    partial class AddAnsweredByToSupportFeedback
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -136,11 +136,19 @@ public class FeedbackDto
     public string? Response { get; set; }
     public string CreatedAt { get; set; } = null!;
     public string? RespondedAt { get; set; }
+    public string? AnsweredByUserId { get; set; }
+    public string? AnsweredByName { get; set; }
 }
 
 public class RespondFeedbackDto
 {
     public string Response { get; set; } = null!;
+}
+
+public class CreateFeedbackDto
+{
+    public string Title { get; set; } = null!;
+    public string Message { get; set; } = null!;
 }
 
 public class DiscussionReplyDto

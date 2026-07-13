@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +12,7 @@ namespace SWP.BLL.DTOs.ClassStudents
         public string FullName { get; set; } = null!;
         public string Email { get; set; } = null!;
         public string? AvatarUrl { get; set; }
+        public string? ClassRole { get; set; }
         public DateTime EnrolledAt { get; set; }
     }
 }

@@ -20,5 +20,9 @@ public partial class SupportFeedback
 
     public DateTime? RespondedAt { get; set; }
 
+    public string? AnsweredByUserId { get; set; }
+
     public virtual User Sender { get; set; } = null!;
+
+    public virtual User? AnsweredBy { get; set; }
 }

@@ -42,4 +42,19 @@ public interface IStudentClassesService
     /// Sinh viên nộp (hoặc nộp lại) bài tập. Tự động ghi đè nếu đã có bài nộp và chưa bị chấm điểm.
     /// </summary>
     Task<SWP.BLL.DTOs.Lecturer.SubmissionDto> SubmitAssignmentAsync(string studentId, string classId, Guid assignmentId, SWP.BLL.DTOs.Lecturer.SubmitAssignmentRequestDto request);
+
+    /// <summary>
+    /// Lấy danh sách câu hỏi / feedback trong một lớp học.
+    /// </summary>
+    Task<IReadOnlyList<SWP.BLL.DTOs.Lecturer.FeedbackDto>> GetFeedbacksAsync(string studentId, string classId);
+
+    /// <summary>
+    /// Học viên tạo một câu hỏi mới trong lớp.
+    /// </summary>
+    Task<SWP.BLL.DTOs.Lecturer.FeedbackDto> CreateFeedbackAsync(string studentId, string classId, SWP.BLL.DTOs.Lecturer.CreateFeedbackDto request);
+
+    /// <summary>
+    /// Trợ giảng (ClassRole == assistant) trả lời câu hỏi.
+    /// </summary>
+    Task<SWP.BLL.DTOs.Lecturer.FeedbackDto> RespondFeedbackAsAssistantAsync(string studentId, string classId, Guid feedbackId, SWP.BLL.DTOs.Lecturer.RespondFeedbackDto request);
 }

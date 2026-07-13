@@ -225,6 +225,13 @@ public partial class FlippedClassroomContext : DbContext
                 .HasForeignKey(d => d.SenderId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_SupportFeedbacks_Sender");
+
+            entity.Property(e => e.AnsweredByUserId).HasMaxLength(20).IsUnicode(false);
+
+            entity.HasOne(d => d.AnsweredBy).WithMany()
+                .HasForeignKey(d => d.AnsweredByUserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_SupportFeedbacks_AnsweredBy");
         });
 
         modelBuilder.Entity<DiscussionThread>(entity =>

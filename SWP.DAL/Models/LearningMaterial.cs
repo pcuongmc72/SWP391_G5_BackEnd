@@ -29,7 +29,6 @@ public partial class LearningMaterial
     /// <summary>Tên chương / chapter của học liệu. Format: "TênMôn ÷ TênChương" (ví dụ: "SWP ÷ Chương 1")</summary>
     public string? Chapter { get; set; }
 
-    /// <summary>Tên bài học cụ thể (tuỳ chọn, có thể null)</summary>
     public string? Lesson { get; set; }
 
     public virtual Class Class { get; set; } = null!;

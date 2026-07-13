@@ -218,6 +218,51 @@ public class StudentClassesController : ControllerBase
         }
     }
 
+    // ─── Support Feedbacks ───────────────────────────────────────────────────
+
+    [HttpGet("{classId}/feedbacks")]
+    public async Task<IActionResult> GetFeedbacks(string classId)
+    {
+        var studentId = GetCurrentStudentId();
+        if (studentId == null) return Unauthorized();
+
+        try
+        {
+            var data = await _studentClassesService.GetFeedbacksAsync(studentId, classId);
+            return Ok(new { success = true, data });
+        }
+        catch (KeyNotFoundException ex) { return NotFound(new { success = false, message = ex.Message }); }
+    }
+
+    [HttpPost("{classId}/feedbacks")]
+    public async Task<IActionResult> CreateFeedback(string classId, [FromBody] SWP.BLL.DTOs.Lecturer.CreateFeedbackDto request)
+    {
+        var studentId = GetCurrentStudentId();
+        if (studentId == null) return Unauthorized();
+
+        try
+        {
+            var data = await _studentClassesService.CreateFeedbackAsync(studentId, classId, request);
+            return Ok(new { success = true, data });
+        }
+        catch (KeyNotFoundException ex) { return NotFound(new { success = false, message = ex.Message }); }
+    }
+
+    [HttpPut("{classId}/feedbacks/{feedbackId:guid}/respond")]
+    public async Task<IActionResult> RespondFeedbackAsAssistant(string classId, Guid feedbackId, [FromBody] SWP.BLL.DTOs.Lecturer.RespondFeedbackDto request)
+    {
+        var studentId = GetCurrentStudentId();
+        if (studentId == null) return Unauthorized();
+
+        try
+        {
+            var data = await _studentClassesService.RespondFeedbackAsAssistantAsync(studentId, classId, feedbackId, request);
+            return Ok(new { success = true, data });
+        }
+        catch (UnauthorizedAccessException ex) { return StatusCode(403, new { success = false, message = ex.Message }); }
+        catch (KeyNotFoundException ex) { return NotFound(new { success = false, message = ex.Message }); }
+    }
+
     // ─── Helper ────────────────────────────────────────────────────────────────
     private string? GetCurrentStudentId() =>
         User.FindFirst(ClaimTypes.NameIdentifier)?.Value
