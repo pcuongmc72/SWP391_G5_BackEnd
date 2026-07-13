@@ -258,9 +258,12 @@ public class StudentClassesService : IStudentClassesService
         if (assignment == null)
             throw new KeyNotFoundException("Không tìm thấy bài tập.");
 
-        // Kiểm tra deadline (cho phép nộp muộn, đánh dấu LATE)
+        // Kiểm tra deadline (nếu quá hạn nộp, từ chối nộp bài)
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
-        var isLate = today > assignment.DueDate;
+        if (today > assignment.DueDate)
+        {
+            throw new InvalidOperationException("Không thể nộp bài. Hạn nộp đã kết thúc.");
+        }
 
         // Tìm bài nộp cũ (nếu có)
         var existing = await _context.Submissions
@@ -277,7 +280,7 @@ public class StudentClassesService : IStudentClassesService
             existing.FileName     = request.FileName;
             existing.StudentNotes = request.StudentNotes;
             existing.SubmittedAt  = DateTime.UtcNow;
-            existing.Status       = isLate ? "LATE" : "SUBMITTED";
+            existing.Status       = "SUBMITTED";
             await _context.SaveChangesAsync();
             return MapSubmission(existing);
         }
@@ -289,7 +292,7 @@ public class StudentClassesService : IStudentClassesService
             StudentId     = studentId,
             FileName      = request.FileName,
             StudentNotes  = request.StudentNotes,
-            Status        = isLate ? "LATE" : "SUBMITTED",
+            Status        = "SUBMITTED",
             SubmittedAt   = DateTime.UtcNow
         };
 
