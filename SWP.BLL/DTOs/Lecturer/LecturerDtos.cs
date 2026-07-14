@@ -136,6 +136,21 @@ public class FeedbackDto
     public string? Response { get; set; }
     public string CreatedAt { get; set; } = null!;
     public string? RespondedAt { get; set; }
+    /// <summary>ID bài học liên kết (null nếu hỏi chung)</summary>
+    public Guid? MaterialId { get; set; }
+    /// <summary>Tên bài học liên kết (null nếu hỏi chung)</summary>
+    public string? MaterialTitle { get; set; }
+    public string? AnsweredById { get; set; }
+    public string? AnsweredByName { get; set; }
+    public string? AnsweredByRole { get; set; }
+}
+
+public class CreateFeedbackDto
+{
+    public string Title { get; set; } = null!;
+    public string Message { get; set; } = null!;
+    /// <summary>ID bài học đang xem (tuỳ chọn, có thể null)</summary>
+    public Guid? MaterialId { get; set; }
 }
 
 public class RespondFeedbackDto

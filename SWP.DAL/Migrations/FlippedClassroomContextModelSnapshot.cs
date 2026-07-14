@@ -98,6 +98,66 @@ namespace SWP.DAL.Migrations
                     b.ToTable("Assignments");
                 });
 
+            modelBuilder.Entity("SWP.DAL.Models.Blog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("(newsequentialid())");
+
+                    b.Property<string>("AuthorId")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<string>("ClassId")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(sysdatetime())");
+
+                    b.Property<bool>("IsPrivate")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Keywords")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(sysdatetime())");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("ClassId");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("Blogs");
+                });
+
             modelBuilder.Entity("SWP.DAL.Models.Class", b =>
                 {
                     b.Property<string>("Id")
@@ -227,6 +287,45 @@ namespace SWP.DAL.Migrations
                         });
 
                     b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
+                });
+
+            modelBuilder.Entity("SWP.DAL.Models.Comment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("(newsequentialid())");
+
+                    b.Property<string>("AuthorId")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<Guid>("BlogId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(sysdatetime())");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(sysdatetime())");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("BlogId");
+
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("SWP.DAL.Models.Course", b =>
@@ -372,10 +471,14 @@ namespace SWP.DAL.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
 
+                    b.Property<string>("Lesson")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("MaterialType")
                         .IsRequired()
                         .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -472,6 +575,15 @@ namespace SWP.DAL.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("(newsequentialid())");
 
+                    b.Property<string>("AnsweredById")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AnsweredByName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AnsweredByRole")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ClassId")
                         .HasMaxLength(20)
                         .IsUnicode(false)
@@ -481,6 +593,9 @@ namespace SWP.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("(sysdatetime())");
+
+                    b.Property<Guid?>("MaterialId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Message")
                         .IsRequired()
@@ -509,6 +624,8 @@ namespace SWP.DAL.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MaterialId");
 
                     b.HasIndex("SenderId");
 
@@ -593,6 +710,33 @@ namespace SWP.DAL.Migrations
                     b.Navigation("Class");
                 });
 
+            modelBuilder.Entity("SWP.DAL.Models.Blog", b =>
+                {
+                    b.HasOne("SWP.DAL.Models.User", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .IsRequired()
+                        .HasConstraintName("FK_Blogs_Author");
+
+                    b.HasOne("SWP.DAL.Models.Class", "Class")
+                        .WithMany()
+                        .HasForeignKey("ClassId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("FK_Blogs_Class");
+
+                    b.HasOne("SWP.DAL.Models.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .IsRequired()
+                        .HasConstraintName("FK_Blogs_Course");
+
+                    b.Navigation("Author");
+
+                    b.Navigation("Class");
+
+                    b.Navigation("Course");
+                });
+
             modelBuilder.Entity("SWP.DAL.Models.Class", b =>
                 {
                     b.HasOne("SWP.DAL.Models.AcademicTerm", "AcademicTerm")
@@ -651,6 +795,26 @@ namespace SWP.DAL.Migrations
                     b.Navigation("Student");
                 });
 
+            modelBuilder.Entity("SWP.DAL.Models.Comment", b =>
+                {
+                    b.HasOne("SWP.DAL.Models.User", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .IsRequired()
+                        .HasConstraintName("FK_Comments_Author");
+
+                    b.HasOne("SWP.DAL.Models.Blog", "Blog")
+                        .WithMany("Comments")
+                        .HasForeignKey("BlogId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Comments_Blog");
+
+                    b.Navigation("Author");
+
+                    b.Navigation("Blog");
+                });
+
             modelBuilder.Entity("SWP.DAL.Models.DiscussionReply", b =>
                 {
                     b.HasOne("SWP.DAL.Models.User", "Author")
@@ -704,7 +868,7 @@ namespace SWP.DAL.Migrations
                         .HasConstraintName("FK_MaterialCompletions_Material");
 
                     b.HasOne("SWP.DAL.Models.User", "Student")
-                        .WithMany()
+                        .WithMany("MaterialCompletions")
                         .HasForeignKey("StudentId")
                         .IsRequired()
                         .HasConstraintName("FK_MaterialCompletions_Student");
@@ -736,11 +900,19 @@ namespace SWP.DAL.Migrations
 
             modelBuilder.Entity("SWP.DAL.Models.SupportFeedback", b =>
                 {
+                    b.HasOne("SWP.DAL.Models.LearningMaterial", "Material")
+                        .WithMany()
+                        .HasForeignKey("MaterialId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .HasConstraintName("FK_SupportFeedbacks_LearningMaterials");
+
                     b.HasOne("SWP.DAL.Models.User", "Sender")
                         .WithMany()
                         .HasForeignKey("SenderId")
                         .IsRequired()
                         .HasConstraintName("FK_SupportFeedbacks_Sender");
+
+                    b.Navigation("Material");
 
                     b.Navigation("Sender");
                 });
@@ -753,6 +925,11 @@ namespace SWP.DAL.Migrations
             modelBuilder.Entity("SWP.DAL.Models.Assignment", b =>
                 {
                     b.Navigation("Submissions");
+                });
+
+            modelBuilder.Entity("SWP.DAL.Models.Blog", b =>
+                {
+                    b.Navigation("Comments");
                 });
 
             modelBuilder.Entity("SWP.DAL.Models.Class", b =>
@@ -786,6 +963,8 @@ namespace SWP.DAL.Migrations
                     b.Navigation("ClassStudents");
 
                     b.Navigation("Classes");
+
+                    b.Navigation("MaterialCompletions");
                 });
 #pragma warning restore 612, 618
         }

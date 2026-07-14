@@ -219,7 +219,13 @@ public partial class FlippedClassroomContext : DbContext
                 .HasForeignKey(d => d.SenderId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_SupportFeedbacks_Sender");
+
+            entity.HasOne(d => d.Material).WithMany()
+                .HasForeignKey(d => d.MaterialId)
+                .OnDelete(DeleteBehavior.NoAction)
+                .HasConstraintName("FK_SupportFeedbacks_LearningMaterials");
         });
+
 
         modelBuilder.Entity<DiscussionThread>(entity =>
         {
