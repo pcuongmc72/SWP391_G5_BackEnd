@@ -8,6 +8,8 @@ using SWP.BLL.Interfaces;
 using SWP.DAL.Context;
 using SWP.DAL.Models;
 
+using SWP.BLL.DTOs.Lecturer;
+
 namespace SWP.BLL.Services;
 
 public class ClassesService : IClassesService
@@ -17,6 +19,31 @@ public class ClassesService : IClassesService
     public ClassesService(FlippedClassroomContext context)
     {
         _context = context;
+    }
+
+    public async Task<IReadOnlyList<MaterialDto>> GetClassMaterialsAsync(string classId)
+    {
+        var list = await _context.LearningMaterials
+            .AsNoTracking()
+            .Include(m => m.MaterialCompletions)
+            .Where(m => m.ClassId == classId && !m.IsDisabled)
+            .OrderByDescending(m => m.UploadedAt)
+            .ToListAsync();
+
+        return list.Select(m => new MaterialDto
+        {
+            Id = m.Id,
+            ClassId = m.ClassId,
+            Title = m.Title,
+            Description = m.Description,
+            Chapter = m.Chapter,
+            Type = m.MaterialType,
+            FileUrl = m.FileUrl,
+            FileSize = m.FileSize,
+            UploadedAt = m.UploadedAt,
+            CompletedByUsers = m.MaterialCompletions?.Select(c => c.StudentId).ToList() ?? new List<string>(),
+            IsDisabled = m.IsDisabled
+        }).ToList();
     }
 
     public async Task<IEnumerable<ClassResponseDto>> GetAllClassesAsync(Guid? academicTermId = null)

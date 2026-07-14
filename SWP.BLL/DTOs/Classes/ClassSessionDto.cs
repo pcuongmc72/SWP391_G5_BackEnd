@@ -2,9 +2,6 @@ using System;
 
 namespace SWP.BLL.DTOs.Classes
 {
-    /// <summary>
-    /// DTO trả về thông tin một buổi học cho sinh viên xem lộ trình
-    /// </summary>
     public class ClassSessionDto
     {
         public Guid Id { get; set; }

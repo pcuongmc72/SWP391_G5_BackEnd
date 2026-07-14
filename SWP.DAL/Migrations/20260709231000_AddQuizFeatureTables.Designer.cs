@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SWP.DAL.Context;
 
@@ -11,9 +12,11 @@ using SWP.DAL.Context;
 namespace SWP.DAL.Migrations
 {
     [DbContext(typeof(FlippedClassroomContext))]
-    partial class FlippedClassroomContextModelSnapshot : ModelSnapshot
+    [Migration("20260709231000_AddQuizFeatureTables")]
+    partial class AddQuizFeatureTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -739,15 +742,6 @@ namespace SWP.DAL.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("(newsequentialid())");
 
-                    b.Property<string>("AnsweredById")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AnsweredByName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AnsweredByRole")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ClassId")
                         .HasMaxLength(20)
                         .IsUnicode(false)
@@ -757,9 +751,6 @@ namespace SWP.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("(sysdatetime())");
-
-                    b.Property<Guid?>("MaterialId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Message")
                         .IsRequired()
@@ -788,8 +779,6 @@ namespace SWP.DAL.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MaterialId");
 
                     b.HasIndex("SenderId");
 
@@ -839,13 +828,6 @@ namespace SWP.DAL.Migrations
                         .IsRequired()
                         .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)");
-
-                    b.Property<DateTime?>("PasswordResetTokenExpiry")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PasswordResetTokenHash")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("Phone")
                         .HasMaxLength(20)
@@ -1160,19 +1142,11 @@ namespace SWP.DAL.Migrations
 
             modelBuilder.Entity("SWP.DAL.Models.SupportFeedback", b =>
                 {
-                    b.HasOne("SWP.DAL.Models.LearningMaterial", "Material")
-                        .WithMany()
-                        .HasForeignKey("MaterialId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .HasConstraintName("FK_SupportFeedbacks_LearningMaterials");
-
                     b.HasOne("SWP.DAL.Models.User", "Sender")
                         .WithMany()
                         .HasForeignKey("SenderId")
                         .IsRequired()
                         .HasConstraintName("FK_SupportFeedbacks_Sender");
-
-                    b.Navigation("Material");
 
                     b.Navigation("Sender");
                 });

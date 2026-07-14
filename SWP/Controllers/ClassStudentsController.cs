@@ -10,7 +10,7 @@ namespace SWP.Controllers;
 
 [ApiController]
 [Route("api/classes/{classId}/students")]
-[Authorize(Roles = "admin")] // Bắt buộc phải là Admin mới được phép xếp lớp
+[Authorize(Roles = "admin")] 
 [Produces("application/json")]
 public class ClassStudentsController : ControllerBase
 {

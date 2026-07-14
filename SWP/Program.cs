@@ -38,6 +38,8 @@ builder.Services.AddAuthentication(options =>
 });
 
 // ─── DI Services ─────────────────────────────────────────────────────────────
+builder.Services.AddMemoryCache();
+builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ILecturerService, LecturerService>();
 
@@ -106,6 +108,7 @@ builder.Services.AddScoped<IClassStudentsService, ClassStudentsService>();
 builder.Services.AddScoped<IStudentClassesService, StudentClassesService>();
 builder.Services.AddScoped<IBlogsService, BlogsService>();
 builder.Services.AddScoped<IStudentLearningMaterialsService, StudentLearningMaterialsService>();
+builder.Services.AddScoped<IQuizService, QuizService>();
 
 // ─── Build & Middleware ───────────────────────────────────────────────────────
 var app = builder.Build();

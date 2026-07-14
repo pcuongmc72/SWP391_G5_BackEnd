@@ -25,9 +25,6 @@ namespace SWP.BLL.Services
             if (await _context.Users.AnyAsync(u => u.Id == request.Id))
                 throw new InvalidOperationException("Mã định danh (Id) này đã tồn tại trên hệ thống.");
 
-            if (await _context.Users.AnyAsync(u => u.Email == request.Email))
-                throw new InvalidOperationException("Email này đã được sử dụng.");
-
             var newUser = new User
             {
                 Id = request.Id,
@@ -35,6 +32,7 @@ namespace SWP.BLL.Services
                 FullName = request.FullName,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
                 Role = request.Role.ToLower(),
+                AvatarUrl = request.AvatarUrl,
                 IsActive = true,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
@@ -76,9 +74,6 @@ namespace SWP.BLL.Services
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
             if (user == null)
                 throw new KeyNotFoundException("Không tìm thấy người dùng.");
-
-            if (user.Email != request.Email && await _context.Users.AnyAsync(u => u.Email == request.Email))
-                throw new InvalidOperationException("Email mới đã có tài khoản khác sử dụng.");
 
             user.FullName = request.FullName;
             user.Email = request.Email;
