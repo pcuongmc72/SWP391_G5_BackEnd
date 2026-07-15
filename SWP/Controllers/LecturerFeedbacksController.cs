@@ -24,9 +24,6 @@ public class LecturerFeedbacksController : ControllerBase
     public async Task<IActionResult> GetFeedbacks(string classId)
         => await Read(classId, id => _lecturerService.GetFeedbacksAsync(id, classId));
 
-    [HttpPost("classes/{classId}/feedbacks")]  // Wait, there is no create feedback in LecturerController, only Respond feedback.
-    // Ah, wait. Let's look at what endpoints were in LecturerController. Only GetFeedbacks and RespondFeedback! Let's check LecturerController.cs line 198.
-    // Yes: [HttpPut("classes/{classId}/feedbacks/{feedbackId:guid}/respond")]
 
     [HttpPut("classes/{classId}/feedbacks/{feedbackId:guid}/respond")]
     public async Task<IActionResult> RespondFeedback(string classId, Guid feedbackId, [FromBody] RespondFeedbackDto request)
