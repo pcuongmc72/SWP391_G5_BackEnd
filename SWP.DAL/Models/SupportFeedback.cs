@@ -20,5 +20,15 @@ public partial class SupportFeedback
 
     public DateTime? RespondedAt { get; set; }
 
+    public Guid? MaterialId { get; set; }
+
+    public string? AnsweredById { get; set; }
+
+    public string? AnsweredByName { get; set; }
+
+    public string? AnsweredByRole { get; set; }
+
     public virtual User Sender { get; set; } = null!;
+
+    public virtual LearningMaterial? Material { get; set; }
 }

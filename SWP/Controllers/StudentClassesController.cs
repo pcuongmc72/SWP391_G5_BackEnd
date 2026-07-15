@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 using SWP.BLL.DTOs.Lecturer;
 using SWP.BLL.Interfaces;
-
 namespace SWP.Controllers;
 
 [ApiController]
@@ -211,6 +210,84 @@ public class StudentClassesController : ControllerBase
         catch (KeyNotFoundException ex)
         {
             return NotFound(new { success = false, message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { success = false, message = ex.Message });
+        }
+    }
+
+    // ─── GET /api/student-classes/{classId}/feedbacks ──────────────────────────
+    /// <summary>Sinh viên xem danh sách câu hỏi đã gửi trong lớp.</summary>
+    [HttpGet("{classId}/feedbacks")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(401)]
+    public async Task<IActionResult> GetMyFeedbacks(string classId)
+    {
+        var studentId = GetCurrentStudentId();
+        if (string.IsNullOrEmpty(studentId))
+            return Unauthorized(new { success = false, message = "Token không hợp lệ." });
+
+        try
+        {
+            var result = await _studentClassesService.GetMyFeedbacksAsync(studentId, classId);
+            return Ok(new { success = true, data = result });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { success = false, message = ex.Message });
+        }
+    }
+
+    // ─── POST /api/student-classes/{classId}/feedbacks ─────────────────────────
+    /// <summary>Sinh viên gửi câu hỏi mới cho giảng viên, tuỳ chọn gắn với bài học cụ thể.</summary>
+    [HttpPost("{classId}/feedbacks")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(403)]
+    public async Task<IActionResult> CreateFeedback(string classId, [FromBody] CreateFeedbackDto request)
+    {
+        var studentId = GetCurrentStudentId();
+        if (string.IsNullOrEmpty(studentId))
+            return Unauthorized(new { success = false, message = "Token không hợp lệ." });
+
+        try
+        {
+            var result = await _studentClassesService.CreateFeedbackAsync(studentId, classId, request);
+            return Ok(new { success = true, data = result, message = "Gửi câu hỏi thành công." });
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Forbid();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { success = false, message = ex.Message });
+        }
+    }
+
+    // ─── PUT /api/student-classes/{classId}/feedbacks/{feedbackId}/respond ────────────────
+    /// <summary>Trợ giảng giải đáp câu hỏi của sinh viên.</summary>
+    [HttpPut("{classId}/feedbacks/{feedbackId:guid}/respond")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(403)]
+    public async Task<IActionResult> RespondFeedback(string classId, Guid feedbackId, [FromBody] SWP.BLL.DTOs.Lecturer.RespondFeedbackDto request)
+    {
+        var studentId = GetCurrentStudentId();
+        if (string.IsNullOrEmpty(studentId))
+            return Unauthorized(new { success = false, message = "Token không hợp lệ." });
+
+        try
+        {
+            var result = await _studentClassesService.RespondFeedbackAsAssistantAsync(studentId, classId, feedbackId, request);
+            return Ok(new { success = true, data = result, message = "Giải đáp thành công." });
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Forbid();
         }
         catch (Exception ex)
         {
