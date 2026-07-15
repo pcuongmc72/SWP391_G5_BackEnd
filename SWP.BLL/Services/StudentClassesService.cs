@@ -356,7 +356,7 @@ public class StudentClassesService : IStudentClassesService
             .AsNoTracking()
             .Include(f => f.Sender)
             .Include(f => f.Material)
-            .Where(f => f.ClassId == classId || (f.ClassId == null && f.SenderId == studentId))
+            .Where(f => f.ClassId == classId)
             .OrderByDescending(f => f.CreatedAt)
             .ToListAsync();
 
@@ -384,6 +384,7 @@ public class StudentClassesService : IStudentClassesService
     {
         // 1. Kiểm tra quyền trợ giảng
         var cs = await _context.ClassStudents
+            .Include(x => x.Student)
             .FirstOrDefaultAsync(x => x.ClassId == classId && x.StudentId == assistantId);
         if (cs == null || cs.ClassRole != "assistant")
             throw new UnauthorizedAccessException("Chỉ người hỗ trợ mới có quyền giải đáp.");
