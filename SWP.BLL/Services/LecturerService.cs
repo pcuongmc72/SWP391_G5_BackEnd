@@ -169,10 +169,15 @@ public partial class LecturerService : ILecturerService
 
     private async Task EnsureClassAccessAsync(string lecturerId, string classId)
     {
-        var exists = await _context.Classes
+        var isLecturer = await _context.Classes
             .AnyAsync(c => c.Id == classId && c.LecturerId == lecturerId);
 
-        if (!exists)
+        if (isLecturer) return;
+
+        var isAssistant = await _context.ClassStudents
+            .AnyAsync(cs => cs.ClassId == classId && cs.StudentId == lecturerId && cs.ClassRole == "assistant");
+
+        if (!isAssistant)
             throw new KeyNotFoundException("Khong tim thay lop hoc hoac ban khong co quyen truy cap.");
     }
 
