@@ -419,6 +419,42 @@ public partial class FlippedClassroomContext : DbContext
                 .HasConstraintName("FK_QuizAnswers_Option");
         });
 
+        modelBuilder.Entity<User>().HasData(
+            new User
+            {
+                Id = "AD100001",
+                Email = "admin@gmail.com",
+                FullName = "System Admin",
+                Role = "admin",
+                PasswordHash = "admin123", // Will be auto-upgraded to BCrypt upon first login by AuthService
+                IsActive = true,
+                CreatedAt = new DateTime(2026, 7, 15, 0, 0, 0, DateTimeKind.Utc),
+                UpdatedAt = new DateTime(2026, 7, 15, 0, 0, 0, DateTimeKind.Utc)
+            },
+            new User
+            {
+                Id = "GV100001",
+                Email = "lecturer@gmail.com",
+                FullName = "Nguyễn Văn Giảng",
+                Role = "lecturer",
+                PasswordHash = "lecturer123", // Will be auto-upgraded to BCrypt upon first login by AuthService
+                IsActive = true,
+                CreatedAt = new DateTime(2026, 7, 15, 0, 0, 0, DateTimeKind.Utc),
+                UpdatedAt = new DateTime(2026, 7, 15, 0, 0, 0, DateTimeKind.Utc)
+            },
+            new User
+            {
+                Id = "SE100001",
+                Email = "student@gmail.com",
+                FullName = "Nguyễn Văn Học",
+                Role = "student",
+                PasswordHash = "student123", // Will be auto-upgraded to BCrypt upon first login by AuthService
+                IsActive = true,
+                CreatedAt = new DateTime(2026, 7, 15, 0, 0, 0, DateTimeKind.Utc),
+                UpdatedAt = new DateTime(2026, 7, 15, 0, 0, 0, DateTimeKind.Utc)
+            }
+        );
+
         OnModelCreatingPartial(modelBuilder);
     }
 

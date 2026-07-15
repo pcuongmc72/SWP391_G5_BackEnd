@@ -22,13 +22,18 @@ namespace SWP.BLL.Services
 
         public async Task<UserResponseDto> CreateUserAsync(RegisterRequestDto request)
         {
+            var email = request.Email.Trim().ToLowerInvariant();
+
             if (await _context.Users.AnyAsync(u => u.Id == request.Id))
                 throw new InvalidOperationException("Mã định danh (Id) này đã tồn tại trên hệ thống.");
+
+            if (await _context.Users.AnyAsync(u => u.Email == email))
+                throw new InvalidOperationException("Email này đã tồn tại trên hệ thống.");
 
             var newUser = new User
             {
                 Id = request.Id,
-                Email = request.Email,
+                Email = email,
                 FullName = request.FullName,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
                 Role = request.Role.ToLower(),
@@ -75,8 +80,12 @@ namespace SWP.BLL.Services
             if (user == null)
                 throw new KeyNotFoundException("Không tìm thấy người dùng.");
 
+            var email = request.Email.Trim().ToLowerInvariant();
+            if (await _context.Users.AnyAsync(u => u.Email == email && u.Id != id))
+                throw new InvalidOperationException("Email này đã được sử dụng bởi người dùng khác.");
+
             user.FullName = request.FullName;
-            user.Email = request.Email;
+            user.Email = email;
             user.AvatarUrl = request.AvatarUrl;
             user.IsActive = request.IsActive;
 
