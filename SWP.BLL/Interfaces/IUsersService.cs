@@ -13,5 +13,6 @@ namespace SWP.BLL.Interfaces
         Task<IEnumerable<UserResponseDto>> GetAllUsersAsync(string? role, string? searchTerm);
         Task<UserResponseDto> GetUserByIdAsync(string id);
         Task<UserResponseDto> UpdateUserAsync(string id, UpdateUserDto request);
+        Task<ImportUsersResultDto> ImportUsersAsync(System.IO.Stream fileStream, string fileExtension);
     }
 }
