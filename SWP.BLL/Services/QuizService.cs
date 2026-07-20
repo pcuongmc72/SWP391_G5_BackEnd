@@ -448,6 +448,20 @@ public class QuizService : IQuizService
         if (attempt.SubmittedAt != null)
             throw new InvalidOperationException("Lượt làm bài này đã được nộp.");
 
+        // Validate thời gian hết hạn (chống gian lận bypass timer)
+        if (attempt.Quiz.TimeLimit.HasValue)
+        {
+            var deadline = attempt.StartedAt
+                .AddMinutes(attempt.Quiz.TimeLimit.Value)
+                .AddSeconds(30); // Buffer 30s cho độ trễ mạng
+
+            if (DateTime.UtcNow > deadline)
+            {
+                throw new InvalidOperationException(
+                    "Đã hết thời gian làm bài. Bài thi không thể nộp sau khi quá giờ.");
+            }
+        }
+
         // Tính điểm tự động
         int correctQuestionsCount = 0;
         int totalQuestions = attempt.Quiz.QuizQuestions.Count;
@@ -565,10 +579,15 @@ public class QuizService : IQuizService
 
     private async Task EnsureClassAccessAsync(string lecturerId, string classId)
     {
-        var exists = await _context.Classes
+        var isLecturer = await _context.Classes
             .AnyAsync(c => c.Id == classId && c.LecturerId == lecturerId);
 
-        if (!exists)
+        if (isLecturer) return;
+
+        var isAssistant = await _context.ClassStudents
+            .AnyAsync(cs => cs.ClassId == classId && cs.StudentId == lecturerId && cs.ClassRole == "assistant");
+
+        if (!isAssistant)
             throw new UnauthorizedAccessException("Bạn không được phân công giảng dạy lớp học này.");
     }
 

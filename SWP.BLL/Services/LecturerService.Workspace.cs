@@ -442,7 +442,9 @@ public partial class LecturerService
 
     public async Task PromoteStudentAsync(string lecturerId, string classId, string studentId, string role)
     {
-        await EnsureClassAccessAsync(lecturerId, classId);
+        var isLecturer = await _context.Classes.AnyAsync(c => c.Id == classId && c.LecturerId == lecturerId);
+        if (!isLecturer)
+            throw new UnauthorizedAccessException("Chi giang vien chinh moi co the thay doi vai tro.");
 
         var validRoles = new[] { "student", "assistant" };
         if (!validRoles.Contains(role.ToLower()))
