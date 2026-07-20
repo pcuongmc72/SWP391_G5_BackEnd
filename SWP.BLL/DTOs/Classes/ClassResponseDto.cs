@@ -8,17 +8,17 @@ namespace SWP.BLL.DTOs.Classes
 {
     public class ClassResponseDto
     {
-        public string Id { get; set; } = null!; 
+        public string Id { get; set; } = null!;
 
         public Guid CourseId { get; set; }
-        public string CourseCode { get; set; } = null!; 
-        public string CourseName { get; set; } = null!; 
+        public string CourseCode { get; set; } = null!;
+        public string CourseName { get; set; } = null!;
 
         public Guid AcademicTermId { get; set; }
-        public string TermCode { get; set; } = null!; 
+        public string TermCode { get; set; } = null!;
 
         public string? LecturerId { get; set; }
-        public string LecturerName { get; set; } = null!; 
+        public string LecturerName { get; set; } = null!;
 
         public DateOnly? StartDate { get; set; }
         public DateOnly? EndDate { get; set; }

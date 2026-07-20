@@ -74,11 +74,11 @@ public class AuthService : IAuthService
             throw new KeyNotFoundException("Nguoi dung khong ton tai.");
 
         // Chỉ cập nhật các field cho phép sửa
-        user.FullName  = request.FullName  ?? user.FullName;
+        user.FullName = request.FullName ?? user.FullName;
         user.AvatarUrl = request.AvatarUrl ?? user.AvatarUrl;
-        user.Phone     = request.Phone     ?? user.Phone;
-        user.Address   = request.Address   ?? user.Address;
-        user.Bio       = request.Bio       ?? user.Bio;
+        user.Phone = request.Phone ?? user.Phone;
+        user.Address = request.Address ?? user.Address;
+        user.Bio = request.Bio ?? user.Bio;
         user.UpdatedAt = DateTime.UtcNow;
 
         await _context.SaveChangesAsync();
@@ -92,33 +92,33 @@ public class AuthService : IAuthService
         var (token, expiresAt) = GenerateJwtToken(user);
         return new AuthResponseDto
         {
-            Token     = token,
+            Token = token,
             TokenType = "Bearer",
             ExpiresAt = expiresAt,
-            User      = MapToUserInfo(user)
+            User = MapToUserInfo(user)
         };
     }
 
     private static UserInfoDto MapToUserInfo(User user) => new()
     {
-        Id        = user.Id,
-        FullName  = user.FullName,
-        Email     = user.Email,
-        Role      = user.Role,
+        Id = user.Id,
+        FullName = user.FullName,
+        Email = user.Email,
+        Role = user.Role,
         AvatarUrl = user.AvatarUrl,
-        IsActive  = user.IsActive,
-        Phone     = user.Phone,
-        Address   = user.Address,
-        Bio       = user.Bio
+        IsActive = user.IsActive,
+        Phone = user.Phone,
+        Address = user.Address,
+        Bio = user.Bio
     };
 
     private (string Token, DateTime ExpiresAt) GenerateJwtToken(User user)
     {
-        var jwtSection    = _configuration.GetSection("Jwt");
-        var key           = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSection["Key"]!));
-        var credentials   = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var jwtSection = _configuration.GetSection("Jwt");
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSection["Key"]!));
+        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         int expireMinutes = int.Parse(jwtSection["ExpireMinutes"] ?? "60");
-        var expiresAt     = DateTime.UtcNow.AddMinutes(expireMinutes);
+        var expiresAt = DateTime.UtcNow.AddMinutes(expireMinutes);
 
         var claims = new[]
         {
@@ -130,10 +130,10 @@ public class AuthService : IAuthService
         };
 
         var token = new JwtSecurityToken(
-            issuer:             jwtSection["Issuer"],
-            audience:           jwtSection["Audience"],
-            claims:             claims,
-            expires:            expiresAt,
+            issuer: jwtSection["Issuer"],
+            audience: jwtSection["Audience"],
+            claims: claims,
+            expires: expiresAt,
             signingCredentials: credentials
         );
 
@@ -148,7 +148,7 @@ public class AuthService : IAuthService
     {
         if (IsBCryptHash(storedHash))
         {
-            try   { return BCrypt.Net.BCrypt.Verify(inputPassword, storedHash); }
+            try { return BCrypt.Net.BCrypt.Verify(inputPassword, storedHash); }
             catch (BCrypt.Net.SaltParseException) { return false; }
         }
         // Plain-text so sánh thẳng (tài khoản test chưa hash)

@@ -111,13 +111,13 @@ public class StudentClassesService : IStudentClassesService
                 ChapterName = string.IsNullOrWhiteSpace(m.Chapter) ? "Chung" : m.Chapter.Trim(),
                 Dto = new StudentRoadmapMaterialDto
                 {
-                    Id         = m.Id,
-                    ClassId    = m.ClassId,
-                    Title      = m.Title,
+                    Id = m.Id,
+                    ClassId = m.ClassId,
+                    Title = m.Title,
                     Description = m.Description,
-                    Type       = m.MaterialType,
-                    FileUrl    = m.FileUrl,
-                    FileSize   = m.FileSize,
+                    Type = m.MaterialType,
+                    FileUrl = m.FileUrl,
+                    FileSize = m.FileSize,
                     UploadedAt = m.UploadedAt,
                     IsCompleted = completion != null,
                     CompletedAt = completion?.CompletedAt
@@ -130,7 +130,7 @@ public class StudentClassesService : IStudentClassesService
             .Select(g => new ChapterRoadmapDto
             {
                 ChapterName = g.Key,
-                Materials   = g.Select(x => x.Dto)
+                Materials = g.Select(x => x.Dto)
                                .OrderBy(m => m.UploadedAt)
                                .ToList()
             })
@@ -138,9 +138,9 @@ public class StudentClassesService : IStudentClassesService
 
         return new StudentClassRoadmapDto
         {
-            ClassId   = classId,
+            ClassId = classId,
             ClassName = classEntity.Name ?? classEntity.Course?.Name ?? "LĂ¡Â»â€ºp hĂ¡Â»Âc",
-            Chapters  = chapters
+            Chapters = chapters
         };
     }
 
@@ -163,8 +163,8 @@ public class StudentClassesService : IStudentClassesService
 
         _context.MaterialCompletions.Add(new MaterialCompletion
         {
-            MaterialId  = materialId,
-            StudentId   = studentId,
+            MaterialId = materialId,
+            StudentId = studentId,
             CompletedAt = DateTime.UtcNow
         });
 
@@ -191,19 +191,19 @@ public class StudentClassesService : IStudentClassesService
 
     private static ClassResponseDto MapToDto(Class classEntity) => new()
     {
-        Id           = classEntity.Id,
-        CourseId     = classEntity.CourseId,
-        CourseCode   = classEntity.Course?.Code ?? "N/A",
-        CourseName   = classEntity.Course?.Name ?? "N/A",
+        Id = classEntity.Id,
+        CourseId = classEntity.CourseId,
+        CourseCode = classEntity.Course?.Code ?? "N/A",
+        CourseName = classEntity.Course?.Name ?? "N/A",
         AcademicTermId = classEntity.AcademicTermId,
-        TermCode     = classEntity.AcademicTerm?.TermCode ?? "N/A",
-        LecturerId   = classEntity.LecturerId,
+        TermCode = classEntity.AcademicTerm?.TermCode ?? "N/A",
+        LecturerId = classEntity.LecturerId,
         LecturerName = classEntity.Lecturer?.FullName ?? "N/A",
-        StartDate    = classEntity.StartDate ?? classEntity.AcademicTerm?.StartDate,
-        EndDate      = classEntity.EndDate   ?? classEntity.AcademicTerm?.EndDate,
+        StartDate = classEntity.StartDate ?? classEntity.AcademicTerm?.StartDate,
+        EndDate = classEntity.EndDate ?? classEntity.AcademicTerm?.EndDate,
         TotalStudents = classEntity.ClassStudents?.Count ?? 0,
         AllowReviewAfterEnd = classEntity.AllowReviewAfterEnd,
-        CreatedAt    = classEntity.CreatedAt
+        CreatedAt = classEntity.CreatedAt
     };
 
     // Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬ Danh sÄ‚Â¡ch bÄ‚Â i tĂ¡ÂºÂ­p (student view) Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬
@@ -230,12 +230,12 @@ public class StudentClassesService : IStudentClassesService
             var sub = a.Submissions.FirstOrDefault(s => s.StudentId == studentId);
             return new StudentAssignmentDto
             {
-                Id          = a.Id,
-                ClassId     = a.ClassId,
-                Title       = a.Title,
+                Id = a.Id,
+                ClassId = a.ClassId,
+                Title = a.Title,
                 Description = a.Description,
-                DueDate     = a.DueDate,
-                MaxPoints   = a.MaxPoints,
+                DueDate = a.DueDate,
+                MaxPoints = a.MaxPoints,
                 MySubmission = sub == null ? null : MapSubmission(sub)
             };
         });
@@ -307,17 +307,17 @@ public class StudentClassesService : IStudentClassesService
 
     private static SubmissionDto MapSubmission(Submission s) => new()
     {
-        Id           = s.Id,
+        Id = s.Id,
         AssignmentId = s.AssignmentId,
-        StudentId    = s.StudentId,
-        StudentName  = s.Student?.FullName,
-        FileName     = s.FileName,
+        StudentId = s.StudentId,
+        StudentName = s.Student?.FullName,
+        FileName = s.FileName,
         StudentNotes = s.StudentNotes,
-        Status       = s.Status,
-        Grade        = s.Grade,
-        Feedback     = s.Feedback,
-        SubmittedAt  = s.SubmittedAt.ToString("yyyy-MM-dd HH:mm"),
-        GradedAt     = s.GradedAt?.ToString("yyyy-MM-dd HH:mm")
+        Status = s.Status,
+        Grade = s.Grade,
+        Feedback = s.Feedback,
+        SubmittedAt = s.SubmittedAt.ToString("yyyy-MM-dd HH:mm"),
+        GradedAt = s.GradedAt?.ToString("yyyy-MM-dd HH:mm")
     };
 
     // Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬ GĂ¡Â»Â­i cÄ‚Â¢u hĂ¡Â»Âi cho GiĂ¡ÂºÂ£ng viÄ‚Âªn Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬
@@ -332,13 +332,13 @@ public class StudentClassesService : IStudentClassesService
 
         var entity = new SupportFeedback
         {
-            ClassId    = classId,
-            SenderId   = studentId,
-            Title      = (request.Title ?? "CÄ‚Â¢u hĂ¡Â»Âi").Trim(),
-            Message    = request.Message.Trim(),
-            Status     = "OPEN",
+            ClassId = classId,
+            SenderId = studentId,
+            Title = (request.Title ?? "CÄ‚Â¢u hĂ¡Â»Âi").Trim(),
+            Message = request.Message.Trim(),
+            Status = "OPEN",
             MaterialId = request.MaterialId,
-            CreatedAt  = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow
         };
 
         _context.SupportFeedbacks.Add(entity);
@@ -410,7 +410,7 @@ public class StudentClassesService : IStudentClassesService
             .Include(f => f.Sender)
             .Include(f => f.Material)
             .FirstOrDefaultAsync(f => f.Id == feedbackId && f.ClassId == classId);
-        
+
         if (fb == null)
             throw new KeyNotFoundException("Không tìm thấy câu hỏi.");
 
@@ -444,22 +444,22 @@ public class StudentClassesService : IStudentClassesService
             AnsweredByRole = fb.AnsweredByRole
         };
     }
-    
+
     private static FeedbackDto MapFeedback(SupportFeedback f) => new()
     {
-        Id            = f.Id,
-        ClassId       = f.ClassId,
-        SenderId      = f.SenderId,
-        SenderName    = f.Sender?.FullName,
-        Title         = f.Title,
-        Message       = f.Message,
-        Status        = f.Status,
-        Response      = f.Response,
-        CreatedAt     = f.CreatedAt.ToString("yyyy-MM-dd HH:mm"),
-        RespondedAt   = f.RespondedAt?.ToString("yyyy-MM-dd HH:mm"),
-        MaterialId    = f.MaterialId,
+        Id = f.Id,
+        ClassId = f.ClassId,
+        SenderId = f.SenderId,
+        SenderName = f.Sender?.FullName,
+        Title = f.Title,
+        Message = f.Message,
+        Status = f.Status,
+        Response = f.Response,
+        CreatedAt = f.CreatedAt.ToString("yyyy-MM-dd HH:mm"),
+        RespondedAt = f.RespondedAt?.ToString("yyyy-MM-dd HH:mm"),
+        MaterialId = f.MaterialId,
         MaterialTitle = f.Material?.Title,
-        AnsweredById  = f.AnsweredById,
+        AnsweredById = f.AnsweredById,
         AnsweredByName = f.AnsweredByName,
         AnsweredByRole = f.AnsweredByRole
     };
