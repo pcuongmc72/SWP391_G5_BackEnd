@@ -352,11 +352,25 @@ public class StudentClassesService : IStudentClassesService
 
     public async Task<IReadOnlyList<FeedbackDto>> GetMyFeedbacksAsync(string studentId, string classId)
     {
-        var list = await _context.SupportFeedbacks
+        var role = await _context.ClassStudents
+            .Where(cs => cs.ClassId == classId && cs.StudentId == studentId)
+            .Select(cs => cs.ClassRole)
+            .FirstOrDefaultAsync();
+
+        bool isAssistant = role == "assistant";
+
+        var query = _context.SupportFeedbacks
             .AsNoTracking()
             .Include(f => f.Sender)
             .Include(f => f.Material)
-            .Where(f => f.ClassId == classId)
+            .Where(f => f.ClassId == classId);
+
+        if (!isAssistant)
+        {
+            query = query.Where(f => f.SenderId == studentId);
+        }
+
+        var list = await query
             .OrderByDescending(f => f.CreatedAt)
             .ToListAsync();
 

@@ -579,10 +579,15 @@ public class QuizService : IQuizService
 
     private async Task EnsureClassAccessAsync(string lecturerId, string classId)
     {
-        var exists = await _context.Classes
+        var isLecturer = await _context.Classes
             .AnyAsync(c => c.Id == classId && c.LecturerId == lecturerId);
 
-        if (!exists)
+        if (isLecturer) return;
+
+        var isAssistant = await _context.ClassStudents
+            .AnyAsync(cs => cs.ClassId == classId && cs.StudentId == lecturerId && cs.ClassRole == "assistant");
+
+        if (!isAssistant)
             throw new UnauthorizedAccessException("Bạn không được phân công giảng dạy lớp học này.");
     }
 
