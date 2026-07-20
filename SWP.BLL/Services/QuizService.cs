@@ -623,6 +623,7 @@ public class QuizService : IQuizService
                 QuestionText = q.QuestionText,
                 Points = q.Points,
                 Order = q.Order,
+                MaxSelections = q.QuizOptions.Count(o => o.IsCorrect),
                 Options = q.QuizOptions.Select(o => new QuizOptionDto
                 {
                     Id = o.Id,
