@@ -9,7 +9,7 @@ namespace SWP.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = "admin")] 
+[Authorize(Roles = "admin")]
 [Produces("application/json")]
 public class UsersController : ControllerBase
 {

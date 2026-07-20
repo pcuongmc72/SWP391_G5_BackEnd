@@ -96,7 +96,7 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequestDto request)
     {
         var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
-        
+
         var origin = Request.Headers["Origin"].ToString();
         if (string.IsNullOrEmpty(origin))
         {
