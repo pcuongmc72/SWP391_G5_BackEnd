@@ -13,8 +13,6 @@ public partial class Class
 
     public string? LecturerId { get; set; }
 
-    public string? Name { get; set; }
-
     public bool AllowReviewAfterEnd { get; set; }
 
     public DateOnly? StartDate { get; set; }
