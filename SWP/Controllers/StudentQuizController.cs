@@ -119,6 +119,31 @@ public class StudentQuizController : ControllerBase
         }
     }
 
+    [HttpGet("{quizId:guid}/attempts/{attemptId:guid}/detail")]
+    public async Task<IActionResult> GetAttemptDetail(Guid quizId, Guid attemptId)
+    {
+        var studentId = GetCurrentUserId();
+        if (studentId == null) return Unauthorized(new { success = false, message = "Chưa đăng nhập." });
+
+        try
+        {
+            var data = await _quizService.GetAttemptDetailAsync(studentId, attemptId);
+            return Ok(new { success = true, data });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { success = false, message = ex.Message });
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { success = false, message = ex.Message });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { success = false, message = ex.Message });
+        }
+    }
+
     private string? GetCurrentUserId() =>
         User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value
         ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value
