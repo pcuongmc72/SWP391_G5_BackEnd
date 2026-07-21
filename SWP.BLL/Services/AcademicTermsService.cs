@@ -19,7 +19,7 @@ public class AcademicTermsService : IAcademicTermsService
         _context = context;
     }
 
-        public async Task<IEnumerable<AcademicTermResponseDto>> GetAllTermsAsync()
+    public async Task<IEnumerable<AcademicTermResponseDto>> GetAllTermsAsync()
     {
         // Sử dụng Select trực tiếp để chuyển đổi thành câu lệnh SQL COALESCE xử lý Null
         return await _context.AcademicTerms
@@ -37,7 +37,7 @@ public class AcademicTermsService : IAcademicTermsService
     }
 
 
-        public async Task<AcademicTermResponseDto> GetTermByIdAsync(Guid id)
+    public async Task<AcademicTermResponseDto> GetTermByIdAsync(Guid id)
     {
         var term = await _context.AcademicTerms
             .Where(t => t.Id == id)
@@ -73,7 +73,7 @@ public class AcademicTermsService : IAcademicTermsService
             // Không gán Id và CreatedAt để SQL Server tự sinh qua thuộc tính DEFAULT
             TermCode = request.TermCode.ToUpper(),
             Name = request.Name,
-            StartDate = request.StartDate, 
+            StartDate = request.StartDate,
             EndDate = request.EndDate
         };
 

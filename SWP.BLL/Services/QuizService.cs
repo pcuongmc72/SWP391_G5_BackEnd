@@ -284,7 +284,7 @@ public class QuizService : IQuizService
             if (material != null)
             {
                 material.Title = quiz.Title;
-                
+
                 var parsedDesc = new { desc = quiz.Description ?? "", publishDate = DateTime.UtcNow.ToString("yyyy-MM-dd"), deadline = "", distributeMode = "all", groups = new List<string>(), comments = new List<string>() };
                 material.Description = System.Text.Json.JsonSerializer.Serialize(parsedDesc);
             }

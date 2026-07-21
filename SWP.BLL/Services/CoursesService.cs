@@ -52,7 +52,7 @@ public class CoursesService : ICoursesService
         }
 
         var courseIds = await classQuery.Select(c => c.CourseId).Distinct().ToListAsync();
-        
+
         var courses = await _context.Courses
             .Where(c => courseIds.Contains(c.Id))
             .OrderByDescending(c => c.CreatedAt)

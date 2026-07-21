@@ -119,7 +119,7 @@ namespace SWP.BLL.Services
             var query = _context.Blogs
                 .Include(b => b.Author)
                 .Include(b => b.Course)
-                .Where(b => (b.Status == 1 || b.AuthorId == studentId) && 
+                .Where(b => (b.Status == 1 || b.AuthorId == studentId) &&
                             (
                                 // 1. Blogs specifically for their classes
                                 (b.ClassId != null && classIds.Contains(b.ClassId)) ||
@@ -353,7 +353,8 @@ namespace SWP.BLL.Services
                     // 3. Is the commenter the author of the blog post?
                     else if (blog.AuthorId == request.AuthorId) isAllowed = true;
                     // 4. Admin is always allowed
-                    else {
+                    else
+                    {
                         var user = await _context.Users.FindAsync(request.AuthorId);
                         if (user?.Role == "admin") isAllowed = true;
                     }

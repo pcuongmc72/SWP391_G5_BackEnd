@@ -10,7 +10,7 @@ namespace SWP.Controllers;
 
 [ApiController]
 [Route("api/classes/{classId}/students")]
-[Authorize(Roles = "admin")] 
+[Authorize(Roles = "admin")]
 [Produces("application/json")]
 public class ClassStudentsController : ControllerBase
 {
