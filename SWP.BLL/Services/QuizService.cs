@@ -340,12 +340,30 @@ public class QuizService : IQuizService
             .ToListAsync();
     }
 
-    public async Task<QuizDetailDto> GetQuizDetailsForLecturerAsync(string lecturerId, Guid quizId)
+    private async Task<Quiz?> ResolveQuizAsync(Guid quizId)
     {
         var quiz = await _context.Quizzes
             .Include(q => q.QuizQuestions)
                 .ThenInclude(qq => qq.QuizOptions)
             .FirstOrDefaultAsync(q => q.Id == quizId);
+
+        if (quiz != null) return quiz;
+
+        var material = await _context.LearningMaterials.FirstOrDefaultAsync(m => m.Id == quizId);
+        if (material != null && Guid.TryParse(material.FileUrl, out var actualQuizId))
+        {
+            return await _context.Quizzes
+                .Include(q => q.QuizQuestions)
+                    .ThenInclude(qq => qq.QuizOptions)
+                .FirstOrDefaultAsync(q => q.Id == actualQuizId);
+        }
+
+        return null;
+    }
+
+    public async Task<QuizDetailDto> GetQuizDetailsForLecturerAsync(string lecturerId, Guid quizId)
+    {
+        var quiz = await ResolveQuizAsync(quizId);
 
         if (quiz == null) throw new KeyNotFoundException("Không tìm thấy bài trắc nghiệm.");
 
@@ -357,33 +375,27 @@ public class QuizService : IQuizService
 
     public async Task<List<QuizAttemptDto>> GetClassAttemptsAsync(string lecturerId, Guid quizId)
     {
-        var quiz = await _context.Quizzes.FirstOrDefaultAsync(q => q.Id == quizId);
+        var quiz = await ResolveQuizAsync(quizId);
         if (quiz == null) throw new KeyNotFoundException("Không tìm thấy bài trắc nghiệm.");
 
         await EnsureClassAccessAsync(lecturerId, quiz.ClassId);
 
-        return await _context.QuizAttempts
+        var attempts = await _context.QuizAttempts
             .AsNoTracking()
             .Include(a => a.Student)
-            .Where(a => a.QuizId == quizId)
+            .Where(a => a.QuizId == quiz.Id)
             .OrderByDescending(a => a.SubmittedAt)
-            .Select(a => MapToAttemptDto(a))
             .ToListAsync();
+
+        return attempts.Select(MapToAttemptDto).ToList();
     }
 
-    #endregion
-
-    #region Student Operations
 
     public async Task<QuizDetailDto> GetQuizDetailsForStudentAsync(string studentId, Guid quizId)
     {
-        // Kiểm tra xem sinh viên có thuộc lớp chứa quiz này hay không
-        var quiz = await _context.Quizzes
-            .Include(q => q.QuizQuestions)
-                .ThenInclude(qq => qq.QuizOptions)
-            .FirstOrDefaultAsync(q => q.Id == quizId && !q.IsDisabled);
+        var quiz = await ResolveQuizAsync(quizId);
 
-        if (quiz == null) throw new KeyNotFoundException("Không tìm thấy bài trắc nghiệm.");
+        if (quiz == null || quiz.IsDisabled) throw new KeyNotFoundException("Không tìm thấy bài trắc nghiệm.");
 
         var isEnrolled = await _context.ClassStudents
             .AnyAsync(cs => cs.ClassId == quiz.ClassId && cs.StudentId == studentId);
@@ -391,27 +403,23 @@ public class QuizService : IQuizService
         if (!isEnrolled)
             throw new UnauthorizedAccessException("Bạn không thuộc lớp học chứa bài trắc nghiệm này.");
 
-        // Sinh viên xem đề sẽ ẩn đáp án đúng
         return MapToDetailDto(quiz, isLecturer: false);
     }
 
     public async Task<QuizAttemptDto> StartAttemptAsync(string studentId, Guid quizId)
     {
-        var quiz = await _context.Quizzes
-            .FirstOrDefaultAsync(q => q.Id == quizId && !q.IsDisabled);
+        var quiz = await ResolveQuizAsync(quizId);
 
-        if (quiz == null) throw new KeyNotFoundException("Không tìm thấy bài trắc nghiệm.");
+        if (quiz == null || quiz.IsDisabled) throw new KeyNotFoundException("Không tìm thấy bài trắc nghiệm.");
 
-        // Kiểm tra xem sinh viên có thuộc lớp chứa quiz này hay không
         var isEnrolled = await _context.ClassStudents
             .AnyAsync(cs => cs.ClassId == quiz.ClassId && cs.StudentId == studentId);
 
         if (!isEnrolled)
             throw new UnauthorizedAccessException("Bạn không thuộc lớp học chứa bài trắc nghiệm này.");
 
-        // Đếm số lượt đã làm
         var attemptsCount = await _context.QuizAttempts
-            .CountAsync(a => a.QuizId == quizId && a.StudentId == studentId);
+            .CountAsync(a => a.QuizId == quiz.Id && a.StudentId == studentId);
 
         if (attemptsCount >= quiz.MaxAttempts)
         {
@@ -421,7 +429,7 @@ public class QuizService : IQuizService
         var attempt = new QuizAttempt
         {
             Id = Guid.NewGuid(),
-            QuizId = quizId,
+            QuizId = quiz.Id,
             StudentId = studentId,
             AttemptNumber = attemptsCount + 1,
             StartedAt = DateTime.UtcNow
@@ -564,18 +572,19 @@ public class QuizService : IQuizService
 
     public async Task<List<QuizAttemptDto>> GetMyAttemptsAsync(string studentId, Guid quizId)
     {
-        return await _context.QuizAttempts
+        var quiz = await ResolveQuizAsync(quizId);
+        var targetQuizId = quiz?.Id ?? quizId;
+
+        var attempts = await _context.QuizAttempts
             .AsNoTracking()
             .Include(a => a.Student)
-            .Where(a => a.QuizId == quizId && a.StudentId == studentId && a.SubmittedAt != null)
+            .Where(a => a.QuizId == targetQuizId && a.StudentId == studentId && a.SubmittedAt != null)
             .OrderByDescending(a => a.SubmittedAt)
-            .Select(a => MapToAttemptDto(a))
             .ToListAsync();
+
+        return attempts.Select(MapToAttemptDto).ToList();
     }
 
-    #endregion
-
-    #region Helpers
 
     private async Task EnsureClassAccessAsync(string lecturerId, string classId)
     {
