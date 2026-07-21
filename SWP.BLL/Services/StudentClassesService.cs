@@ -29,7 +29,7 @@ public class StudentClassesService : IStudentClassesService
             .Include(c => c.AcademicTerm)
             .Include(c => c.Lecturer)
             .Include(c => c.ClassStudents)
-            .Where(c => c.ClassStudents.Any(cs => cs.StudentId == studentId))
+            .Where(c => c.ClassStudents.Any(cs => cs.StudentId.ToUpper() == studentId.ToUpper()))
             .AsQueryable();
 
         if (academicTermId.HasValue)

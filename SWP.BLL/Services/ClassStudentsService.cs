@@ -63,7 +63,7 @@ public class ClassStudentsService : IClassStudentsService
 
         // 3. Kiểm tra trùng lặp: Sinh viên này đã ở trong lớp chưa?
         bool isAlreadyEnrolled = await _context.ClassStudents
-            .AnyAsync(cs => cs.ClassId == classId && cs.StudentId == request.StudentId);
+            .AnyAsync(cs => cs.ClassId.ToUpper() == classId.ToUpper() && cs.StudentId.ToUpper() == request.StudentId.ToUpper());
 
         if (isAlreadyEnrolled)
             throw new InvalidOperationException("Học viên này đã có tên trong danh sách lớp.");
@@ -72,7 +72,7 @@ public class ClassStudentsService : IClassStudentsService
         var newEnrollment = new ClassStudent
         {
             ClassId = classId.ToUpper(),
-            StudentId = request.StudentId
+            StudentId = request.StudentId.ToUpper()
             // Ngày EnrolledAt sẽ do SQL Server tự sinh nhờ cấu hình DEFAULT SYSDATETIME()
         };
 
