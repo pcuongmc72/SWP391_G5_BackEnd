@@ -45,7 +45,7 @@ public partial class LecturerService : ILecturerService
             .FirstOrDefaultAsync(c => c.Id == classId && c.LecturerId == lecturerId);
 
         if (cls is null)
-            throw new KeyNotFoundException("Khong tim thay lop hoc hoac ban khong co quyen truy cap.");
+            throw new KeyNotFoundException("Không tìm thấy lớp học hoặc bạn không có quyền truy cập.");
 
         var studentCount = await _context.ClassStudents.CountAsync(cs => cs.ClassId == classId);
 
@@ -97,7 +97,7 @@ public partial class LecturerService : ILecturerService
             .FirstOrDefaultAsync(s => s.Id == sessionId && s.ClassId == classId);
 
         if (session is null)
-            throw new KeyNotFoundException("Khong tim thay buoi hoc.");
+            throw new KeyNotFoundException("Không tìm thấy buổi học.");
 
         return MapSession(session);
     }
@@ -138,7 +138,7 @@ public partial class LecturerService : ILecturerService
             .FirstOrDefaultAsync(s => s.Id == sessionId && s.ClassId == classId);
 
         if (session is null)
-            throw new KeyNotFoundException("Khong tim thay buoi hoc.");
+            throw new KeyNotFoundException("Không tìm thấy buổi học.");
 
         session.SessionDate = request.SessionDate;
         session.StartTime = ParseTime(request.StartTime);
@@ -161,7 +161,7 @@ public partial class LecturerService : ILecturerService
             .FirstOrDefaultAsync(s => s.Id == sessionId && s.ClassId == classId);
 
         if (session is null)
-            throw new KeyNotFoundException("Khong tim thay buoi hoc.");
+            throw new KeyNotFoundException("Không tìm thấy buổi học.");
 
         _context.ClassSessions.Remove(session);
         await _context.SaveChangesAsync();
@@ -178,13 +178,13 @@ public partial class LecturerService : ILecturerService
             .AnyAsync(cs => cs.ClassId == classId && cs.StudentId == lecturerId && cs.ClassRole == "assistant");
 
         if (!isAssistant)
-            throw new KeyNotFoundException("Khong tim thay lop hoc hoac ban khong co quyen truy cap.");
+            throw new KeyNotFoundException("Không tìm thấy lớp học hoặc bạn không có quyền truy cập.");
     }
 
     private static void ValidateSessionRequest(UpsertClassSessionDto request)
     {
         if (string.IsNullOrWhiteSpace(request.Title))
-            throw new ArgumentException("Tieu de buoi hoc khong duoc de trong.");
+            throw new ArgumentException("Tiêu đề buổi học không được để trống.");
     }
 
     private static TimeOnly? ParseTime(string? value)
@@ -195,7 +195,7 @@ public partial class LecturerService : ILecturerService
         if (TimeOnly.TryParse(value, out var time))
             return time;
 
-        throw new ArgumentException($"Gio khong hop le: {value}");
+        throw new ArgumentException($"Giờ không hợp lệ: {value}");
     }
 
     private static ClassSessionDto MapSession(ClassSession session) => new()

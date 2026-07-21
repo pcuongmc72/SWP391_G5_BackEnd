@@ -86,21 +86,21 @@ public class StudentClassesService : IStudentClassesService
 
     public async Task<StudentClassRoadmapDto> GetClassRoadmapAsync(string studentId, string classId)
     {
-        // KiĂ¡Â»Æ’m tra lĂ¡Â»â€ºp tĂ¡Â»â€œn tĂ¡ÂºÂ¡i
+        // Kiểm tra lớp tồn tại
         var classEntity = await _context.Classes
             .Include(c => c.Course)
             .FirstOrDefaultAsync(c => c.Id == classId);
 
         if (classEntity == null)
-            throw new KeyNotFoundException("KhÄ‚Â´ng tÄ‚Â¬m thĂ¡ÂºÂ¥y lĂ¡Â»â€ºp hĂ¡Â»Âc.");
+            throw new KeyNotFoundException("Không tìm thấy lớp học.");
 
-        // LĂ¡ÂºÂ¥y toÄ‚Â n bĂ¡Â»â„¢ hĂ¡Â»Âc liĂ¡Â»â€¡u Ă„â€˜ang active cĂ¡Â»Â§a lĂ¡Â»â€ºp, kÄ‚Â¨m thÄ‚Â´ng tin hoÄ‚Â n thÄ‚Â nh
+        // Lấy toàn bộ học liệu đang active của lớp, kèm thông tin hoàn thành
         var materials = await _context.LearningMaterials
             .Include(m => m.MaterialCompletions)
             .Where(m => m.ClassId == classId && m.IsDisabled == false)
             .ToListAsync();
 
-        // Map vÄ‚Â  nhÄ‚Â³m theo ChapterName
+        // Map và nhóm theo ChapterName
         var mappedMaterials = materials.Select(m =>
         {
             var completion = m.MaterialCompletions
@@ -144,7 +144,7 @@ public class StudentClassesService : IStudentClassesService
         };
     }
 
-    // Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬ Ă„Â Ä‚Â¡nh dĂ¡ÂºÂ¥u hoÄ‚Â n thÄ‚Â nh Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬Ă¢â€ â‚¬
+    // ---------------- Đánh dấu hoàn thành ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     public async Task<bool> CompleteMaterialAsync(string studentId, Guid materialId)
     {
@@ -152,9 +152,9 @@ public class StudentClassesService : IStudentClassesService
             .FirstOrDefaultAsync(m => m.Id == materialId && m.IsDisabled == false);
 
         if (material == null)
-            throw new KeyNotFoundException("KhÄ‚Â´ng tÄ‚Â¬m thĂ¡ÂºÂ¥y hĂ¡Â»Âc liĂ¡Â»â€¡u.");
+            throw new KeyNotFoundException("Không tìm thấy học liệu.");
 
-        // NĂ¡ÂºÂ¿u Ă„â€˜Ä‚Â£ Ă„â€˜Ä‚Â¡nh dĂ¡ÂºÂ¥u rĂ¡Â»â€œi thÄ‚Â¬ bĂ¡Â»Â qua
+        // Nếu đã đánh dấu rồi thì bỏ qua
         var existing = await _context.MaterialCompletions
             .FirstOrDefaultAsync(mc => mc.MaterialId == materialId && mc.StudentId == studentId);
 
@@ -172,7 +172,7 @@ public class StudentClassesService : IStudentClassesService
         return true;
     }
 
-    // Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬ HĂ¡Â»Â§y Ă„â€˜Ä‚Â¡nh dĂ¡ÂºÂ¥u hoÄ‚Â n thÄ‚Â nh Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬
+    // ---------------- Hủy đánh dấu hoàn thành -------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     public async Task<bool> UncompleteMaterialAsync(string studentId, Guid materialId)
     {
@@ -180,14 +180,14 @@ public class StudentClassesService : IStudentClassesService
             .FirstOrDefaultAsync(mc => mc.MaterialId == materialId && mc.StudentId == studentId);
 
         if (existing == null)
-            return true; // Ă„ÂÄ‚Â£ uncomplete rĂ¡Â»â€œi
+            return true; // Đã uncomplete rồi
 
         _context.MaterialCompletions.Remove(existing);
         await _context.SaveChangesAsync();
         return true;
     }
 
-    // Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬ Helper mapping Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬
+    // ---------------- Helper mapping ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     private static ClassResponseDto MapToDto(Class classEntity) => new()
     {
@@ -206,16 +206,16 @@ public class StudentClassesService : IStudentClassesService
         CreatedAt = classEntity.CreatedAt
     };
 
-    // Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬ Danh sÄ‚Â¡ch bÄ‚Â i tĂ¡ÂºÂ­p (student view) Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬
+    // ---------------- Danh sách bài tập (student view) ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
     public async Task<IEnumerable<StudentAssignmentDto>> GetStudentAssignmentsAsync(
         string studentId, string classId)
     {
-        // XÄ‚Â¡c thĂ¡Â»Â±c sinh viÄ‚Âªn cÄ‚Â³ trong lĂ¡Â»â€ºp
+        // Xác thực sinh viên có trong lớp
         var isEnrolled = await _context.ClassStudents
             .AnyAsync(cs => cs.ClassId == classId && cs.StudentId == studentId);
         if (!isEnrolled)
-            throw new UnauthorizedAccessException("BĂ¡ÂºÂ¡n khÄ‚Â´ng phĂ¡ÂºÂ£i thÄ‚Â nh viÄ‚Âªn cĂ¡Â»Â§a lĂ¡Â»â€ºp hĂ¡Â»Âc nÄ‚Â y.");
+            throw new UnauthorizedAccessException("Bạn không phải thành viên của lớp học này.");
 
         var assignments = await _context.Assignments
             .AsNoTracking()
@@ -241,22 +241,22 @@ public class StudentClassesService : IStudentClassesService
         });
     }
 
-    // Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬ NĂ¡Â»â„¢p bÄ‚Â i tĂ¡ÂºÂ­p Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬
+    // ---------------- Nộp bài tập ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     public async Task<SubmissionDto> SubmitAssignmentAsync(
         string studentId, string classId, Guid assignmentId, SubmitAssignmentRequestDto request)
     {
-        // XÄ‚Â¡c thĂ¡Â»Â±c sinh viÄ‚Âªn cÄ‚Â³ trong lĂ¡Â»â€ºp
+        // Xác thực sinh viên có trong lớp
         var isEnrolled = await _context.ClassStudents
             .AnyAsync(cs => cs.ClassId == classId && cs.StudentId == studentId);
         if (!isEnrolled)
-            throw new UnauthorizedAccessException("BĂ¡ÂºÂ¡n khÄ‚Â´ng phĂ¡ÂºÂ£i thÄ‚Â nh viÄ‚Âªn cĂ¡Â»Â§a lĂ¡Â»â€ºp hĂ¡Â»Âc nÄ‚Â y.");
+            throw new UnauthorizedAccessException("Bạn không phải thành viên của lớp học này.");
 
         var assignment = await _context.Assignments
             .FirstOrDefaultAsync(a => a.Id == assignmentId && a.ClassId == classId);
 
         if (assignment == null)
-            throw new KeyNotFoundException("KhÄ‚Â´ng tÄ‚Â¬m thĂ¡ÂºÂ¥y bÄ‚Â i tĂ¡ÂºÂ­p.");
+            throw new KeyNotFoundException("Không tìm thấy bài tập.");
 
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
         if (today > assignment.DueDate)
@@ -264,18 +264,18 @@ public class StudentClassesService : IStudentClassesService
             throw new InvalidOperationException("Không thể nộp bài. Hạn nộp đã kết thúc.");
         }
 
-        // TÄ‚Â¬m bÄ‚Â i nĂ¡Â»â„¢p cĂ…Â© (nĂ¡ÂºÂ¿u cÄ‚Â³)
+        // Tìm bài nộp cũ (nếu có)
         var existing = await _context.Submissions
             .Include(s => s.Student)
             .FirstOrDefaultAsync(s => s.AssignmentId == assignmentId && s.StudentId == studentId);
 
         if (existing != null)
         {
-            // KhÄ‚Â´ng cho nĂ¡Â»â„¢p lĂ¡ÂºÂ¡i khi Ă„â€˜Ä‚Â£ chĂ¡ÂºÂ¥m Ă„â€˜iĂ¡Â»Æ’m
+            // Không cho nộp lại khi đã chấm điểm
             if (existing.Status == "GRADED")
-                throw new InvalidOperationException("BÄ‚Â i tĂ¡ÂºÂ­p Ă„â€˜Ä‚Â£ Ă„â€˜Ă†Â°Ă¡Â»Â£c chĂ¡ÂºÂ¥m Ă„â€˜iĂ¡Â»Æ’m, khÄ‚Â´ng thĂ¡Â»Æ’ nĂ¡Â»â„¢p lĂ¡ÂºÂ¡i.");
+                throw new InvalidOperationException("Bài tập đã được chấm điểm, không thể nộp lại.");
 
-            // CĂ¡ÂºÂ­p nhĂ¡ÂºÂ­t bÄ‚Â i nĂ¡Â»â„¢p cĂ…Â©
+            // Cập nhật bài nộp cũ
             existing.FileName     = request.FileName;
             existing.StudentNotes = request.StudentNotes;
             existing.SubmittedAt  = DateTime.UtcNow;
@@ -284,7 +284,7 @@ public class StudentClassesService : IStudentClassesService
             return MapSubmission(existing);
         }
 
-        // TĂ¡ÂºÂ¡o bÄ‚Â i nĂ¡Â»â„¢p mĂ¡Â»â€ºi
+        // Tạo bài nộp mới
         var submission = new Submission
         {
             AssignmentId  = assignmentId,
@@ -298,12 +298,12 @@ public class StudentClassesService : IStudentClassesService
         _context.Submissions.Add(submission);
         await _context.SaveChangesAsync();
 
-        // Load navigation property Ă„â€˜Ă¡Â»Æ’ map
+        // Load navigation property để map
         await _context.Entry(submission).Reference(s => s.Student).LoadAsync();
         return MapSubmission(submission);
     }
 
-    // Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬ Shared Submission mapper Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬
+    // ---------------- Shared Submission mapper -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     private static SubmissionDto MapSubmission(Submission s) => new()
     {
@@ -320,21 +320,21 @@ public class StudentClassesService : IStudentClassesService
         GradedAt = s.GradedAt?.ToString("yyyy-MM-dd HH:mm")
     };
 
-    // Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬ GĂ¡Â»Â­i cÄ‚Â¢u hĂ¡Â»Âi cho GiĂ¡ÂºÂ£ng viÄ‚Âªn Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬Ă¢â€â‚¬
+    // ---------------- Gửi câu hỏi cho Giảng viên ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     public async Task<FeedbackDto> CreateFeedbackAsync(string studentId, string classId, CreateFeedbackDto request)
     {
-        // XÄ‚Â¡c thĂ¡Â»Â±c sinh viÄ‚Âªn cÄ‚Â³ trong lĂ¡Â»â€ºp
+        // Xác thực sinh viên có trong lớp
         var isEnrolled = await _context.ClassStudents
             .AnyAsync(cs => cs.ClassId == classId && cs.StudentId == studentId);
         if (!isEnrolled)
-            throw new UnauthorizedAccessException("BĂ¡ÂºÂ¡n khÄ‚Â´ng phĂ¡ÂºÂ£i thÄ‚Â nh viÄ‚Âªn cĂ¡Â»Â§a lĂ¡Â»â€ºp hĂ¡Â»Âc nÄ‚Â y.");
+            throw new UnauthorizedAccessException("Bạn không phải thành viên của lớp học này.");
 
         var entity = new SupportFeedback
         {
             ClassId = classId,
             SenderId = studentId,
-            Title = (request.Title ?? "CÄ‚Â¢u hĂ¡Â»Âi").Trim(),
+            Title = (request.Title ?? "Câu hỏi").Trim(),
             Message = request.Message.Trim(),
             Status = "OPEN",
             MaterialId = request.MaterialId,

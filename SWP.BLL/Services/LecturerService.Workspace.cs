@@ -72,7 +72,7 @@ public partial class LecturerService
             .Include(m => m.MaterialCompletions)
             .FirstOrDefaultAsync(m => m.Id == materialId && m.ClassId == classId);
 
-        if (entity is null) throw new KeyNotFoundException("Khong tim thay hoc lieu.");
+        if (entity is null) throw new KeyNotFoundException("Không tìm thấy học liệu.");
 
         entity.Title = request.Title.Trim();
         entity.Description = string.IsNullOrWhiteSpace(request.Description) ? null : request.Description.Trim();
@@ -92,7 +92,7 @@ public partial class LecturerService
         var entity = await _context.LearningMaterials
             .FirstOrDefaultAsync(m => m.Id == materialId && m.ClassId == classId);
 
-        if (entity is null) throw new KeyNotFoundException("Khong tim thay hoc lieu.");
+        if (entity is null) throw new KeyNotFoundException("Không tìm thấy học liệu.");
 
         // Soft delete – disable the material but keep it in DB so lecturer can still see it
         entity.IsDisabled = true;
@@ -106,7 +106,7 @@ public partial class LecturerService
         var material = await _context.LearningMaterials
             .FirstOrDefaultAsync(m => m.Id == materialId && m.ClassId == classId);
 
-        if (material is null) throw new KeyNotFoundException("Khong tim thay hoc lieu.");
+        if (material is null) throw new KeyNotFoundException("Không tìm thấy học liệu.");
 
         var studentIds = await _context.ClassStudents
             .Where(cs => cs.ClassId == classId)
@@ -190,7 +190,7 @@ public partial class LecturerService
             .Include(a => a.Submissions)
             .FirstOrDefaultAsync(a => a.Id == assignmentId && a.ClassId == classId);
 
-        if (entity is null) throw new KeyNotFoundException("Khong tim thay bai tap.");
+        if (entity is null) throw new KeyNotFoundException("Không tìm thấy bài tập.");
 
         entity.Title = request.Title.Trim();
         entity.Description = string.IsNullOrWhiteSpace(request.Description) ? null : request.Description.Trim();
@@ -218,7 +218,7 @@ public partial class LecturerService
         var entity = await _context.Assignments
             .FirstOrDefaultAsync(a => a.Id == assignmentId && a.ClassId == classId);
 
-        if (entity is null) throw new KeyNotFoundException("Khong tim thay bai tap.");
+        if (entity is null) throw new KeyNotFoundException("Không tìm thấy bài tập.");
 
         _context.Assignments.Remove(entity);
         await _context.SaveChangesAsync();
@@ -249,7 +249,7 @@ public partial class LecturerService
             .Include(s => s.Assignment)
             .FirstOrDefaultAsync(s => s.Id == submissionId && s.Assignment.ClassId == classId);
 
-        if (submission is null) throw new KeyNotFoundException("Khong tim thay bai nop.");
+        if (submission is null) throw new KeyNotFoundException("Không tìm thấy bài nộp.");
 
         submission.Status = "GRADED";
         submission.Grade = request.Grade;
@@ -285,7 +285,7 @@ public partial class LecturerService
             .Include(f => f.Material)   // <-- Include tên bài học
             .FirstOrDefaultAsync(f => f.Id == feedbackId && (f.ClassId == null || f.ClassId == classId));
 
-        if (fb is null) throw new KeyNotFoundException("Khong tim thay phan hoi.");
+        if (fb is null) throw new KeyNotFoundException("Không tìm thấy phản hồi.");
 
         fb.Status = "RESPONDED";
         fb.Response = request.Response;
@@ -343,7 +343,7 @@ public partial class LecturerService
         var thread = await _context.DiscussionThreads
             .FirstOrDefaultAsync(t => t.Id == threadId && (t.ClassId == null || t.ClassId == classId));
 
-        if (thread is null) throw new KeyNotFoundException("Khong tim thay chu de.");
+        if (thread is null) throw new KeyNotFoundException("Không tìm thấy chủ đề.");
 
         var reply = new DiscussionReply
         {
@@ -437,24 +437,24 @@ public partial class LecturerService
     {
         var valid = new[] { "video", "pdf", "document", "quiz", "image", "link" };
         if (!valid.Contains(type.ToLower()))
-            throw new ArgumentException("Loai hoc lieu khong hop le.");
+            throw new ArgumentException("Loại học liệu không hợp lệ.");
     }
 
     public async Task PromoteStudentAsync(string lecturerId, string classId, string studentId, string role)
     {
         var isLecturer = await _context.Classes.AnyAsync(c => c.Id == classId && c.LecturerId == lecturerId);
         if (!isLecturer)
-            throw new UnauthorizedAccessException("Chi giang vien chinh moi co the thay doi vai tro.");
+            throw new UnauthorizedAccessException("Chỉ giảng viên chính mới có thể thay đổi vai trò.");
 
         var validRoles = new[] { "student", "assistant" };
         if (!validRoles.Contains(role.ToLower()))
-            throw new ArgumentException($"Role khong hop le: {role}. Chi chap nhan: student, assistant.");
+            throw new ArgumentException($"Vai trò không hợp lệ: {role}. Chỉ chấp nhận: student, assistant.");
 
         var enrollment = await _context.ClassStudents
             .FirstOrDefaultAsync(cs => cs.ClassId == classId && cs.StudentId == studentId);
 
         if (enrollment is null)
-            throw new KeyNotFoundException("Hoc sinh khong thuoc lop hoc nay.");
+            throw new KeyNotFoundException("Học sinh không thuộc lớp học này.");
 
         enrollment.ClassRole = role.ToLower();
         await _context.SaveChangesAsync();
