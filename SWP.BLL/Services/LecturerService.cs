@@ -26,7 +26,7 @@ public partial class LecturerService : ILecturerService
             .Select(c => new LecturerClassListItemDto
             {
                 Id = c.Id,
-                Name = c.Name ?? c.Id,
+                Name = c.Id,
                 CourseCode = c.Course.Code,
                 CourseName = c.Course.Name,
                 TermName = c.AcademicTerm.Name,
@@ -52,7 +52,7 @@ public partial class LecturerService : ILecturerService
         return new LecturerClassDetailDto
         {
             Id = cls.Id,
-            Name = cls.Name ?? cls.Id,
+            Name = cls.Id,
             AllowReviewAfterEnd = cls.AllowReviewAfterEnd,
             CourseId = cls.CourseId,
             CourseCode = cls.Course.Code,
