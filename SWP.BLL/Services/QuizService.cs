@@ -585,6 +585,79 @@ public class QuizService : IQuizService
         return attempts.Select(MapToAttemptDto).ToList();
     }
 
+    public async Task<AttemptDetailDto> GetAttemptDetailAsync(string studentId, Guid attemptId)
+    {
+        var attempt = await _context.QuizAttempts
+            .AsNoTracking()
+            .Include(a => a.QuizAnswers)
+            .Include(a => a.Quiz)
+                .ThenInclude(q => q.QuizQuestions.OrderBy(qq => qq.Order))
+                    .ThenInclude(qq => qq.QuizOptions)
+            .FirstOrDefaultAsync(a => a.Id == attemptId && a.StudentId == studentId);
+
+        if (attempt == null)
+            throw new KeyNotFoundException("Không tìm thấy lượt thi.");
+
+        if (attempt.SubmittedAt == null)
+            throw new InvalidOperationException("Lượt thi này chưa được nộp.");
+
+        // Build the set of selected option IDs for O(1) lookup
+        var selectedOptionIds = attempt.QuizAnswers
+            .Select(ans => ans.SelectedOptionId)
+            .ToHashSet();
+
+        var questions = attempt.Quiz.QuizQuestions
+            .OrderBy(q => q.Order)
+            .Select(q =>
+            {
+                var correctOptionIds = q.QuizOptions
+                    .Where(o => o.IsCorrect)
+                    .Select(o => o.Id)
+                    .ToHashSet();
+
+                var studentSelectedForThisQ = attempt.QuizAnswers
+                    .Where(ans => ans.QuestionId == q.Id)
+                    .Select(ans => ans.SelectedOptionId)
+                    .ToHashSet();
+
+                bool isQuestionCorrect = studentSelectedForThisQ.Count > 0
+                    && studentSelectedForThisQ.SetEquals(correctOptionIds);
+
+                return new AttemptAnswerDetailDto
+                {
+                    QuestionId = q.Id,
+                    QuestionOrder = q.Order,
+                    QuestionText = q.QuestionText,
+                    Points = q.Points,
+                    IsCorrect = isQuestionCorrect,
+                    Options = q.QuizOptions.Select(o => new AttemptOptionDetailDto
+                    {
+                        Id = o.Id,
+                        OptionText = o.OptionText,
+                        IsCorrect = o.IsCorrect,
+                        WasSelected = studentSelectedForThisQ.Contains(o.Id)
+                    }).ToList()
+                };
+            }).ToList();
+
+        int correctCount = questions.Count(q => q.IsCorrect);
+
+        return new AttemptDetailDto
+        {
+            AttemptId = attempt.Id,
+            AttemptNumber = attempt.AttemptNumber,
+            StartedAt = attempt.StartedAt,
+            SubmittedAt = attempt.SubmittedAt,
+            TotalScore = attempt.TotalScore,
+            CorrectCount = correctCount,
+            TotalCount = questions.Count,
+            Questions = questions
+        };
+    }
+
+    #endregion
+
+    #region Helpers
 
     private async Task EnsureClassAccessAsync(string lecturerId, string classId)
     {
@@ -632,6 +705,7 @@ public class QuizService : IQuizService
                 QuestionText = q.QuestionText,
                 Points = q.Points,
                 Order = q.Order,
+                MaxSelections = q.QuizOptions.Count(o => o.IsCorrect),
                 Options = q.QuizOptions.Select(o => new QuizOptionDto
                 {
                     Id = o.Id,

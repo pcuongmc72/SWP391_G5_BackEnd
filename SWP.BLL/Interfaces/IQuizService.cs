@@ -20,4 +20,5 @@ public interface IQuizService
     Task<QuizAttemptDto> StartAttemptAsync(string studentId, Guid quizId);
     Task<QuizResultDto> SubmitAttemptAsync(string studentId, Guid attemptId, SubmitQuizDto dto);
     Task<List<QuizAttemptDto>> GetMyAttemptsAsync(string studentId, Guid quizId);
+    Task<AttemptDetailDto> GetAttemptDetailAsync(string studentId, Guid attemptId);
 }
