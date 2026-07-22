@@ -666,7 +666,7 @@ public class QuizService : IQuizService
         };
     }
 
-    #endregion
+   
 
     #region Helpers
 
@@ -737,4 +737,6 @@ public class QuizService : IQuizService
         SubmittedAt = attempt.SubmittedAt,
         TotalScore = attempt.TotalScore
     };
+
+    #endregion
 }
