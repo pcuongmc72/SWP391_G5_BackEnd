@@ -15,6 +15,10 @@ public class UpdateQuizDto
 
     public int MaxAttempts { get; set; } = 1;
 
+    public string? PublishDate { get; set; }
+
+    public string? Deadline { get; set; }
+
     [Required]
     public List<CreateQuizQuestionDto> Questions { get; set; } = new();
 }
