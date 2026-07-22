@@ -23,6 +23,10 @@ public class CreateQuizDto
 
     public string? Lesson { get; set; } // Tên bài học
 
+    public string? PublishDate { get; set; }
+
+    public string? Deadline { get; set; }
+
     [Required]
     public List<CreateQuizQuestionDto> Questions { get; set; } = new();
 }

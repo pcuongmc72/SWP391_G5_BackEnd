@@ -19,7 +19,7 @@ public class QuizService : IQuizService
         _context = context;
     }
 
-    #region Lecturer Operations
+
 
     public async Task<QuizDetailDto> CreateQuizAsync(string lecturerId, CreateQuizDto dto)
     {
@@ -77,8 +77,8 @@ public class QuizService : IQuizService
             var materialDesc = System.Text.Json.JsonSerializer.Serialize(new
             {
                 desc = dto.Description?.Trim() ?? "",
-                publishDate = DateTime.UtcNow.ToString("yyyy-MM-dd"),
-                deadline = "",
+                publishDate = dto.PublishDate ?? DateTime.UtcNow.ToString("yyyy-MM-dd"),
+                deadline = dto.Deadline ?? "",
                 distributeMode = "all",
                 groups = new List<string>(),
                 comments = new List<string>()
@@ -285,7 +285,33 @@ public class QuizService : IQuizService
             {
                 material.Title = quiz.Title;
 
-                var parsedDesc = new { desc = quiz.Description ?? "", publishDate = DateTime.UtcNow.ToString("yyyy-MM-dd"), deadline = "", distributeMode = "all", groups = new List<string>(), comments = new List<string>() };
+                var existingMeta = new { desc = "", publishDate = "", deadline = "", distributeMode = "all", groups = new List<string>(), comments = new List<string>() };
+                try
+                {
+                    if (!string.IsNullOrEmpty(material.Description))
+                    {
+                        var parsed = System.Text.Json.JsonSerializer.Deserialize<System.Text.Json.JsonElement>(material.Description);
+                        existingMeta = new
+                        {
+                            desc = parsed.TryGetProperty("desc", out var d) ? d.GetString() ?? "" : "",
+                            publishDate = parsed.TryGetProperty("publishDate", out var pd) ? pd.GetString() ?? "" : "",
+                            deadline = parsed.TryGetProperty("deadline", out var dl) ? dl.GetString() ?? "" : "",
+                            distributeMode = parsed.TryGetProperty("distributeMode", out var dm) ? dm.GetString() ?? "all" : "all",
+                            groups = parsed.TryGetProperty("groups", out var g) ? System.Text.Json.JsonSerializer.Deserialize<List<string>>(g.GetRawText()) ?? new List<string>() : new List<string>(),
+                            comments = parsed.TryGetProperty("comments", out var c) ? System.Text.Json.JsonSerializer.Deserialize<List<string>>(c.GetRawText()) ?? new List<string>() : new List<string>()
+                        };
+                    }
+                }
+                catch {}
+
+                var parsedDesc = new { 
+                    desc = quiz.Description ?? "", 
+                    publishDate = dto.PublishDate ?? existingMeta.publishDate, 
+                    deadline = dto.Deadline ?? "", 
+                    distributeMode = existingMeta.distributeMode, 
+                    groups = existingMeta.groups, 
+                    comments = existingMeta.comments 
+                };
                 material.Description = System.Text.Json.JsonSerializer.Serialize(parsedDesc);
             }
 
@@ -340,30 +366,12 @@ public class QuizService : IQuizService
             .ToListAsync();
     }
 
-    private async Task<Quiz?> ResolveQuizAsync(Guid quizId)
+    public async Task<QuizDetailDto> GetQuizDetailsForLecturerAsync(string lecturerId, Guid quizId)
     {
         var quiz = await _context.Quizzes
             .Include(q => q.QuizQuestions)
                 .ThenInclude(qq => qq.QuizOptions)
             .FirstOrDefaultAsync(q => q.Id == quizId);
-
-        if (quiz != null) return quiz;
-
-        var material = await _context.LearningMaterials.FirstOrDefaultAsync(m => m.Id == quizId);
-        if (material != null && Guid.TryParse(material.FileUrl, out var actualQuizId))
-        {
-            return await _context.Quizzes
-                .Include(q => q.QuizQuestions)
-                    .ThenInclude(qq => qq.QuizOptions)
-                .FirstOrDefaultAsync(q => q.Id == actualQuizId);
-        }
-
-        return null;
-    }
-
-    public async Task<QuizDetailDto> GetQuizDetailsForLecturerAsync(string lecturerId, Guid quizId)
-    {
-        var quiz = await ResolveQuizAsync(quizId);
 
         if (quiz == null) throw new KeyNotFoundException("Không tìm thấy bài trắc nghiệm.");
 
@@ -375,27 +383,30 @@ public class QuizService : IQuizService
 
     public async Task<List<QuizAttemptDto>> GetClassAttemptsAsync(string lecturerId, Guid quizId)
     {
-        var quiz = await ResolveQuizAsync(quizId);
+        var quiz = await _context.Quizzes.FirstOrDefaultAsync(q => q.Id == quizId);
         if (quiz == null) throw new KeyNotFoundException("Không tìm thấy bài trắc nghiệm.");
 
         await EnsureClassAccessAsync(lecturerId, quiz.ClassId);
 
-        var attempts = await _context.QuizAttempts
+        return await _context.QuizAttempts
             .AsNoTracking()
             .Include(a => a.Student)
-            .Where(a => a.QuizId == quiz.Id)
+            .Where(a => a.QuizId == quizId)
             .OrderByDescending(a => a.SubmittedAt)
+            .Select(a => MapToAttemptDto(a))
             .ToListAsync();
-
-        return attempts.Select(MapToAttemptDto).ToList();
     }
 
 
     public async Task<QuizDetailDto> GetQuizDetailsForStudentAsync(string studentId, Guid quizId)
     {
-        var quiz = await ResolveQuizAsync(quizId);
+        // Kiểm tra xem sinh viên có thuộc lớp chứa quiz này hay không
+        var quiz = await _context.Quizzes
+            .Include(q => q.QuizQuestions)
+                .ThenInclude(qq => qq.QuizOptions)
+            .FirstOrDefaultAsync(q => q.Id == quizId && !q.IsDisabled);
 
-        if (quiz == null || quiz.IsDisabled) throw new KeyNotFoundException("Không tìm thấy bài trắc nghiệm.");
+        if (quiz == null) throw new KeyNotFoundException("Không tìm thấy bài trắc nghiệm.");
 
         var isEnrolled = await _context.ClassStudents
             .AnyAsync(cs => cs.ClassId == quiz.ClassId && cs.StudentId == studentId);
@@ -403,23 +414,27 @@ public class QuizService : IQuizService
         if (!isEnrolled)
             throw new UnauthorizedAccessException("Bạn không thuộc lớp học chứa bài trắc nghiệm này.");
 
+        // Sinh viên xem đề sẽ ẩn đáp án đúng
         return MapToDetailDto(quiz, isLecturer: false);
     }
 
     public async Task<QuizAttemptDto> StartAttemptAsync(string studentId, Guid quizId)
     {
-        var quiz = await ResolveQuizAsync(quizId);
+        var quiz = await _context.Quizzes
+            .FirstOrDefaultAsync(q => q.Id == quizId && !q.IsDisabled);
 
-        if (quiz == null || quiz.IsDisabled) throw new KeyNotFoundException("Không tìm thấy bài trắc nghiệm.");
+        if (quiz == null) throw new KeyNotFoundException("Không tìm thấy bài trắc nghiệm.");
 
+        // Kiểm tra xem sinh viên có thuộc lớp chứa quiz này hay không
         var isEnrolled = await _context.ClassStudents
             .AnyAsync(cs => cs.ClassId == quiz.ClassId && cs.StudentId == studentId);
 
         if (!isEnrolled)
             throw new UnauthorizedAccessException("Bạn không thuộc lớp học chứa bài trắc nghiệm này.");
 
+        // Đếm số lượt đã làm
         var attemptsCount = await _context.QuizAttempts
-            .CountAsync(a => a.QuizId == quiz.Id && a.StudentId == studentId);
+            .CountAsync(a => a.QuizId == quizId && a.StudentId == studentId);
 
         if (attemptsCount >= quiz.MaxAttempts)
         {
@@ -429,7 +444,7 @@ public class QuizService : IQuizService
         var attempt = new QuizAttempt
         {
             Id = Guid.NewGuid(),
-            QuizId = quiz.Id,
+            QuizId = quizId,
             StudentId = studentId,
             AttemptNumber = attemptsCount + 1,
             StartedAt = DateTime.UtcNow
@@ -572,17 +587,13 @@ public class QuizService : IQuizService
 
     public async Task<List<QuizAttemptDto>> GetMyAttemptsAsync(string studentId, Guid quizId)
     {
-        var quiz = await ResolveQuizAsync(quizId);
-        var targetQuizId = quiz?.Id ?? quizId;
-
-        var attempts = await _context.QuizAttempts
+        return await _context.QuizAttempts
             .AsNoTracking()
             .Include(a => a.Student)
-            .Where(a => a.QuizId == targetQuizId && a.StudentId == studentId && a.SubmittedAt != null)
+            .Where(a => a.QuizId == quizId && a.StudentId == studentId && a.SubmittedAt != null)
             .OrderByDescending(a => a.SubmittedAt)
+            .Select(a => MapToAttemptDto(a))
             .ToListAsync();
-
-        return attempts.Select(MapToAttemptDto).ToList();
     }
 
     public async Task<AttemptDetailDto> GetAttemptDetailAsync(string studentId, Guid attemptId)
@@ -726,6 +737,4 @@ public class QuizService : IQuizService
         SubmittedAt = attempt.SubmittedAt,
         TotalScore = attempt.TotalScore
     };
-
-    #endregion
 }
