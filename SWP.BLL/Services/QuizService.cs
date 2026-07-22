@@ -666,9 +666,7 @@ public class QuizService : IQuizService
         };
     }
 
-   
 
-    #region Helpers
 
     private async Task EnsureClassAccessAsync(string lecturerId, string classId)
     {
